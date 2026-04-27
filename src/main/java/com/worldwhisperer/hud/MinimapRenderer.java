@@ -236,8 +236,10 @@ public class MinimapRenderer {
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
         int radiusBlocks = (w / 2) * bpp;
 
+        String currentDim = mod.getGameStats().getDimension();
         for (Waypoint wp : mod.getWaypointManager().getWaypoints()) {
             if (!wp.visible()) continue;
+            if (!wp.dimension().equals(currentDim)) continue;
             int dx = wp.x() - centerX;
             int dz = wp.z() - centerZ;
 

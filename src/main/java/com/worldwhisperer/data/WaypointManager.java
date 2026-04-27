@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.worldwhisperer.WorldWhispererClient;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -67,7 +68,8 @@ public class WaypointManager {
         String name = "WP-" + (waypoints.size() + 1);
         int color = WAYPOINT_COLORS[colorIndex % WAYPOINT_COLORS.length];
         colorIndex++;
-        addWaypoint(new Waypoint(name, x, y, z, color));
+        String dim = getCurrentDimension();
+        addWaypoint(new Waypoint(name, x, y, z, color, dim, true));
     }
 
     public void removeWaypoint(int index) {
@@ -92,9 +94,17 @@ public class WaypointManager {
         int ix = MathHelper.floor(x);
         int iy = MathHelper.floor(y);
         int iz = MathHelper.floor(z);
-        // Remove old death markers
-        waypoints.removeIf(wp -> wp.name().startsWith("Death"));
-        addWaypoint(new Waypoint("Death", ix, iy, iz, 0xFFFF0000));
+        String dim = getCurrentDimension();
+        waypoints.removeIf(wp -> wp.name().startsWith("Death") && wp.dimension().equals(dim));
+        addWaypoint(new Waypoint("Death", ix, iy, iz, 0xFFFF0000, dim, true));
+    }
+
+    private String getCurrentDimension() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world != null) {
+            return client.world.getRegistryKey().getValue().getPath();
+        }
+        return "overworld";
     }
 
     private static Path getWaypointsPath() {
