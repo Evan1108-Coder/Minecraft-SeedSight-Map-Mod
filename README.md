@@ -25,12 +25,13 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Structure proximity alert**: "Near: Village" popup when within 100 blocks of a predicted structure
 - Hostile mob count badge (yellow/red warning)
 - Biome change notification (3-second popup on minimap)
-- Expandable map mode (M key: 128px ↔ 256px)
+- Expandable map mode (M key: 128px ↔ 256px, panel also scales 1.5x)
 - Zoom level indicator with **cave mode label** (shows "CAVE" when underground)
 - **Underground cave mode**: auto-detects when player is underground and shows cave terrain instead of surface
 - **Nether terrain rendering**: scans downward from player Y to show actual Nether floor, not bedrock ceiling
 - **Edge waypoint indicators**: off-screen waypoints show colored markers at minimap edges
-- **Player breadcrumb trail**: last 20 positions shown as fading green dots on the minimap
+- **Player breadcrumb trail**: last 20 positions shown as fading green dots (configurable on/off)
+- **Danger-pulse border**: minimap border pulses red when 5+ hostile mobs nearby
 - **Render distance boundary**: faint circle showing the edge of loaded chunks
 - **World spawn marker**: white cross at coordinates 0,0 (Overworld only)
 - **Visual scale bar**: 32-block reference ruler at top-left of minimap
@@ -52,7 +53,10 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Player coordinates (X, Y, Z)
 - Current biome name
 - In-game time (12-hour format), day count, and weather (Clear/Rain/Thunder)
-- **Player vitals**: HP with absorption hearts (color-coded), food level, armor value, XP level, movement speed (m/s)
+- **Player vitals**: HP with absorption hearts (color-coded), food level with saturation, armor value, XP level, movement speed (m/s)
+- **Target block display**: shows name of block you're looking at
+- **Session tracker**: time played and distance walked this session
+- **Nearest structure bearing**: cardinal direction + distance to closest predicted structure
 - **Air/oxygen meter**: appears when underwater with color-coded threshold
 - Light level (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
 - Dimension indicator (shows when in Nether or End)
@@ -89,6 +93,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 ### Waypoint System
 - Quick-add waypoints at current position (B key)
 - **Delete nearest waypoint** (X key, within 32 blocks)
+- **HUD corner cycling** (G key: Top-Right → Top-Left → Bottom-Right → Bottom-Left)
 - Death markers (auto-created on death, per-dimension)
 - Dimension-aware: waypoints record their dimension, only show on correct dimension's minimap
 - Color-coded waypoints with distance display (cross-dimension waypoints show [Nether]/[End]/[OW])
@@ -113,6 +118,8 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Map zoom range
 - North lock toggle
 - Sound indicator toggle
+- Player trail toggle
+- HUD corner position (G key)
 - Seed override for multiplayer servers
 
 ### Seed-Based Prediction
@@ -139,6 +146,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 | `L` | Toggle north-locked/rotation-following mode |
 | `V` | Copy coordinates to clipboard |
 | `X` | Delete nearest waypoint (within 32 blocks) |
+| `G` | Cycle HUD corner position |
 
 All keybindings are configurable in Minecraft's Controls settings under the "WorldWhisperer" category.
 
