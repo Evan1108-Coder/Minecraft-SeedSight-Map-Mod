@@ -16,6 +16,7 @@ public class HudRenderer {
     private final MinimapRenderer minimapRenderer;
     private final PanelRenderer panelRenderer;
     private boolean visible = true;
+    private boolean expanded = false;
 
     private static final int TAB_W = 24;
     private static final int TAB_H = 20;
@@ -39,7 +40,7 @@ public class HudRenderer {
         TextRenderer font = client.textRenderer;
 
         int screenW = client.getWindow().getScaledWidth();
-        int mapSize = cfg.mapSize;
+        int mapSize = expanded ? cfg.mapSize * 2 : cfg.mapSize;
         int panelH = cfg.panelHeight;
         int contentW = mapSize;
         int contentH;
@@ -149,7 +150,7 @@ public class HudRenderer {
     }
 
     public void toggleExpanded() {
-        // Could implement fullscreen map mode here
+        expanded = !expanded;
     }
 
     public boolean isVisible() { return visible; }
