@@ -153,16 +153,20 @@ public class MinimapRenderer {
         // Draw compass directions (rotated in rotation-following mode)
         drawCompass(ctx, client.textRenderer, x, y, w, h);
 
-        // Draw coordinates at bottom
+        // Draw coordinates at bottom (flashes red at low HP)
         int playerY = MathHelper.floor(client.player.getY());
         String coords = w >= 200
                 ? String.format("%d / %d / %d  [%d, %d]", centerBlockX, playerY, centerBlockZ,
                         centerBlockX >> 4, centerBlockZ >> 4)
                 : String.format("%d / %d / %d", centerBlockX, playerY, centerBlockZ);
-        ctx.fill(x, y + h - 10, x + w, y + h, 0x99000000);
+        float hp = client.player.getHealth();
+        boolean lowHp = hp > 0 && hp <= 4;
+        int barBg = lowHp ? 0x99AA0000 : 0x99000000;
+        int coordColor = lowHp ? ColorUtil.RED : ColorUtil.WHITE;
+        ctx.fill(x, y + h - 10, x + w, y + h, barBg);
         ctx.drawText(client.textRenderer, coords,
                 x + (w - client.textRenderer.getWidth(coords)) / 2,
-                y + h - 9, ColorUtil.WHITE, true);
+                y + h - 9, coordColor, true);
 
         // Draw zoom level + scale indicator (top-right corner)
         int blocksVisible = w * blocksPerPixel;
