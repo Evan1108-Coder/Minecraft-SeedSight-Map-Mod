@@ -392,7 +392,9 @@ public class PanelRenderer {
         String currentDim = mod.getGameStats().getDimension();
         List<Waypoint> wps = new java.util.ArrayList<>(mod.getWaypointManager().getWaypoints());
         if (wps.isEmpty()) {
-            ctx.drawText(font, "No waypoints. Press B to add.", x + PAD, ty, ColorUtil.GRAY, true);
+            ctx.drawText(font, "No waypoints.", x + PAD, ty, ColorUtil.GRAY, true);
+            ty += LINE_H;
+            ctx.drawText(font, "B: Add  |  X: Delete nearest", x + PAD, ty, ColorUtil.DARK_GRAY, true);
             return;
         }
         net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
