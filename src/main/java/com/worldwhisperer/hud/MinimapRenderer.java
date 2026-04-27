@@ -272,19 +272,23 @@ public class MinimapRenderer {
         for (Waypoint wp : mod.getWaypointManager().getWaypoints()) {
             if (!wp.visible()) continue;
             if (!wp.dimension().equals(currentDim)) continue;
-            if (Math.abs(wp.x() - centerX) > radiusBlocks || Math.abs(wp.z() - centerZ) > radiusBlocks) continue;
 
             int px = toScreenX(wp.x(), wp.z());
             int pz = toScreenY(wp.x(), wp.z());
-            if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
 
-            // Diamond shape
-            ctx.fill(px - 1, pz - 2, px + 2, pz + 3, 0xFF000000);
-            ctx.fill(px, pz - 1, px + 1, pz + 2, wp.color());
-            ctx.fill(px - 1, pz, px + 2, pz + 1, wp.color());
-
-            // Label
-            ctx.drawText(font, wp.name(), px + 3, pz - 3, ColorUtil.WHITE, true);
+            if (px >= x + 3 && px < x + w - 3 && pz >= y + 3 && pz < y + h - 3) {
+                // Inside minimap: draw full waypoint marker
+                ctx.fill(px - 1, pz - 2, px + 2, pz + 3, 0xFF000000);
+                ctx.fill(px, pz - 1, px + 1, pz + 2, wp.color());
+                ctx.fill(px - 1, pz, px + 2, pz + 1, wp.color());
+                ctx.drawText(font, wp.name(), px + 3, pz - 3, ColorUtil.WHITE, true);
+            } else {
+                // Off-screen: draw edge indicator pointing toward waypoint
+                int ex = Math.max(x + 2, Math.min(x + w - 3, px));
+                int ey = Math.max(y + 2, Math.min(y + h - 3, pz));
+                ctx.fill(ex - 1, ey - 1, ex + 2, ey + 2, 0xFF000000);
+                ctx.fill(ex, ey, ex + 1, ey + 1, wp.color());
+            }
         }
     }
 
