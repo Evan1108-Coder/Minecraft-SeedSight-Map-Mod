@@ -5,9 +5,13 @@ import com.worldwhisperer.worldgen.SeedPredictor;
 import com.worldwhisperer.worldgen.SlimeChunkFinder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -44,6 +48,7 @@ public class GameStats {
     private String heldItemName = "";
     private int durability = -1;
     private int maxDurability = -1;
+    private final List<String> activeEffects = new ArrayList<>();
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -119,6 +124,15 @@ public class GameStats {
                             client.player.getChunkPos().x, client.player.getChunkPos().z);
                 }
             }
+
+            activeEffects.clear();
+            for (StatusEffectInstance effect : client.player.getStatusEffects()) {
+                int amp = effect.getAmplifier();
+                int secs = effect.getDuration() / 20;
+                String time = String.format("%d:%02d", secs / 60, secs % 60);
+                String name = effect.getEffectType().value().getName().getString();
+                activeEffects.add(name + (amp > 0 ? " " + (amp + 1) : "") + " " + time);
+            }
         }
     }
 
@@ -185,4 +199,5 @@ public class GameStats {
     public String getHeldItemName() { return heldItemName; }
     public int getDurability() { return durability; }
     public int getMaxDurability() { return maxDurability; }
+    public List<String> getActiveEffects() { return activeEffects; }
 }
