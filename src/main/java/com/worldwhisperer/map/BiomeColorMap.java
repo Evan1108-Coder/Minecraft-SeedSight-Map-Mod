@@ -1,5 +1,7 @@
 package com.worldwhisperer.map;
 
+import com.worldwhisperer.ModVersion;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +63,9 @@ public final class BiomeColorMap {
         put("minecraft:dripstone_caves", 0xFF866043);
         put("minecraft:lush_caves", 0xFF6A8C3C);
         put("minecraft:deep_dark", 0xFF0A2626);
-        put("minecraft:pale_garden", 0xFFC8BDA4);
+        if (ModVersion.hasPaleGarden()) {
+            put("minecraft:pale_garden", 0xFFC8BDA4);
+        }
 
         // Nether biomes
         put("minecraft:nether_wastes", 0xFF801900);

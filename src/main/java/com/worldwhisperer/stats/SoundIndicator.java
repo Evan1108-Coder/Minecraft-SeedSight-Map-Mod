@@ -1,5 +1,6 @@
 package com.worldwhisperer.stats;
 
+import com.worldwhisperer.ModVersion;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundCategory;
 
@@ -68,7 +69,7 @@ public class SoundIndicator {
         if (soundId.contains("entity.wither")) return "Wither";
         if (soundId.contains("entity.warden")) return "Warden";
         if (soundId.contains("entity.breeze")) return "Breeze";
-        if (soundId.contains("entity.creaking")) return "Creaking";
+        if (ModVersion.hasCreaking() && soundId.contains("entity.creaking")) return "Creaking";
         if (soundId.contains("entity.player.attack")) return "Player Attack";
         if (soundId.contains("block.anvil")) return "Anvil";
         if (soundId.contains("block.chest")) return "Chest";

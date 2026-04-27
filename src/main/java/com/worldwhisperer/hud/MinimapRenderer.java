@@ -181,30 +181,27 @@ public class MinimapRenderer {
 
     private void drawStructures(DrawContext ctx, int x, int y, int w, int h,
                                  int centerX, int centerZ, int bpp) {
-        // Structure icons rendered from StructureFinder predictions
-        var structures = mod.getMapManager().getNearbyStructures();
-        if (structures == null) return;
+        var markers = mod.getMapManager().getStructureMarkers();
+        if (markers == null || markers.isEmpty()) return;
 
         int radiusBlocks = (w / 2) * bpp;
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
 
-        for (var entry : structures.entrySet()) {
-            BlockPos pos = entry.getValue();
-            int dx = pos.getX() - centerX;
-            int dz = pos.getZ() - centerZ;
+        for (var marker : markers) {
+            int dx = marker.pos().getX() - centerX;
+            int dz = marker.pos().getZ() - centerZ;
 
             if (Math.abs(dx) > radiusBlocks || Math.abs(dz) > radiusBlocks) continue;
 
             int px = x + w / 2 + dx / bpp;
             int pz = y + h / 2 + dz / bpp;
 
-            // Structure marker
-            ctx.fill(px - 2, pz - 2, px + 3, pz + 3, 0xFFFFAA00);
-            ctx.fill(px - 1, pz - 1, px + 2, pz + 2, 0xFFFFFF55);
+            int borderColor = ColorUtil.brighten(marker.color(), 0.6f) | 0xFF000000;
+            ctx.fill(px - 3, pz - 3, px + 4, pz + 4, 0xFF000000);
+            ctx.fill(px - 2, pz - 2, px + 3, pz + 3, borderColor);
+            ctx.fill(px - 1, pz - 1, px + 2, pz + 2, marker.color());
 
-            String label = entry.getKey();
-            if (label.length() > 3) label = label.substring(0, 3);
-            ctx.drawText(font, label, px + 4, pz - 3, ColorUtil.GOLD, true);
+            ctx.drawText(font, marker.label(), px + 5, pz - 3, marker.color(), true);
         }
     }
 
