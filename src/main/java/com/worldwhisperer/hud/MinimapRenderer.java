@@ -98,6 +98,12 @@ public class MinimapRenderer {
         ctx.drawText(client.textRenderer, coords,
                 x + (w - client.textRenderer.getWidth(coords)) / 2,
                 y + h - 9, ColorUtil.WHITE, true);
+
+        // Draw zoom level indicator (top-right corner)
+        String zoomText = zoom + "x";
+        ctx.drawText(client.textRenderer, zoomText,
+                x + w - client.textRenderer.getWidth(zoomText) - 2,
+                y + 2, ColorUtil.GRAY, true);
     }
 
     private void drawSlimeChunks(DrawContext ctx, int x, int y, int w, int h,
@@ -113,6 +119,9 @@ public class MinimapRenderer {
             }
         }
         if (seed == 0) return;
+
+        int chunkPixels = 16 / blocksPerPixel;
+        if (chunkPixels < 2) return;
 
         int radiusBlocks = (w / 2) * blocksPerPixel;
         int minChunkX = (centerX - radiusBlocks) >> 4;
