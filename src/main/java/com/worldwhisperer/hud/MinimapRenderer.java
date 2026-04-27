@@ -278,6 +278,13 @@ public class MinimapRenderer {
             ctx.drawText(client.textRenderer, badge, x + 2, y + h - 19, badgeColor, true);
         }
 
+        // Y-level quick indicator (top-left, below scale bar)
+        if (playerY < 0) {
+            ctx.drawText(client.textRenderer, "DEEP", x + 2, y + 8, ColorUtil.RED, true);
+        } else if (playerY > 200) {
+            ctx.drawText(client.textRenderer, "HIGH", x + 2, y + 8, ColorUtil.AQUA, true);
+        }
+
         // Draw nearest structure indicator (bottom-right, above coords bar)
         if (cfg.showStructures) {
             var markers = map.getStructureMarkers();
