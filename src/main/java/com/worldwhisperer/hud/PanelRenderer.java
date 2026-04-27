@@ -111,6 +111,14 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
+        if (gs.getDurability() >= 0) {
+            int pct = gs.getMaxDurability() > 0 ? gs.getDurability() * 100 / gs.getMaxDurability() : 0;
+            int durColor = pct > 50 ? ColorUtil.GREEN : pct > 20 ? ColorUtil.YELLOW : ColorUtil.RED;
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Tool", gs.getDurability() + "/" + gs.getMaxDurability(), labelColor, durColor);
+            ty += LINE_H;
+        }
+
         String entities = String.format("H:%d P:%d", gs.getHostileCount(), gs.getPassiveCount());
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Entities", entities, labelColor, valueColor);

@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -40,6 +41,9 @@ public class GameStats {
     private int xpLevel;
     private int air;
     private int maxAir;
+    private String heldItemName = "";
+    private int durability = -1;
+    private int maxDurability = -1;
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -79,6 +83,16 @@ public class GameStats {
         double dx = client.player.getX() - client.player.prevX;
         double dz = client.player.getZ() - client.player.prevZ;
         speed = (float) Math.sqrt(dx * dx + dz * dz) * 20;
+
+        ItemStack held = client.player.getMainHandStack();
+        if (held != null && !held.isEmpty() && held.isDamageable()) {
+            heldItemName = held.getName().getString();
+            maxDurability = held.getMaxDamage();
+            durability = maxDurability - held.getDamage();
+        } else {
+            heldItemName = "";
+            durability = -1;
+        }
 
         if (client.world.isThundering()) weather = "Thunder";
         else if (client.world.isRaining()) weather = "Rain";
@@ -168,4 +182,7 @@ public class GameStats {
     public int getXpLevel() { return xpLevel; }
     public int getAir() { return air; }
     public int getMaxAir() { return maxAir; }
+    public String getHeldItemName() { return heldItemName; }
+    public int getDurability() { return durability; }
+    public int getMaxDurability() { return maxDurability; }
 }
