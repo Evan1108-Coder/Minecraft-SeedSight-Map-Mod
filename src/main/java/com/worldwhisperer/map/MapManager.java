@@ -139,7 +139,8 @@ public class MapManager {
 
         int playerX = (int) client.player.getX();
         int playerZ = (int) client.player.getZ();
-        structureMarkers = structureFinder.findNearbyMarkers(seed, playerX, playerZ, 2048);
+        String dimension = client.world.getRegistryKey().getValue().getPath();
+        structureMarkers = structureFinder.findNearbyMarkers(seed, playerX, playerZ, 2048, dimension);
     }
 
     private long getSeed(MinecraftClient client) {
