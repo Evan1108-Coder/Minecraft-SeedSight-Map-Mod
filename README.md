@@ -45,6 +45,10 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Hostile/passive entity counts within 128 blocks
 - Slime chunk indicator
 - Sound indicators (25+ mob types: Creeper, Zombie, Skeleton, Enderman, Witch, Pillager, Ravager, Evoker, and more)
+- **Sound source markers**: hostile sounds appear as fading red dots on minimap, other sounds as yellow
+- **Player name labels**: other players show their name above their minimap marker
+- **Circular minimap mode**: toggle between square and circular shape (C key)
+- Compass bearing (degrees) shown alongside facing direction
 
 ### Performance Stats
 - FPS and TPS monitoring
@@ -96,6 +100,8 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 | `-` | Zoom out |
 | `B` | Add waypoint at current position |
 | `N` | Cycle through tabs |
+| `C` | Toggle circular/square minimap |
+| `L` | Toggle north-locked/rotation-following mode |
 
 All keybindings are configurable in Minecraft's Controls settings under the "WorldWhisperer" category.
 
