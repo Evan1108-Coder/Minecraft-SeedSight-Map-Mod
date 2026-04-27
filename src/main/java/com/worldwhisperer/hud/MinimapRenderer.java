@@ -336,19 +336,21 @@ public class MinimapRenderer {
     private void drawGrid(DrawContext ctx, int x, int y, int w, int h,
                            int centerX, int centerZ, int blocksPerPixel) {
         int gridColor = 0x33FFFFFF;
-        int chunkSize = 16;
+        int chunkPixels = 16 / blocksPerPixel;
+        if (chunkPixels < 2) return;
 
-        for (int px = 0; px < w; px++) {
-            int worldX = centerX - (w / 2) * blocksPerPixel + px * blocksPerPixel;
-            if (worldX % chunkSize == 0) {
-                ctx.fill(x + px, y, x + px + 1, y + h, gridColor);
-            }
+        int worldMinX = centerX - (w / 2) * blocksPerPixel;
+        int worldMinZ = centerZ - (h / 2) * blocksPerPixel;
+        int firstChunkX = ((worldMinX >> 4) + 1) << 4;
+        int firstChunkZ = ((worldMinZ >> 4) + 1) << 4;
+
+        for (int wx = firstChunkX; wx < worldMinX + w * blocksPerPixel; wx += 16) {
+            int px = (wx - worldMinX) / blocksPerPixel;
+            if (px >= 0 && px < w) ctx.fill(x + px, y, x + px + 1, y + h, gridColor);
         }
-        for (int pz = 0; pz < h; pz++) {
-            int worldZ = centerZ - (h / 2) * blocksPerPixel + pz * blocksPerPixel;
-            if (worldZ % chunkSize == 0) {
-                ctx.fill(x, y + pz, x + w, y + pz + 1, gridColor);
-            }
+        for (int wz = firstChunkZ; wz < worldMinZ + h * blocksPerPixel; wz += 16) {
+            int pz = (wz - worldMinZ) / blocksPerPixel;
+            if (pz >= 0 && pz < h) ctx.fill(x, y + pz, x + w, y + pz + 1, gridColor);
         }
     }
 

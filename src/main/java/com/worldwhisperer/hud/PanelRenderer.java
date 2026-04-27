@@ -187,13 +187,16 @@ public class PanelRenderer {
         }
 
         // Distance to Home waypoint
-        var homeWps = mod.getWaypointManager().getWaypoints().stream()
-                .filter(wp -> wp.name().equals("Home") && wp.dimension().equals(gs.getDimension()))
-                .findFirst();
-        if (homeWps.isPresent()) {
+        Waypoint home = null;
+        for (Waypoint wp : mod.getWaypointManager().getWaypoints()) {
+            if (wp.name().equals("Home") && wp.dimension().equals(gs.getDimension())) {
+                home = wp;
+                break;
+            }
+        }
+        if (home != null) {
             net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
             if (mc.player != null) {
-                var home = homeWps.get();
                 double dist = home.distanceTo(mc.player.getX(), mc.player.getY(), mc.player.getZ());
                 String distStr = dist < 1000 ? String.format("%.0fm", dist) : String.format("%.1fkm", dist / 1000);
                 drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
