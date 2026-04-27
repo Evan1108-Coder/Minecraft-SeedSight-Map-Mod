@@ -3,8 +3,8 @@ package com.worldwhisperer.hud;
 import com.worldwhisperer.WorldWhispererClient;
 import com.worldwhisperer.config.WorldWhispererConfig;
 import com.worldwhisperer.data.Waypoint;
-import com.worldwhisperer.map.BiomeColorMap;
 import com.worldwhisperer.map.MapManager;
+import com.worldwhisperer.worldgen.SlimeChunkFinder;
 import com.worldwhisperer.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -61,6 +61,11 @@ public class MinimapRenderer {
             }
         }
 
+        // Draw slime chunk overlay
+        if (cfg.showSlimeChunks) {
+            drawSlimeChunks(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
+        }
+
         // Draw grid overlay
         if (cfg.showGrid) {
             drawGrid(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
@@ -93,6 +98,49 @@ public class MinimapRenderer {
         ctx.drawText(client.textRenderer, coords,
                 x + (w - client.textRenderer.getWidth(coords)) / 2,
                 y + h - 9, ColorUtil.WHITE, true);
+    }
+
+    private void drawSlimeChunks(DrawContext ctx, int x, int y, int w, int h,
+                                  int centerX, int centerZ, int blocksPerPixel) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        long seed = 0;
+        if (client.isIntegratedServerRunning() && client.getServer() != null) {
+            seed = client.getServer().getOverworld().getSeed();
+        } else {
+            String override = mod.getConfig().seedOverride;
+            if (!override.isEmpty()) {
+                try { seed = Long.parseLong(override); } catch (NumberFormatException e) { seed = override.hashCode(); }
+            }
+        }
+        if (seed == 0) return;
+
+        int radiusBlocks = (w / 2) * blocksPerPixel;
+        int minChunkX = (centerX - radiusBlocks) >> 4;
+        int maxChunkX = (centerX + radiusBlocks) >> 4;
+        int minChunkZ = (centerZ - radiusBlocks) >> 4;
+        int maxChunkZ = (centerZ + radiusBlocks) >> 4;
+
+        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                if (!SlimeChunkFinder.isSlimeChunk(seed, cx, cz)) continue;
+
+                int blockX = cx << 4;
+                int blockZ = cz << 4;
+                int px1 = x + w / 2 + (blockX - centerX) / blocksPerPixel;
+                int pz1 = y + h / 2 + (blockZ - centerZ) / blocksPerPixel;
+                int px2 = px1 + 16 / blocksPerPixel;
+                int pz2 = pz1 + 16 / blocksPerPixel;
+
+                px1 = Math.max(px1, x);
+                pz1 = Math.max(pz1, y);
+                px2 = Math.min(px2, x + w);
+                pz2 = Math.min(pz2, y + h);
+
+                if (px2 > px1 && pz2 > pz1) {
+                    ctx.fill(px1, pz1, px2, pz2, 0x3300FF00);
+                }
+            }
+        }
     }
 
     private void drawGrid(DrawContext ctx, int x, int y, int w, int h,
