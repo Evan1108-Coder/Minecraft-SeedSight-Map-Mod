@@ -28,6 +28,8 @@ public class GameStats {
     private String dimension = "overworld";
     private String weather = "Clear";
     private int moonPhase;
+    private String lastBiome = "";
+    private long biomeChangeTime;
     private int tickCounter;
 
     public void tick(MinecraftClient client) {
@@ -38,6 +40,10 @@ public class GameStats {
         playerZ = MathHelper.floor(client.player.getZ());
 
         biome = biomePredictor.getBiomeAt(playerX, playerY, playerZ);
+        if (!biome.equals(lastBiome) && !lastBiome.isEmpty()) {
+            biomeChangeTime = System.currentTimeMillis();
+        }
+        lastBiome = biome;
 
         dimension = client.world.getRegistryKey().getValue().getPath();
 
@@ -131,4 +137,5 @@ public class GameStats {
     public boolean isInEnd() { return "the_end".equals(dimension); }
     public String getWeather() { return weather; }
     public int getMoonPhase() { return moonPhase; }
+    public boolean isBiomeChanged() { return System.currentTimeMillis() - biomeChangeTime < 3000; }
 }
