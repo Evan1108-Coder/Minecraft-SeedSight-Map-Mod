@@ -56,6 +56,7 @@ public class GameStats {
     private long sessionStartTime;
     private double totalDistance;
     private String targetBlock = "";
+    private boolean hasNightVision;
     private final int[] trailX = new int[20];
     private final int[] trailZ = new int[20];
     private int trailIndex;
@@ -165,13 +166,16 @@ public class GameStats {
             }
 
             List<String> effects = new ArrayList<>();
+            boolean nightVis = false;
             for (StatusEffectInstance effect : client.player.getStatusEffects()) {
                 int amp = effect.getAmplifier();
                 int secs = effect.getDuration() / 20;
                 String time = String.format("%d:%02d", secs / 60, secs % 60);
                 String name = effect.getEffectType().value().getName().getString();
                 effects.add(name + (amp > 0 ? " " + (amp + 1) : "") + " " + time);
+                if (name.equals("Night Vision")) nightVis = true;
             }
+            hasNightVision = nightVis;
             activeEffects = List.copyOf(effects);
         }
     }
@@ -255,12 +259,19 @@ public class GameStats {
     public int getDurability() { return durability; }
     public int getMaxDurability() { return maxDurability; }
     public List<String> getActiveEffects() { return activeEffects; }
+    public boolean hasNightVision() { return hasNightVision; }
     public String getTargetBlock() { return targetBlock; }
     public double getTotalDistance() { return totalDistance; }
     public long getSessionDurationSecs() {
         return sessionStartTime > 0 ? (System.currentTimeMillis() - sessionStartTime) / 1000 : 0;
     }
     public int getTrailSize() { return trailSize; }
-    public int getTrailX(int i) { return trailX[((trailIndex - trailSize + i) % trailX.length + trailX.length) % trailX.length]; }
-    public int getTrailZ(int i) { return trailZ[((trailIndex - trailSize + i) % trailZ.length + trailZ.length) % trailZ.length]; }
+    public int getTrailX(int i) {
+        if (i < 0 || i >= trailSize) return playerX;
+        return trailX[((trailIndex - trailSize + i) % trailX.length + trailX.length) % trailX.length];
+    }
+    public int getTrailZ(int i) {
+        if (i < 0 || i >= trailSize) return playerZ;
+        return trailZ[((trailIndex - trailSize + i) % trailZ.length + trailZ.length) % trailZ.length];
+    }
 }
