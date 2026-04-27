@@ -44,8 +44,11 @@ public class PerfStats {
 
             if (client.world != null) {
                 entityCount = 0;
-                for (var ignored : client.world.getEntities()) {
-                    entityCount++;
+                try {
+                    for (var ignored : client.world.getEntities()) {
+                        entityCount++;
+                    }
+                } catch (java.util.ConcurrentModificationException ignored) {
                 }
             }
         }

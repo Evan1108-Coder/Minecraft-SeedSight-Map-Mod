@@ -73,6 +73,20 @@ public class PanelRenderer {
                 "", phaseStr, labelColor, phaseColor);
         ty += LINE_H;
 
+        // Day/night progress bar
+        int barX = x + PAD;
+        int barW = w - PAD * 2;
+        int barH = 3;
+        ctx.fill(barX, ty, barX + barW, ty + barH, 0xFF222222);
+        float progress = tickTime / 24000f;
+        int fillW = (int) (barW * progress);
+        int barColor = tickTime < 12000 ? ColorUtil.GOLD : 0xFF333399;
+        ctx.fill(barX, ty, barX + fillW, ty + barH, barColor);
+        // Sunset/sunrise markers
+        int sunsetX = barX + (int) (barW * (12000f / 24000f));
+        ctx.fill(sunsetX, ty, sunsetX + 1, ty + barH, ColorUtil.RED);
+        ty += barH + 2;
+
         int light = gs.getLightLevel();
         int lightColor = light == 0 ? ColorUtil.RED : light <= 7 ? ColorUtil.YELLOW : ColorUtil.GREEN;
         String lightStr = light == 0 ? "0 DANGER" : String.valueOf(light);
@@ -88,9 +102,18 @@ public class PanelRenderer {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Dim", "Nether", labelColor, ColorUtil.RED);
             ty += LINE_H;
+            int owX = gs.getPlayerX() * 8, owZ = gs.getPlayerZ() * 8;
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "OW", String.format("%d, %d", owX, owZ), labelColor, ColorUtil.GREEN);
+            ty += LINE_H;
         } else if (gs.isInEnd()) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Dim", "The End", labelColor, ColorUtil.LIGHT_PURPLE);
+            ty += LINE_H;
+        } else {
+            int nX = gs.getPlayerX() / 8, nZ = gs.getPlayerZ() / 8;
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Nether", String.format("%d, %d", nX, nZ), labelColor, ColorUtil.RED);
             ty += LINE_H;
         }
 
