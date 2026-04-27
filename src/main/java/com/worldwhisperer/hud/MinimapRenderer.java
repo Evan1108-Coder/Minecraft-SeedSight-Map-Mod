@@ -11,7 +11,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -196,6 +199,16 @@ public class MinimapRenderer {
                 int tw = client.textRenderer.getWidth(structText);
                 ctx.drawText(client.textRenderer, structText,
                         x + w - tw - 2, y + h - 19, nearest.color(), true);
+
+                // Direction arrow at edge pointing toward nearest structure
+                int sx = toScreenX(nearest.pos().getX(), nearest.pos().getZ());
+                int sy = toScreenY(nearest.pos().getX(), nearest.pos().getZ());
+                if (isOutsideMap(sx, sy, x, y, w, h)) {
+                    int ex = Math.max(x + 3, Math.min(x + w - 4, sx));
+                    int ey = Math.max(y + 3, Math.min(y + h - 14, sy));
+                    ctx.fill(ex - 2, ey - 2, ex + 3, ey + 3, 0xFF000000);
+                    ctx.fill(ex - 1, ey - 1, ex + 2, ey + 2, nearest.color());
+                }
             }
         }
     }
@@ -295,6 +308,12 @@ public class MinimapRenderer {
                 TextRenderer font = client.textRenderer;
                 ctx.drawText(font, name, px - font.getWidth(name) / 2, pz - 8, ColorUtil.AQUA, true);
                 continue;
+            } else if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity) {
+                color = ColorUtil.LIGHT_PURPLE;
+                size = 4;
+            } else if (entity instanceof WardenEntity) {
+                color = ColorUtil.MC_DARK_AQUA;
+                size = 3;
             } else if (entity instanceof HostileEntity) {
                 color = ColorUtil.RED;
                 size = 2;
