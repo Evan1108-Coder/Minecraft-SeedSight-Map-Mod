@@ -43,6 +43,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding toggleNorthLockKey;
     private KeyBinding copyCoordsKey;
     private KeyBinding deleteWaypointKey;
+    private KeyBinding cycleCornerKey;
     private boolean wasAlive = true;
     private boolean wasSleeping = false;
     private String modeNotification = "";
@@ -112,6 +113,10 @@ public class WorldWhispererClient implements ClientModInitializer {
         deleteWaypointKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.worldwhisperer.delete_waypoint", InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_X, "key.worldwhisperer.category"));
+
+        cycleCornerKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.worldwhisperer.cycle_corner", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_G, "key.worldwhisperer.category"));
     }
 
     private void registerEvents() {
@@ -160,6 +165,10 @@ public class WorldWhispererClient implements ClientModInitializer {
                 waypointManager.deleteNearest(
                         client.player.getX(), client.player.getY(), client.player.getZ(),
                         gameStats.getDimension());
+            }
+            if (cycleCornerKey.wasPressed()) {
+                config.cycleCorner();
+                showModeNotification("HUD: " + config.getCornerName());
             }
 
             // Death detection
