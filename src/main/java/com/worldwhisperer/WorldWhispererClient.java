@@ -40,6 +40,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding addWaypointKey;
     private KeyBinding cycleTabKey;
     private KeyBinding toggleCircularKey;
+    private KeyBinding toggleNorthLockKey;
     private boolean wasAlive = true;
 
     public static WorldWhispererClient getInstance() {
@@ -94,6 +95,10 @@ public class WorldWhispererClient implements ClientModInitializer {
         toggleCircularKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.worldwhisperer.toggle_circular", InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_C, "key.worldwhisperer.category"));
+
+        toggleNorthLockKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.worldwhisperer.toggle_north_lock", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_L, "key.worldwhisperer.category"));
     }
 
     private void registerEvents() {
@@ -123,6 +128,10 @@ public class WorldWhispererClient implements ClientModInitializer {
             }
             if (toggleCircularKey.wasPressed()) {
                 config.circularMap = !config.circularMap;
+                config.save();
+            }
+            if (toggleNorthLockKey.wasPressed()) {
+                config.northLocked = !config.northLocked;
                 config.save();
             }
 
