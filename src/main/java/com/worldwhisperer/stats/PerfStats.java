@@ -12,6 +12,8 @@ public class PerfStats {
     private int renderDistance;
     private int ping = -1;
     private int entityCount;
+    private String serverBrand = "";
+    private int onlinePlayers;
 
     private long lastTickTime;
     private int tickCount;
@@ -51,13 +53,18 @@ public class PerfStats {
         renderDistance = client.options.getViewDistance().getValue();
 
         if (client.getNetworkHandler() != null && client.player != null) {
-            PlayerListEntry entry = client.getNetworkHandler()
-                    .getPlayerListEntry(client.player.getUuid());
+            ClientPlayNetworkHandler handler = client.getNetworkHandler();
+            PlayerListEntry entry = handler.getPlayerListEntry(client.player.getUuid());
             if (entry != null) {
                 ping = entry.getLatency();
             }
+            onlinePlayers = handler.getPlayerList().size();
+            String brand = handler.getBrand();
+            serverBrand = brand != null ? brand : "";
         } else {
             ping = -1;
+            onlinePlayers = 0;
+            serverBrand = "";
         }
 
         // TPS estimation (client-side approximation)
@@ -83,4 +90,6 @@ public class PerfStats {
     public int getRenderDistance() { return renderDistance; }
     public int getPing() { return ping; }
     public int getEntityCount() { return entityCount; }
+    public String getServerBrand() { return serverBrand; }
+    public int getOnlinePlayers() { return onlinePlayers; }
 }
