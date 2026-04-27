@@ -567,6 +567,18 @@ public class PanelRenderer {
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Hero", "25-55% discount (raid)", ColorUtil.GRAY, ColorUtil.GREEN);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Fall Damage", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Safe", "3 blocks (no damage)", ColorUtil.GRAY, ColorUtil.GREEN);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Fatal", "23.5 blocks (20 HP)", ColorUtil.GRAY, ColorUtil.RED);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Water", "Any depth = safe", ColorUtil.GRAY, ColorUtil.AQUA);
     }
 
     public void renderSettings(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
