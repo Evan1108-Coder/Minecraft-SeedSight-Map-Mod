@@ -35,8 +35,10 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Render distance boundary**: faint circle showing the edge of loaded chunks
 - **World spawn marker**: white cross at coordinates 0,0 (Overworld only)
 - **Visual scale bar**: 32-block reference ruler at top-left of minimap
+- **Improved player arrow**: directional arrow with wings and tail, rotates with facing
 - **Dropped items**: shown as white dots (1px) on minimap
 - **Mode change notifications**: centered popup when toggling circular/north-lock modes
+- **Expanded mode biome name**: coordinate bar shows biome in expanded view
 - **Night vision boost**: minimap brightens 30% when player has Night Vision effect
 - **Water depth shading**: deeper water renders progressively darker blue (up to 10 blocks)
 - **Lava glow**: lava surface blocks render with brighter orange on minimap
@@ -61,7 +63,9 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Session tracker**: time played and distance walked this session
 - **Nearest structure bearing**: cardinal direction + distance to closest predicted structure
 - **Air/oxygen meter**: appears when underwater with color-coded threshold
+- **Chunk coordinates** in stats panel
 - Light level with **block/sky breakdown** (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
+- **Movement mode display**: Sprint (yellow), Swim (cyan), Elytra (purple), Riding (shows mount name)
 - Dimension indicator (shows when in Nether or End)
 - **Cross-dimension coordinates**: always shows corresponding Nether/Overworld coordinates
 - **Distance to Home**: shows cardinal bearing + distance to your bed/home waypoint
@@ -120,6 +124,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Crop growth reference**: wheat, sugar cane, bamboo growth times
 - **Redstone reference**: signal range, repeater delays, hopper speed
 - **Villager trading reference**: zombie curing, restock schedule, Hero of the Village discounts
+- **Fall damage reference**: safe height, fatal height, water landing
 
 ### Settings
 - Toggle all features on/off
