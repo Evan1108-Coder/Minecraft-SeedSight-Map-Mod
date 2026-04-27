@@ -27,6 +27,7 @@ public final class ColorUtil {
     }
 
     public static int lerp(int c1, int c2, float t) {
+        t = Math.max(0f, Math.min(1f, t));
         int a1 = (c1 >> 24) & 0xFF, r1 = (c1 >> 16) & 0xFF, g1 = (c1 >> 8) & 0xFF, b1 = c1 & 0xFF;
         int a2 = (c2 >> 24) & 0xFF, r2 = (c2 >> 16) & 0xFF, g2 = (c2 >> 8) & 0xFF, b2 = c2 & 0xFF;
         return argb(
