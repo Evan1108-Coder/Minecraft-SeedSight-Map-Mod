@@ -305,6 +305,10 @@ public class PanelRenderer {
 
         drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "North Lock", cfg.northLocked ? "ON" : "OFF");
+        ty += LINE_H + 2;
+
+        drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Circular Map", cfg.circularMap ? "ON" : "OFF");
         ty += LINE_H + 4;
 
         if (!cfg.seedOverride.isEmpty()) {
