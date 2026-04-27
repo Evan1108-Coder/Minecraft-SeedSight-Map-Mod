@@ -24,6 +24,7 @@ public class MapManager {
     private List<StructureFinder.StructureMarker> structureMarkers = List.of();
     private int lastPlayerChunkX = Integer.MIN_VALUE;
     private int lastPlayerChunkZ = Integer.MIN_VALUE;
+    private String lastDimension = "";
     private int tickCounter = 0;
 
     private static final int TILE_SIZE = 16;
@@ -37,6 +38,13 @@ public class MapManager {
         if (client.world == null || client.player == null) return;
 
         tickCounter++;
+
+        String currentDim = client.world.getRegistryKey().getValue().getPath();
+        if (!currentDim.equals(lastDimension)) {
+            tileCache.clear();
+            lastDimension = currentDim;
+        }
+
         int playerChunkX = client.player.getChunkPos().x;
         int playerChunkZ = client.player.getChunkPos().z;
 
