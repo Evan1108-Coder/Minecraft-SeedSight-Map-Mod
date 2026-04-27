@@ -1,7 +1,6 @@
 package com.worldwhisperer.data;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.MathHelper;
 
 public record Waypoint(String name, int x, int y, int z, int color, String dimension, boolean visible) {
 
