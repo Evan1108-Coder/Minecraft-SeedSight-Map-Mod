@@ -57,8 +57,24 @@ public class HudRenderer {
         int totalW = TAB_W + BORDER + contentW + BORDER * 2;
         int totalH = contentH + BORDER * 2;
 
-        int baseX = cfg.hudX >= 0 ? cfg.hudX : screenW - totalW - 5;
-        int baseY = cfg.hudY;
+        int screenH = client.getWindow().getScaledHeight();
+        int baseX, baseY;
+        if (cfg.hudX >= 0) {
+            baseX = cfg.hudX;
+            baseY = cfg.hudY;
+        } else {
+            baseX = switch (cfg.hudCorner) {
+                case 1 -> 5;
+                case 2 -> screenW - totalW - 5;
+                case 3 -> 5;
+                default -> screenW - totalW - 5;
+            };
+            baseY = switch (cfg.hudCorner) {
+                case 2 -> screenH - totalH - 5;
+                case 3 -> screenH - totalH - 5;
+                default -> 10;
+            };
+        }
 
         float alpha = cfg.hudOpacity;
 
