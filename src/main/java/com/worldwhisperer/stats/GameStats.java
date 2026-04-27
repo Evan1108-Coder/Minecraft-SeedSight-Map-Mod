@@ -51,6 +51,11 @@ public class GameStats {
     private int durability = -1;
     private int maxDurability = -1;
     private volatile List<String> activeEffects = List.of();
+    private final int[] trailX = new int[20];
+    private final int[] trailZ = new int[20];
+    private int trailIndex;
+    private int trailSize;
+    private int trailTick;
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -106,6 +111,14 @@ public class GameStats {
         else weather = "Clear";
 
         moonPhase = client.world.getMoonPhase();
+
+        trailTick++;
+        if (trailTick % 10 == 0) {
+            trailX[trailIndex] = playerX;
+            trailZ[trailIndex] = playerZ;
+            trailIndex = (trailIndex + 1) % trailX.length;
+            if (trailSize < trailX.length) trailSize++;
+        }
 
         tickCounter++;
         if (tickCounter % 20 == 0) {
@@ -222,4 +235,7 @@ public class GameStats {
     public int getDurability() { return durability; }
     public int getMaxDurability() { return maxDurability; }
     public List<String> getActiveEffects() { return activeEffects; }
+    public int getTrailSize() { return trailSize; }
+    public int getTrailX(int i) { return trailX[((trailIndex - trailSize + i) % trailX.length + trailX.length) % trailX.length]; }
+    public int getTrailZ(int i) { return trailZ[((trailIndex - trailSize + i) % trailZ.length + trailZ.length) % trailZ.length]; }
 }
