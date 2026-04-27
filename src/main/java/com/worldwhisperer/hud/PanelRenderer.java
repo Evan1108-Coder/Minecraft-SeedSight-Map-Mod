@@ -520,6 +520,18 @@ public class PanelRenderer {
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Hopper", "2.5 items/sec", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Villager Trading", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Cure", "Zombie Villager = best prices", ColorUtil.GRAY, ColorUtil.GOLD);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Restock", "2x per day (workstation)", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Hero", "25-55% discount (raid)", ColorUtil.GRAY, ColorUtil.GREEN);
     }
 
     public void renderSettings(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
