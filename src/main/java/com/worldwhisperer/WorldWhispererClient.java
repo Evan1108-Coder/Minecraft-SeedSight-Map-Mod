@@ -39,6 +39,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding zoomOutKey;
     private KeyBinding addWaypointKey;
     private KeyBinding cycleTabKey;
+    private KeyBinding toggleCircularKey;
     private boolean wasAlive = true;
 
     public static WorldWhispererClient getInstance() {
@@ -89,6 +90,10 @@ public class WorldWhispererClient implements ClientModInitializer {
         cycleTabKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.worldwhisperer.cycle_tab", InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_N, "key.worldwhisperer.category"));
+
+        toggleCircularKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.worldwhisperer.toggle_circular", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_C, "key.worldwhisperer.category"));
     }
 
     private void registerEvents() {
@@ -115,6 +120,10 @@ public class WorldWhispererClient implements ClientModInitializer {
             }
             if (cycleTabKey.wasPressed()) {
                 tabManager.cycleTab();
+            }
+            if (toggleCircularKey.wasPressed()) {
+                config.circularMap = !config.circularMap;
+                config.save();
             }
 
             // Death detection
