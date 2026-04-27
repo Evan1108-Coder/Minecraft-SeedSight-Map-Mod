@@ -62,6 +62,7 @@ public class GameStats {
     private boolean isFreezing;
     private boolean isOnFire;
     private String ridingEntity = "";
+    private boolean isGliding;
     private final int[] trailX = new int[20];
     private final int[] trailZ = new int[20];
     private int trailIndex;
@@ -106,6 +107,7 @@ public class GameStats {
         maxAir = client.player.getMaxAir();
         isFreezing = client.player.getFrozenTicks() > 0;
         isOnFire = client.player.isOnFire();
+        isGliding = client.player.isFallFlying();
         if (client.player.hasVehicle() && client.player.getVehicle() != null) {
             ridingEntity = client.player.getVehicle().getName().getString();
         } else {
@@ -277,6 +279,7 @@ public class GameStats {
     public boolean isFreezing() { return isFreezing; }
     public boolean isOnFire() { return isOnFire; }
     public String getRidingEntity() { return ridingEntity; }
+    public boolean isGliding() { return isGliding; }
     public String getTargetBlock() { return targetBlock; }
     public double getTotalDistance() { return totalDistance; }
     public long getSessionDurationSecs() {
