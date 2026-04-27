@@ -41,7 +41,7 @@ public class HudRenderer {
 
         int screenW = client.getWindow().getScaledWidth();
         int mapSize = expanded ? cfg.mapSize * 2 : cfg.mapSize;
-        int panelH = cfg.panelHeight;
+        int panelH = expanded ? (int) (cfg.panelHeight * 1.5) : cfg.panelHeight;
         int contentW = mapSize;
         int contentH;
 
