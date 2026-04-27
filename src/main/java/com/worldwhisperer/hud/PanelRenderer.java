@@ -33,10 +33,19 @@ public class PanelRenderer {
                 labelColor, valueColor);
         ty += LINE_H;
 
+        int chunkX = gs.getPlayerX() >> 4;
+        int chunkZ = gs.getPlayerZ() >> 4;
         int localX = ((gs.getPlayerX() % 16) + 16) % 16;
         int localZ = ((gs.getPlayerZ() % 16) + 16) % 16;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Chunk", String.format("%d, %d  (%d, %d)", gs.getPlayerX() >> 4, gs.getPlayerZ() >> 4, localX, localZ),
+                "Chunk", String.format("%d, %d  (%d, %d)", chunkX, chunkZ, localX, localZ),
+                labelColor, ColorUtil.DARK_GRAY);
+        ty += LINE_H;
+
+        int regionX = chunkX >> 5;
+        int regionZ = chunkZ >> 5;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Region", String.format("r.%d.%d.mca", regionX, regionZ),
                 labelColor, ColorUtil.DARK_GRAY);
         ty += LINE_H;
 
