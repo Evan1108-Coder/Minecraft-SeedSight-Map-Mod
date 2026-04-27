@@ -22,7 +22,8 @@ public class SoundSystemMixin {
             SoundCategory category = sound.getCategory();
             float volume = sound.getVolume();
 
-            mod.getSoundIndicator().onSoundPlayed(soundId, category, volume);
+            mod.getSoundIndicator().onSoundPlayed(soundId, category, volume,
+                    sound.getX(), sound.getY(), sound.getZ());
         } catch (Exception ignored) {
             // Don't crash the sound system
         }
