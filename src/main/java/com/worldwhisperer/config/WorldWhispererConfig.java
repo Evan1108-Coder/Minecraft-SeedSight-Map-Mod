@@ -28,6 +28,7 @@ public class WorldWhispererConfig {
     public boolean showGrid = false;
     public boolean showSlimeChunks = false;
     public boolean northLocked = true;
+    public boolean circularMap = false;
 
     public boolean soundIndicators = true;
     public String seedOverride = "";

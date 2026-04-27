@@ -19,8 +19,8 @@ import net.minecraft.util.math.MathHelper;
 public class MinimapRenderer {
     private final WorldWhispererClient mod;
     private double cosYaw, sinYaw;
-    private boolean curNorthLocked;
-    private int centerBX, centerBZ, screenCX, screenCY, curBpp;
+    private boolean curNorthLocked, curCircular;
+    private int centerBX, centerBZ, screenCX, screenCY, curBpp, mapRadius;
 
     public MinimapRenderer(WorldWhispererClient mod) {
         this.mod = mod;
@@ -31,6 +31,15 @@ public class MinimapRenderer {
         int dz = worldZ - centerBZ;
         if (curNorthLocked) return screenCX + dx / curBpp;
         return screenCX + (int) ((dx * cosYaw + dz * sinYaw) / curBpp);
+    }
+
+    private boolean isOutsideMap(int px, int pz, int x, int y, int w, int h) {
+        if (curCircular) {
+            int dx = px - screenCX;
+            int dy = pz - screenCY;
+            return dx * dx + dy * dy > mapRadius * mapRadius;
+        }
+        return px < x || px >= x + w || pz < y || pz >= y + h;
     }
 
     private int toScreenY(int worldX, int worldZ) {
@@ -71,9 +80,17 @@ public class MinimapRenderer {
         this.screenCX = x + halfW;
         this.screenCY = y + halfH;
         this.curBpp = blocksPerPixel;
+        this.curCircular = cfg.circularMap;
+        this.mapRadius = halfW;
 
+        int radiusSq = halfW * halfW;
         for (int px = 0; px < w; px++) {
             for (int pz = 0; pz < h; pz++) {
+                if (curCircular) {
+                    int cdx = px - halfW;
+                    int cdz = pz - halfH;
+                    if (cdx * cdx + cdz * cdz > radiusSq) continue;
+                }
                 int worldX, worldZ;
                 if (cfg.northLocked) {
                     worldX = centerBlockX - radiusBlocks + px * blocksPerPixel;
@@ -88,6 +105,11 @@ public class MinimapRenderer {
                 int color = map.getColorAt(worldX, worldZ);
                 ctx.fill(x + px, y + pz, x + px + 1, y + pz + 1, color);
             }
+        }
+
+        // Draw circular border
+        if (curCircular) {
+            drawCircleBorder(ctx, x + halfW, y + halfH, halfW);
         }
 
         // Draw slime chunk overlay (Overworld + north-locked only)
@@ -245,7 +267,7 @@ public class MinimapRenderer {
 
             int px = toScreenX(ex, ez);
             int pz = toScreenY(ex, ez);
-            if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
+            if (isOutsideMap(px, pz, x, y, w, h)) continue;
 
             int color;
             int size;
@@ -288,7 +310,7 @@ public class MinimapRenderer {
             int px = toScreenX(wp.x(), wp.z());
             int pz = toScreenY(wp.x(), wp.z());
 
-            if (px >= x + 3 && px < x + w - 3 && pz >= y + 3 && pz < y + h - 3) {
+            if (!isOutsideMap(px, pz, x, y, w, h)) {
                 // Inside minimap: draw full waypoint marker
                 ctx.fill(px - 1, pz - 2, px + 2, pz + 3, 0xFF000000);
                 ctx.fill(px, pz - 1, px + 1, pz + 2, wp.color());
@@ -318,7 +340,7 @@ public class MinimapRenderer {
 
             int px = toScreenX(marker.pos().getX(), marker.pos().getZ());
             int pz = toScreenY(marker.pos().getX(), marker.pos().getZ());
-            if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
+            if (isOutsideMap(px, pz, x, y, w, h)) continue;
 
             int borderColor = ColorUtil.brighten(marker.color(), 1.4f) | 0xFF000000;
             ctx.fill(px - 3, pz - 3, px + 4, pz + 4, 0xFF000000);
@@ -345,11 +367,28 @@ public class MinimapRenderer {
         ctx.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, 0xFFFFFFFF);
     }
 
+    private void drawCircleBorder(DrawContext ctx, int cx, int cy, int radius) {
+        int borderColor = 0xFF333333;
+        int highlightColor = 0xFF555555;
+        int rSq = radius * radius;
+        int rInnerSq = (radius - 1) * (radius - 1);
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                int distSq = dx * dx + dy * dy;
+                if (distSq <= rSq && distSq > rInnerSq) {
+                    ctx.fill(cx + dx, cy + dy, cx + dx + 1, cy + dy + 1, borderColor);
+                } else if (distSq > rSq && distSq <= (radius + 1) * (radius + 1)) {
+                    ctx.fill(cx + dx, cy + dy, cx + dx + 1, cy + dy + 1, highlightColor);
+                }
+            }
+        }
+    }
+
     private void drawSoundMarkers(DrawContext ctx, int x, int y, int w, int h) {
         for (SoundIndicator.SoundEntry entry : mod.getSoundIndicator().getRecentEntries()) {
             int sx = toScreenX((int) entry.x(), (int) entry.z());
             int sy = toScreenY((int) entry.x(), (int) entry.z());
-            if (sx < x || sx >= x + w || sy < y || sy >= y + h) continue;
+            if (isOutsideMap(sx, sy, x, y, w, h)) continue;
 
             long age = System.currentTimeMillis() - entry.timestamp();
             if (age > 2000) continue;
