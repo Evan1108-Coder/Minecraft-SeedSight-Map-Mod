@@ -1,5 +1,6 @@
 package com.worldwhisperer.stats;
 
+import com.worldwhisperer.WorldWhispererClient;
 import com.worldwhisperer.worldgen.SeedPredictor;
 import com.worldwhisperer.worldgen.SlimeChunkFinder;
 import net.minecraft.client.MinecraftClient;
@@ -70,11 +71,12 @@ public class GameStats {
             }
 
             slimeChunk = false;
-            if (!isInNether() && !isInEnd()
-                    && client.isIntegratedServerRunning() && client.getServer() != null) {
-                long seed = client.getServer().getOverworld().getSeed();
-                slimeChunk = SlimeChunkFinder.isSlimeChunk(seed,
-                        client.player.getChunkPos().x, client.player.getChunkPos().z);
+            if (!isInNether() && !isInEnd()) {
+                long seed = getWorldSeed(client);
+                if (seed != 0) {
+                    slimeChunk = SlimeChunkFinder.isSlimeChunk(seed,
+                            client.player.getChunkPos().x, client.player.getChunkPos().z);
+                }
             }
         }
     }
@@ -96,6 +98,20 @@ public class GameStats {
             case WEST -> "W (-X)";
             default -> "?";
         };
+    }
+
+    private long getWorldSeed(MinecraftClient client) {
+        WorldWhispererClient mod = WorldWhispererClient.getInstance();
+        if (mod != null) {
+            String override = mod.getConfig().seedOverride;
+            if (!override.isEmpty()) {
+                try { return Long.parseLong(override); } catch (NumberFormatException e) { return override.hashCode(); }
+            }
+        }
+        if (client.isIntegratedServerRunning() && client.getServer() != null) {
+            return client.getServer().getOverworld().getSeed();
+        }
+        return 0;
     }
 
     public int getPlayerX() { return playerX; }
