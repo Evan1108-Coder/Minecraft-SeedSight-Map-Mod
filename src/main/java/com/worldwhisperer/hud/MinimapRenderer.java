@@ -122,7 +122,7 @@ public class MinimapRenderer {
             borderColor = 0xFF663333;
         }
         if (curCircular) {
-            drawCircleBorder(ctx, x + halfW, y + halfH, halfW);
+            drawCircleBorder(ctx, x + halfW, y + halfH, halfW, borderColor);
         } else {
             int bc = borderColor;
             ctx.fill(x, y, x + w, y + 1, bc);
@@ -515,8 +515,7 @@ public class MinimapRenderer {
         }
     }
 
-    private void drawCircleBorder(DrawContext ctx, int cx, int cy, int radius) {
-        int c = 0xFF333333;
+    private void drawCircleBorder(DrawContext ctx, int cx, int cy, int radius, int c) {
         int x0 = 0, y0 = radius, d = 3 - 2 * radius;
         while (y0 >= x0) {
             drawCircleOctants(ctx, cx, cy, x0, y0, c);
