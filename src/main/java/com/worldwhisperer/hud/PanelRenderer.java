@@ -415,6 +415,11 @@ public class PanelRenderer {
 
         drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Circular Map", cfg.circularMap ? "ON" : "OFF");
+        ty += LINE_H + 2;
+
+        String posStr = cfg.hudX < 0 ? "Top-Right" : cfg.hudX + "," + cfg.hudY;
+        drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Position", posStr);
         ty += LINE_H + 4;
 
         if (!cfg.seedOverride.isEmpty()) {
