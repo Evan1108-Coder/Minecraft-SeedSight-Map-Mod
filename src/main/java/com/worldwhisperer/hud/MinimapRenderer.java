@@ -314,10 +314,22 @@ public class MinimapRenderer {
             int pz = toScreenY(wp.x(), wp.z());
 
             if (!isOutsideMap(px, pz, x, y, w, h)) {
-                // Inside minimap: draw full waypoint marker
-                ctx.fill(px - 1, pz - 2, px + 2, pz + 3, 0xFF000000);
-                ctx.fill(px, pz - 1, px + 1, pz + 2, wp.color());
-                ctx.fill(px - 1, pz, px + 2, pz + 1, wp.color());
+                boolean isDeath = wp.name().startsWith("Death");
+                int wpColor = wp.color();
+                if (isDeath) {
+                    float pulse = (float) (0.5 + 0.5 * Math.sin(System.currentTimeMillis() / 300.0));
+                    wpColor = ColorUtil.lerp(0xFFAA0000, 0xFFFF5555, pulse);
+                }
+                int markerSize = isDeath ? 3 : 2;
+                ctx.fill(px - markerSize / 2 - 1, pz - markerSize / 2 - 1,
+                        px + markerSize / 2 + 2, pz + markerSize / 2 + 2, 0xFF000000);
+                if (isDeath) {
+                    ctx.fill(px - 1, pz - 2, px + 2, pz + 3, wpColor);
+                    ctx.fill(px - 2, pz, px + 3, pz + 1, wpColor);
+                } else {
+                    ctx.fill(px, pz - 1, px + 1, pz + 2, wpColor);
+                    ctx.fill(px - 1, pz, px + 2, pz + 1, wpColor);
+                }
                 ctx.drawText(font, wp.name(), px + 3, pz - 3, ColorUtil.WHITE, true);
             } else {
                 // Off-screen: draw edge indicator pointing toward waypoint
