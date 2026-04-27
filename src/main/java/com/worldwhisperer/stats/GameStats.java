@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -53,6 +54,7 @@ public class GameStats {
     private volatile List<String> activeEffects = List.of();
     private long sessionStartTime;
     private double totalDistance;
+    private String targetBlock = "";
     private final int[] trailX = new int[20];
     private final int[] trailZ = new int[20];
     private int trailIndex;
@@ -123,6 +125,16 @@ public class GameStats {
             trailZ[trailIndex] = playerZ;
             trailIndex = (trailIndex + 1) % trailX.length;
             if (trailSize < trailX.length) trailSize++;
+        }
+
+        if (tickCounter % 5 == 0 && client.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult bhr) {
+            BlockPos targetPos = bhr.getBlockPos();
+            BlockState targetState = client.world.getBlockState(targetPos);
+            if (!targetState.isAir()) {
+                targetBlock = targetState.getBlock().getName().getString();
+            } else {
+                targetBlock = "";
+            }
         }
 
         tickCounter++;
@@ -240,6 +252,7 @@ public class GameStats {
     public int getDurability() { return durability; }
     public int getMaxDurability() { return maxDurability; }
     public List<String> getActiveEffects() { return activeEffects; }
+    public String getTargetBlock() { return targetBlock; }
     public double getTotalDistance() { return totalDistance; }
     public long getSessionDurationSecs() {
         return sessionStartTime > 0 ? (System.currentTimeMillis() - sessionStartTime) / 1000 : 0;
