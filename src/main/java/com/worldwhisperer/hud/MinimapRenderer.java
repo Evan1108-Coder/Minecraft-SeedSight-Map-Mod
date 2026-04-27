@@ -208,10 +208,12 @@ public class MinimapRenderer {
 
         // Draw zoom level + scale indicator (top-right corner)
         int blocksVisible = w * blocksPerPixel;
-        String zoomText = zoom + "x " + blocksVisible + "b";
+        boolean caveMode = mod.getMapManager().isCaveMode();
+        String zoomText = (caveMode ? "CAVE " : "") + zoom + "x " + blocksVisible + "b";
+        int zoomColor = caveMode ? ColorUtil.YELLOW : ColorUtil.GRAY;
         ctx.drawText(client.textRenderer, zoomText,
                 x + w - client.textRenderer.getWidth(zoomText) - 2,
-                y + 2, ColorUtil.GRAY, true);
+                y + 2, zoomColor, true);
 
         // Scale bar (top-left, 32 blocks)
         int scaleBlocks = 32;
