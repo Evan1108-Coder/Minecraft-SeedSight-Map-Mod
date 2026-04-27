@@ -13,7 +13,8 @@ public class SoundIndicator {
     private static final int MAX_SOUNDS = 8;
     private static final long SOUND_LIFETIME_MS = 3000;
 
-    public record SoundEntry(String name, SoundCategory category, long timestamp) {}
+    public record SoundEntry(String name, SoundCategory category, long timestamp,
+                              double x, double y, double z, boolean hostile) {}
 
     public void tick(MinecraftClient client) {
         long now = System.currentTimeMillis();
@@ -22,24 +23,41 @@ public class SoundIndicator {
         }
     }
 
-    public void onSoundPlayed(String soundId, SoundCategory category, float volume) {
+    public void onSoundPlayed(String soundId, SoundCategory category, float volume,
+                               double x, double y, double z) {
         if (volume < 0.1f) return;
 
         String displayName = formatSoundName(soundId);
         if (displayName == null) return;
 
         long now = System.currentTimeMillis();
+        boolean hostile = category == SoundCategory.HOSTILE || soundId.contains("entity.creeper")
+                || soundId.contains("entity.zombie") || soundId.contains("entity.skeleton");
 
         synchronized (recentSounds) {
             for (SoundEntry entry : recentSounds) {
                 if (entry.name.equals(displayName) && now - entry.timestamp < 500) return;
             }
 
-            recentSounds.addFirst(new SoundEntry(displayName, category, now));
+            recentSounds.addFirst(new SoundEntry(displayName, category, now, x, y, z, hostile));
             while (recentSounds.size() > MAX_SOUNDS) {
                 recentSounds.removeLast();
             }
         }
+    }
+
+    public List<SoundEntry> getRecentEntries() {
+        long now = System.currentTimeMillis();
+        List<SoundEntry> result = new ArrayList<>();
+        synchronized (recentSounds) {
+            for (SoundEntry entry : recentSounds) {
+                if (now - entry.timestamp <= SOUND_LIFETIME_MS) {
+                    result.add(entry);
+                }
+                if (result.size() >= 6) break;
+            }
+        }
+        return result;
     }
 
     public List<String> getRecentSounds() {
