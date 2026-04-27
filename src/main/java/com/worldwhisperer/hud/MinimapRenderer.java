@@ -16,6 +16,7 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -316,6 +317,9 @@ public class MinimapRenderer {
                 size = 3;
             } else if (entity instanceof HostileEntity) {
                 color = ColorUtil.RED;
+                size = 2;
+            } else if (entity instanceof VillagerEntity) {
+                color = ColorUtil.GOLD;
                 size = 2;
             } else if (entity instanceof AnimalEntity) {
                 color = ColorUtil.GREEN;
