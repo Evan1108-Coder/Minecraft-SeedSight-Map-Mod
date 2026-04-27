@@ -221,6 +221,8 @@ public class MapManager {
         return 0;
     }
 
+    public boolean isCaveMode() { return lastCaveScan; }
+
     public List<StructureFinder.StructureMarker> getStructureMarkers() {
         return structureMarkers;
     }
