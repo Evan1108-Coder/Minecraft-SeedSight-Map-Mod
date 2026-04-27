@@ -10,13 +10,16 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Seed-based biome and structure prediction beyond render distance
 - Zoom in/out with configurable levels
 - North-locked or rotation-following modes
-- Grid overlay and coordinate display
-- Entity markers (players, hostile mobs, passive mobs)
+- **Rotation-aware overlays**: entities, waypoints, and structures rotate with the minimap in rotation-following mode
+- Rotating compass labels (N/S/E/W track actual world directions in rotation mode)
+- Grid overlay and coordinate display (X / Y / Z)
+- Entity markers (players, hostile mobs, passive mobs) with screen-space clipping
 - Structure markers with labels (Villages, Temples, Monuments, etc.)
 - Nearest structure indicator with distance (e.g. "VLG 234m")
+- Biome change notification (3-second popup on minimap)
 - Expandable map mode (M key: 128px ↔ 256px)
 - Zoom level indicator
-- Slime chunk overlay (Overworld only)
+- Slime chunk overlay (Overworld, north-locked mode)
 - Map cache auto-clears on dimension change
 
 ### Split-Panel UI
@@ -31,11 +34,12 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Player coordinates (X, Y, Z)
 - Current biome name
 - In-game time (12-hour format), day count, and weather (Clear/Rain/Thunder)
+- **Player vitals**: HP (color-coded), food level, armor value, movement speed (m/s)
 - Light level (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
 - Dimension indicator (shows when in Nether or End)
 - Hostile/passive entity counts within 128 blocks
 - Slime chunk indicator
-- Sound indicators (nearby mob sounds, footsteps, block breaking, ambient)
+- Sound indicators (25+ mob types: Creeper, Zombie, Skeleton, Enderman, Witch, Pillager, Ravager, Evoker, and more)
 
 ### Performance Stats
 - FPS and TPS monitoring
@@ -73,6 +77,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Dimension-aware: only shows structures for the current dimension
 - **Overworld** (15 types): Village, Desert Temple, Jungle Temple, Swamp Hut, Igloo, Pillager Outpost, Ocean Monument, Woodland Mansion, Stronghold (ring algorithm), Ocean Ruin, Shipwreck, Ruined Portal, Ancient City, Trail Ruins, Trial Chamber (1.21.2+)
 - **Nether** (3 types): Bastion Remnant, Nether Fortress (mutually exclusive per region), Ruined Portal
+- **End** (1 type): End City (outer islands only, >1024 blocks from origin)
 - Slime chunk calculation and minimap overlay (Overworld only)
 - Version-aware: structures only predicted for versions where they exist (e.g., Trial Chambers only on 1.21.2+)
 
