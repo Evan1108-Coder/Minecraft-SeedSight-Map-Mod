@@ -56,7 +56,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Player coordinates (X, Y, Z)
 - Current biome name
 - In-game time (12-hour format), day count, and weather (Clear/Rain/Thunder)
-- **Player vitals**: HP with absorption hearts (color-coded), food level with saturation, armor value, XP level, movement speed (m/s)
+- **Player vitals**: HP with absorption hearts (color-coded), food level with saturation, armor value, XP level, movement speed (m/s), fire/freezing status warnings
 - **Target block display**: shows name of block you're looking at
 - **Session tracker**: time played and distance walked this session
 - **Nearest structure bearing**: cardinal direction + distance to closest predicted structure
@@ -64,7 +64,11 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Light level with **block/sky breakdown** (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
 - Dimension indicator (shows when in Nether or End)
 - **Cross-dimension coordinates**: always shows corresponding Nether/Overworld coordinates
-- **Distance to Home**: shows distance to your bed/home waypoint
+- **Distance to Home**: shows cardinal bearing + distance to your bed/home waypoint
+- **Death location distance**: shows distance to your last death marker
+- **Elytra flight indicator**: speed label changes to "Elytra" with purple accent when gliding
+- **Riding indicator**: shows mount name + speed when on horse/boat/etc
+- **Diamond Y-level marker**: coordinate bar shows diamond icon when at optimal mining depth (Y -64 to 16)
 - **Day/night progress bar**: visual timeline with sunset marker
 - Hostile/passive/villager entity counts with total within 128 blocks
 - Slime chunk indicator
@@ -115,6 +119,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Furnace timing reference**: furnace, blast furnace, smoker speeds
 - **Crop growth reference**: wheat, sugar cane, bamboo growth times
 - **Redstone reference**: signal range, repeater delays, hopper speed
+- **Villager trading reference**: zombie curing, restock schedule, Hero of the Village discounts
 
 ### Settings
 - Toggle all features on/off
