@@ -89,8 +89,10 @@ public class MinimapRenderer {
         // Draw player arrow (center)
         drawPlayerArrow(ctx, x + w / 2, y + h / 2, playerYaw, cfg.northLocked);
 
-        // Draw compass directions
-        drawCompass(ctx, client.textRenderer, x, y, w, h);
+        // Draw compass directions (only in north-locked mode where they're accurate)
+        if (cfg.northLocked) {
+            drawCompass(ctx, client.textRenderer, x, y, w, h);
+        }
 
         // Draw coordinates at bottom
         String coords = String.format("X: %d  Z: %d", centerBlockX, centerBlockZ);
@@ -269,8 +271,6 @@ public class MinimapRenderer {
         int size = 4;
         int tipX = cx + (int) (Math.sin(rad) * size);
         int tipY = cy - (int) (Math.cos(rad) * size);
-        int tailX = cx - (int) (Math.sin(rad) * (size - 1));
-        int tailY = cy + (int) (Math.cos(rad) * (size - 1));
 
         // Arrow body
         ctx.fill(cx - 2, cy - 2, cx + 3, cy + 3, 0xFFFFFFFF);
