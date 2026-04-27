@@ -98,6 +98,14 @@ public class PanelRenderer {
                 "Facing", gs.getFacing() + " " + gs.getYawDegrees() + "\u00B0", labelColor, valueColor);
         ty += LINE_H;
 
+        String target = gs.getTargetBlock();
+        if (!target.isEmpty()) {
+            String truncated = target.length() > 16 ? target.substring(0, 16) : target;
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Target", truncated, labelColor, ColorUtil.GRAY);
+            ty += LINE_H;
+        }
+
         if (gs.isInNether()) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Dim", "Nether", labelColor, ColorUtil.RED);
