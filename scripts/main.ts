@@ -72,8 +72,10 @@ world.afterEvents.entityDie.subscribe((event) => {
     if (entity.typeId !== "minecraft:player") return;
     const pos = entity.location;
     const name = entity.nameTag || "Player";
+    const dimId = entity.dimension.id.replace("minecraft:", "");
+    const dimLabel = dimId === "the_nether" ? " (Nether)" : dimId === "the_end" ? " (End)" : "";
     const marker: Waypoint = {
-        name: `§cDeath`,
+        name: `§cDeath${dimLabel}`,
         x: Math.floor(pos.x),
         y: Math.floor(pos.y),
         z: Math.floor(pos.z),
