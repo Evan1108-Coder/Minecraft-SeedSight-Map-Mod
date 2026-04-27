@@ -420,20 +420,24 @@ public class MinimapRenderer {
     }
 
     private void drawCircleBorder(DrawContext ctx, int cx, int cy, int radius) {
-        int borderColor = 0xFF333333;
-        int highlightColor = 0xFF555555;
-        int rSq = radius * radius;
-        int rInnerSq = (radius - 1) * (radius - 1);
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                int distSq = dx * dx + dy * dy;
-                if (distSq <= rSq && distSq > rInnerSq) {
-                    ctx.fill(cx + dx, cy + dy, cx + dx + 1, cy + dy + 1, borderColor);
-                } else if (distSq > rSq && distSq <= (radius + 1) * (radius + 1)) {
-                    ctx.fill(cx + dx, cy + dy, cx + dx + 1, cy + dy + 1, highlightColor);
-                }
-            }
+        int c = 0xFF333333;
+        int x0 = 0, y0 = radius, d = 3 - 2 * radius;
+        while (y0 >= x0) {
+            drawCircleOctants(ctx, cx, cy, x0, y0, c);
+            x0++;
+            if (d > 0) { y0--; d += 4 * (x0 - y0) + 10; } else { d += 4 * x0 + 6; }
         }
+    }
+
+    private void drawCircleOctants(DrawContext ctx, int cx, int cy, int x, int y, int c) {
+        ctx.fill(cx + x, cy + y, cx + x + 1, cy + y + 1, c);
+        ctx.fill(cx - x, cy + y, cx - x + 1, cy + y + 1, c);
+        ctx.fill(cx + x, cy - y, cx + x + 1, cy - y + 1, c);
+        ctx.fill(cx - x, cy - y, cx - x + 1, cy - y + 1, c);
+        ctx.fill(cx + y, cy + x, cx + y + 1, cy + x + 1, c);
+        ctx.fill(cx - y, cy + x, cx - y + 1, cy + x + 1, c);
+        ctx.fill(cx + y, cy - x, cx + y + 1, cy - x + 1, c);
+        ctx.fill(cx - y, cy - x, cx - y + 1, cy - x + 1, c);
     }
 
     private void drawSoundMarkers(DrawContext ctx, int x, int y, int w, int h) {
