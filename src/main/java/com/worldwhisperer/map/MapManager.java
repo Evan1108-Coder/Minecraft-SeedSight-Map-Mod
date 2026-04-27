@@ -22,6 +22,8 @@ public class MapManager {
     private final StructureFinder structureFinder = new StructureFinder();
 
     private volatile List<StructureFinder.StructureMarker> structureMarkers = List.of();
+    private String nearbyStructure = "";
+    private long nearbyStructureTime;
     private int lastPlayerChunkX = Integer.MIN_VALUE;
     private int lastPlayerChunkZ = Integer.MIN_VALUE;
     private int playerY = 64;
@@ -190,6 +192,18 @@ public class MapManager {
         int playerZ = (int) client.player.getZ();
         String dimension = client.world.getRegistryKey().getValue().getPath();
         structureMarkers = structureFinder.findNearbyMarkers(seed, playerX, playerZ, 2048, dimension);
+        if (!structureMarkers.isEmpty()) {
+            var nearest = structureMarkers.get(0);
+            if (nearest.distance() < 100) {
+                String name = nearest.name();
+                if (!name.equals(nearbyStructure)) {
+                    nearbyStructure = name;
+                    nearbyStructureTime = System.currentTimeMillis();
+                }
+            } else {
+                nearbyStructure = "";
+            }
+        }
     }
 
     private long getSeed(MinecraftClient client) {
@@ -209,6 +223,12 @@ public class MapManager {
 
     public List<StructureFinder.StructureMarker> getStructureMarkers() {
         return structureMarkers;
+    }
+
+    public String getNearbyStructureAlert() {
+        if (nearbyStructure.isEmpty()) return null;
+        if (System.currentTimeMillis() - nearbyStructureTime > 5000) return null;
+        return nearbyStructure;
     }
 
     public void zoomIn() {
