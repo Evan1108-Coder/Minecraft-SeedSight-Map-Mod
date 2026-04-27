@@ -63,8 +63,8 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 ### Seed-Based Prediction
 - Predicts biome types for any coordinate using the world seed
 - Predicts structure locations using Minecraft's spacing/separation/salt algorithm
-- Supports 18 structure types: Village, Desert Temple, Jungle Temple, Swamp Hut, Igloo, Pillager Outpost, Ocean Monument, Woodland Mansion, Stronghold, Ocean Ruin, Shipwreck, Buried Treasure, Mineshaft, Ruined Portal, Ancient City, Trail Ruin, Trial Chamber, Nether Fortress
-- Slime chunk calculation
+- Supports 17 structure types: Village, Desert Temple, Jungle Temple, Swamp Hut, Igloo, Pillager Outpost, Ocean Monument, Woodland Mansion, Stronghold (ring algorithm), Ocean Ruin, Shipwreck, Ruined Portal, Ancient City, Trail Ruins, Trial Chamber (1.21.2+), Bastion Remnant, Nether Fortress
+- Slime chunk calculation and minimap overlay
 - Version-aware: structures only predicted for versions where they exist (e.g., Trial Chambers only on 1.21.2+)
 
 ## Keybindings
