@@ -152,6 +152,14 @@ public class PanelRenderer {
         if (gs.isSlimeChunk()) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Slime", "YES", labelColor, ColorUtil.GREEN);
+            ty += LINE_H;
+        }
+
+        String seed = mod.getConfig().seedOverride;
+        if (!seed.isEmpty()) {
+            String displaySeed = seed.length() > 12 ? seed.substring(0, 12) + "..." : seed;
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Seed", displaySeed, labelColor, ColorUtil.DARK_GRAY);
         }
 
         // Active effects
