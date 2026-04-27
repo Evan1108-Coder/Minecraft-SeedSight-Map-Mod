@@ -152,6 +152,12 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
+        if (gs.isFreezing()) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Status", "FREEZING", labelColor, ColorUtil.AQUA);
+            ty += LINE_H;
+        }
+
         if (gs.getXpLevel() > 0) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "XP", "Lv " + gs.getXpLevel(), labelColor, ColorUtil.GREEN);
