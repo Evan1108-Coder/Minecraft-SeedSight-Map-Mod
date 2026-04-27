@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "seedsight",
+  "id": "worldwhisperer",
   "version": "${version}",
-  "name": "SeedSight",
+  "name": "WorldWhisperer",
   "description": "A minimap mod that reveals terrain, biomes, and structures beyond render distance using seed-based prediction. Includes stats overlay, waypoints, calculator, and sound indicators.",
   "authors": [
     "Evan1108-Coder"
   ],
   "contact": {
-    "homepage": "https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod",
-    "sources": "https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod"
+    "homepage": "https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod",
+    "sources": "https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod"
   },
   "license": "MIT",
-  "icon": "assets/seedsight/icon.png",
+  "icon": "assets/worldwhisperer/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.seedsight.SeedSightClient"
+      "com.worldwhisperer.WorldWhispererClient"
     ]
   },
   "mixins": [
-    "seedsight.mixins.json"
+    "worldwhisperer.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.0",

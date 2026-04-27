@@ -1,4 +1,4 @@
-# SeedSight - Minecraft Minimap & Intelligence Mod
+# WorldWhisperer - Minecraft Minimap & Intelligence Mod
 
 A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a feature-rich minimap HUD with seed-based world generation prediction, game statistics, performance monitoring, waypoints, and more.
 
@@ -65,6 +65,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Predicts structure locations using Minecraft's spacing/separation/salt algorithm
 - Supports 18 structure types: Village, Desert Temple, Jungle Temple, Swamp Hut, Igloo, Pillager Outpost, Ocean Monument, Woodland Mansion, Stronghold, Ocean Ruin, Shipwreck, Buried Treasure, Mineshaft, Ruined Portal, Ancient City, Trail Ruin, Trial Chamber, Nether Fortress
 - Slime chunk calculation
+- Version-aware: structures only predicted for versions where they exist (e.g., Trial Chambers only on 1.21.2+)
 
 ## Keybindings
 
@@ -77,17 +78,25 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 | `B` | Add waypoint at current position |
 | `N` | Cycle through tabs |
 
-All keybindings are configurable in Minecraft's Controls settings under the "SeedSight" category.
+All keybindings are configurable in Minecraft's Controls settings under the "WorldWhisperer" category.
 
 ## Supported Versions
 
+### Java Edition (Fabric)
+
 | Branch | Minecraft | Fabric API | Yarn Mappings |
 |--------|-----------|------------|---------------|
-| `mc/1.21.0` | 1.21 | 0.100.3+1.21 | 1.21+build.2 |
-| `mc/1.21.1` | 1.21.1 | 0.102.1+1.21.1 | 1.21.1+build.3 |
-| `mc/1.21.2` | 1.21.2 | 0.105.0+1.21.2 | 1.21.2+build.1 |
-| `mc/1.21.3` | 1.21.3 | 0.114.1+1.21.3 | 1.21.3+build.2 |
-| `main` | 1.21.4 | 0.118.0+1.21.4 | 1.21.4+build.8 |
+| `java-1.21.0` | 1.21 (Tricky Trials) | 0.100.3+1.21 | 1.21+build.2 |
+| `java-1.21.1` | 1.21.1 | 0.102.1+1.21.1 | 1.21.1+build.3 |
+| `java-1.21.2` | 1.21.2 | 0.105.0+1.21.2 | 1.21.2+build.1 |
+| `java-1.21.3` | 1.21.3 | 0.114.1+1.21.3 | 1.21.3+build.2 |
+| `java-1.21.4` | 1.21.4 (Garden Awakens) | 0.118.0+1.21.4 | 1.21.4+build.8 |
+
+### Bedrock Edition
+
+| Branch | Minecraft | Status |
+|--------|-----------|--------|
+| `bedrock-1.21.80` | 1.21.80 | Planned |
 
 ## Installation
 
@@ -99,14 +108,14 @@ All keybindings are configurable in Minecraft's Controls settings under the "See
 ### Steps
 1. Install Fabric Loader for your Minecraft version
 2. Download the Fabric API mod and place it in your `mods` folder
-3. Download the SeedSight JAR for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod/releases)
-4. Place the SeedSight JAR in your `mods` folder
+3. Download the WorldWhisperer JAR for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod/releases)
+4. Place the WorldWhisperer JAR in your `mods` folder
 5. Launch Minecraft with the Fabric profile
 
 ### Multiplayer Note
 On multiplayer servers, the world seed is not sent to clients. To use seed-based prediction features:
 - Use the `/seed` command if you have operator permissions
-- Or manually enter the seed in SeedSight Settings (press `N` to cycle to Settings tab)
+- Or manually enter the seed in WorldWhisperer Settings (press `N` to cycle to Settings tab)
 
 ## Building from Source
 
@@ -116,16 +125,16 @@ On multiplayer servers, the world seed is not sent to clients. To use seed-based
 
 ### Build
 ```bash
-git clone https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod.git
-cd Minecraft-SeedSight-Map-Mod
+git clone https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod.git
+cd Minecraft-WorldWhisperer-Map-Mod
 ./gradlew build
 ```
 
-The built mod JAR will be in `build/libs/seedsight-1.0.0.jar`.
+The built mod JAR will be in `build/libs/worldwhisperer-1.0.0.jar`.
 
 ## Configuration
 
-Config file is stored at `.minecraft/config/seedsight.json`. All settings can be changed in-game via the Settings tab.
+Config file is stored at `.minecraft/config/worldwhisperer.json`. All settings can be changed in-game via the Settings tab.
 
 ## License
 
