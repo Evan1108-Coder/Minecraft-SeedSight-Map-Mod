@@ -149,6 +149,14 @@ public class MinimapRenderer {
             drawStructures(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
         }
 
+        // Draw render distance boundary (faint circle showing loaded chunk edge)
+        int renderDist = mod.getPerfStats().getRenderDistance();
+        int renderRadius = renderDist * 16;
+        int renderPixelRadius = renderRadius / blocksPerPixel;
+        if (renderPixelRadius > 10 && renderPixelRadius < halfW - 2) {
+            drawRenderDistCircle(ctx, x + halfW, y + halfH, renderPixelRadius);
+        }
+
         // Draw world spawn marker (0,0) in Overworld
         if (!mod.getGameStats().isInNether() && !mod.getGameStats().isInEnd()) {
             int spx = toScreenX(0, 0);
@@ -162,6 +170,19 @@ public class MinimapRenderer {
         // Draw sound source markers on minimap
         if (cfg.soundIndicators) {
             drawSoundMarkers(ctx, x, y, w, h);
+        }
+
+        // Draw player breadcrumb trail
+        int trailSize = mod.getGameStats().getTrailSize();
+        for (int i = 0; i < trailSize; i++) {
+            int tx = mod.getGameStats().getTrailX(i);
+            int tz = mod.getGameStats().getTrailZ(i);
+            int tpx = toScreenX(tx, tz);
+            int tpy = toScreenY(tx, tz);
+            if (!isOutsideMap(tpx, tpy, x, y, w, h)) {
+                int alpha = 40 + (i * 160 / Math.max(trailSize, 1));
+                ctx.fill(tpx, tpy, tpx + 1, tpy + 1, ColorUtil.withAlpha(0x55FF55, alpha));
+            }
         }
 
         // Draw player arrow (center)
@@ -468,6 +489,16 @@ public class MinimapRenderer {
 
         // Direction tip
         ctx.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, 0xFFFFFFFF);
+    }
+
+    private void drawRenderDistCircle(DrawContext ctx, int cx, int cy, int radius) {
+        int c = 0x44FFFFFF;
+        int x0 = 0, y0 = radius, d = 3 - 2 * radius;
+        while (y0 >= x0) {
+            drawCircleOctants(ctx, cx, cy, x0, y0, c);
+            x0++;
+            if (d > 0) { y0--; d += 4 * (x0 - y0) + 10; } else { d += 4 * x0 + 6; }
+        }
     }
 
     private void drawCircleBorder(DrawContext ctx, int cx, int cy, int radius) {
