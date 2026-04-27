@@ -53,8 +53,9 @@ public class PanelRenderer {
 
         int light = gs.getLightLevel();
         int lightColor = light == 0 ? ColorUtil.RED : light <= 7 ? ColorUtil.YELLOW : ColorUtil.GREEN;
+        String lightStr = light == 0 ? "0 DANGER" : String.valueOf(light);
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Light", String.valueOf(light), labelColor, lightColor);
+                "Light", lightStr, labelColor, lightColor);
         ty += LINE_H;
 
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
@@ -274,6 +275,27 @@ public class PanelRenderer {
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Lv 50", String.format("%.0f XP", calc.xpForLevel(50)), ColorUtil.GRAY, ColorUtil.YELLOW);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Ore Y Levels", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Diamond", "Y -64 to 16 (best -59)", ColorUtil.GRAY, ColorUtil.AQUA);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Iron", "Y -24 to 56 (best 16)", ColorUtil.GRAY, ColorUtil.WHITE);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Gold", "Y -64 to 32 (best -16)", ColorUtil.GRAY, ColorUtil.GOLD);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Lapis", "Y -64 to 64 (best 0)", ColorUtil.GRAY, ColorUtil.MC_BLUE);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Emerald", "Y -16 to 320 (best 256)", ColorUtil.GRAY, ColorUtil.GREEN);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Ancient", "Y 8 to 22 (best 15)", ColorUtil.GRAY, ColorUtil.MC_RED);
     }
 
     public void renderSettings(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
