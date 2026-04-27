@@ -19,8 +19,12 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Biome change notification (3-second popup on minimap)
 - Expandable map mode (M key: 128px ↔ 256px)
 - Zoom level indicator
+- **Underground cave mode**: auto-detects when player is underground and shows cave terrain instead of surface
+- **Nether terrain rendering**: scans downward from player Y to show actual Nether floor, not bedrock ceiling
+- **Edge waypoint indicators**: off-screen waypoints show colored markers at minimap edges
+- Smooth gradient-based height shading for terrain elevation
 - Slime chunk overlay (Overworld, north-locked mode)
-- Map cache auto-clears on dimension change
+- Map cache auto-clears on dimension change and surface/underground transitions
 
 ### Split-Panel UI
 - Minecraft-native themed interface (bitmap font, stone buttons, MC borders)
@@ -34,7 +38,8 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Player coordinates (X, Y, Z)
 - Current biome name
 - In-game time (12-hour format), day count, and weather (Clear/Rain/Thunder)
-- **Player vitals**: HP (color-coded), food level, armor value, movement speed (m/s)
+- **Player vitals**: HP with absorption hearts (color-coded), food level, armor value, XP level, movement speed (m/s)
+- **Air/oxygen meter**: appears when underwater with color-coded threshold
 - Light level (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
 - Dimension indicator (shows when in Nether or End)
 - Hostile/passive entity counts within 128 blocks
