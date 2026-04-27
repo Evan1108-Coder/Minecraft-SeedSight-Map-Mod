@@ -7,10 +7,10 @@ public final class SlimeChunkFinder {
 
     public static boolean isSlimeChunk(long worldSeed, int chunkX, int chunkZ) {
         long seed = worldSeed
-                + (long) (chunkX * chunkX * 0x4c1906)
-                + (long) (chunkX * 0x5ac0db)
-                + (long) (chunkZ * chunkZ) * 0x4307a7L
-                + (long) (chunkZ * 0x5f24f)
+                + (long) chunkX * (long) chunkX * 0x4c1906L
+                + (long) chunkX * 0x5ac0dbL
+                + (long) chunkZ * (long) chunkZ * 0x4307a7L
+                + (long) chunkZ * 0x5f24fL
                 ^ 0x3AD8025FL;
         Random random = new Random(seed);
         return random.nextInt(10) == 0;

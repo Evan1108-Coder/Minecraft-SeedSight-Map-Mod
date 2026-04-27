@@ -16,7 +16,9 @@ public class SoundIndicator {
 
     public void tick(MinecraftClient client) {
         long now = System.currentTimeMillis();
-        recentSounds.removeIf(entry -> now - entry.timestamp > SOUND_LIFETIME_MS);
+        synchronized (recentSounds) {
+            recentSounds.removeIf(entry -> now - entry.timestamp > SOUND_LIFETIME_MS);
+        }
     }
 
     public void onSoundPlayed(String soundId, SoundCategory category, float volume) {
@@ -27,25 +29,28 @@ public class SoundIndicator {
 
         long now = System.currentTimeMillis();
 
-        // Deduplicate: don't add the same sound within 500ms
-        for (SoundEntry entry : recentSounds) {
-            if (entry.name.equals(displayName) && now - entry.timestamp < 500) return;
-        }
+        synchronized (recentSounds) {
+            for (SoundEntry entry : recentSounds) {
+                if (entry.name.equals(displayName) && now - entry.timestamp < 500) return;
+            }
 
-        recentSounds.addFirst(new SoundEntry(displayName, category, now));
-        while (recentSounds.size() > MAX_SOUNDS) {
-            recentSounds.removeLast();
+            recentSounds.addFirst(new SoundEntry(displayName, category, now));
+            while (recentSounds.size() > MAX_SOUNDS) {
+                recentSounds.removeLast();
+            }
         }
     }
 
     public List<String> getRecentSounds() {
         long now = System.currentTimeMillis();
         List<String> result = new ArrayList<>();
-        for (SoundEntry entry : recentSounds) {
-            if (now - entry.timestamp <= SOUND_LIFETIME_MS) {
-                result.add(entry.name);
+        synchronized (recentSounds) {
+            for (SoundEntry entry : recentSounds) {
+                if (now - entry.timestamp <= SOUND_LIFETIME_MS) {
+                    result.add(entry.name);
+                }
+                if (result.size() >= 4) break;
             }
-            if (result.size() >= 4) break;
         }
         return result;
     }

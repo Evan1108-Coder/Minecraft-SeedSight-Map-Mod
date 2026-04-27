@@ -24,6 +24,7 @@ public class GameStats {
     private int hostileCount;
     private int passiveCount;
     private boolean slimeChunk;
+    private int tickCounter;
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -46,21 +47,22 @@ public class GameStats {
 
         facing = formatDirection(client.player.getHorizontalFacing());
 
-        // Count entities
-        hostileCount = 0;
-        passiveCount = 0;
-        for (Entity entity : client.world.getEntities()) {
-            double dist = entity.squaredDistanceTo(client.player);
-            if (dist > 128 * 128) continue;
-            if (entity instanceof HostileEntity) hostileCount++;
-            else if (entity instanceof AnimalEntity) passiveCount++;
-        }
+        tickCounter++;
+        if (tickCounter % 20 == 0) {
+            hostileCount = 0;
+            passiveCount = 0;
+            for (Entity entity : client.world.getEntities()) {
+                double dist = entity.squaredDistanceTo(client.player);
+                if (dist > 128 * 128) continue;
+                if (entity instanceof HostileEntity) hostileCount++;
+                else if (entity instanceof AnimalEntity) passiveCount++;
+            }
 
-        // Slime chunk check
-        if (client.isIntegratedServerRunning() && client.getServer() != null) {
-            long seed = client.getServer().getOverworld().getSeed();
-            slimeChunk = SlimeChunkFinder.isSlimeChunk(seed,
-                    client.player.getChunkPos().x, client.player.getChunkPos().z);
+            if (client.isIntegratedServerRunning() && client.getServer() != null) {
+                long seed = client.getServer().getOverworld().getSeed();
+                slimeChunk = SlimeChunkFinder.isSlimeChunk(seed,
+                        client.player.getChunkPos().x, client.player.getChunkPos().z);
+            }
         }
     }
 
