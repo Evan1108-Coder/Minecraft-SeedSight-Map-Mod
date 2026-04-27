@@ -101,7 +101,10 @@ function updateActionBar(player: Player): void {
     const pos = player.location;
 
     if (config.showCoords) {
-        lines.push(`§7XYZ: §f${Math.floor(pos.x)} / ${Math.floor(pos.y)} / ${Math.floor(pos.z)}`);
+        const dimId = player.dimension.id.replace("minecraft:", "");
+        const dimLabel = dimId === "the_nether" ? " §c[Nether]" :
+                         dimId === "the_end" ? " §d[End]" : "";
+        lines.push(`§7XYZ: §f${Math.floor(pos.x)} / ${Math.floor(pos.y)} / ${Math.floor(pos.z)}${dimLabel}`);
     }
 
     if (config.showDirection) {
@@ -169,14 +172,16 @@ world.beforeEvents.chatSend.subscribe((event) => {
             case "toggle":
                 handleToggle(player, args.slice(1));
                 break;
-            case "nether": {
+            case "nether":
+            case "overworld":
+            case "portal": {
                 const p = player.location;
-                player.sendMessage(`§a[WW]§r Nether coords: §c${Math.floor(p.x / 8)}, ${Math.floor(p.z / 8)}`);
-                break;
-            }
-            case "overworld": {
-                const p = player.location;
-                player.sendMessage(`§a[WW]§r Overworld coords: §a${Math.floor(p.x * 8)}, ${Math.floor(p.z * 8)}`);
+                const inNether = player.dimension.id === "minecraft:the_nether";
+                if (inNether) {
+                    player.sendMessage(`§a[WW]§r Overworld coords: §a${Math.floor(p.x * 8)}, ${Math.floor(p.z * 8)}`);
+                } else {
+                    player.sendMessage(`§a[WW]§r Nether coords: §c${Math.floor(p.x / 8)}, ${Math.floor(p.z / 8)}`);
+                }
                 break;
             }
             case "death":
@@ -226,8 +231,7 @@ function showHelp(player: Player): void {
         "§e!ww wp remove <name>§r - Remove waypoint",
         "§e!ww wp nearest§r - Show nearest waypoint",
         "§e!ww calc§r - Show calculator",
-        "§e!ww nether§r - Convert coords to Nether",
-        "§e!ww overworld§r - Convert coords to Overworld",
+        "§e!ww portal§r - Auto-convert coords (detects dimension)",
         "§e!ww death§r - Show last death location",
         "§e!ww settings§r - Show current settings",
         "§a══════════════════════════════",
