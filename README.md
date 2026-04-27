@@ -13,7 +13,11 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Grid overlay and coordinate display
 - Entity markers (players, hostile mobs, passive mobs)
 - Structure markers with labels (Villages, Temples, Monuments, etc.)
-- Slime chunk overlay
+- Nearest structure indicator with distance (e.g. "VLG 234m")
+- Expandable map mode (M key: 128px ↔ 256px)
+- Zoom level indicator
+- Slime chunk overlay (Overworld only)
+- Map cache auto-clears on dimension change
 
 ### Split-Panel UI
 - Minecraft-native themed interface (bitmap font, stone buttons, MC borders)
@@ -26,8 +30,9 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 ### Game Statistics
 - Player coordinates (X, Y, Z)
 - Current biome name
-- In-game time (12-hour format) and day count
-- Light level, facing direction, dimension indicator
+- In-game time (12-hour format), day count, and weather (Clear/Rain/Thunder)
+- Light level (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
+- Dimension indicator (shows when in Nether or End)
 - Hostile/passive entity counts within 128 blocks
 - Slime chunk indicator
 - Sound indicators (nearby mob sounds, footsteps, block breaking, ambient)
@@ -42,8 +47,9 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 
 ### Waypoint System
 - Quick-add waypoints at current position (B key)
-- Death markers (auto-created on death)
-- Color-coded waypoints with distance display
+- Death markers (auto-created on death, per-dimension)
+- Dimension-aware: waypoints record their dimension, only show on correct dimension's minimap
+- Color-coded waypoints with distance display (cross-dimension waypoints show [Nether]/[End]/[OW])
 - JSON-based persistence
 - Visible on minimap with labels
 
