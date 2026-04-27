@@ -49,18 +49,24 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Air/oxygen meter**: appears when underwater with color-coded threshold
 - Light level (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
 - Dimension indicator (shows when in Nether or End)
-- Hostile/passive entity counts within 128 blocks
+- Hostile/passive/villager entity counts within 128 blocks
 - Slime chunk indicator
 - Sound indicators (25+ mob types: Creeper, Zombie, Skeleton, Enderman, Witch, Pillager, Ravager, Evoker, and more)
 - **Sound source markers**: hostile sounds appear as fading red dots on minimap, other sounds as yellow
 - **Player name labels**: other players show their name above their minimap marker
 - **Circular minimap mode**: toggle between square and circular shape (C key)
 - Compass bearing (degrees) shown alongside facing direction
-- Day/night countdown timer + moon phase display
-- Active status effects (up to 3, with timer)
-- Tool durability with color-coded warning
-- Ore Y-level reference in Calculator
+- Day/night countdown timer + moon phase display during night
+- Active status effects (up to 3, with name + level + timer)
+- Tool durability with color-coded warning (green/yellow/red)
+- Ore Y-level reference in Calculator (Diamond, Iron, Gold, Lapis, Emerald, Ancient Debris)
 - Server brand + online player count in Perf Stats
+- Danger-responsive HUD border (tints red near hostiles or at light level 0)
+- Low HP warning (coordinate bar flashes red at 2 hearts)
+- **Automatic "Home" waypoint** when sleeping in a bed (per-dimension)
+- Pulsing cross-shaped death markers on minimap
+- Waypoint list sorted by distance (same dimension first)
+- Keybinding hints reference in Settings tab
 
 ### Performance Stats
 - FPS and TPS monitoring
