@@ -41,6 +41,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding cycleTabKey;
     private KeyBinding toggleCircularKey;
     private KeyBinding toggleNorthLockKey;
+    private KeyBinding copyCoordsKey;
     private boolean wasAlive = true;
 
     public static WorldWhispererClient getInstance() {
@@ -99,6 +100,10 @@ public class WorldWhispererClient implements ClientModInitializer {
         toggleNorthLockKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.worldwhisperer.toggle_north_lock", InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_L, "key.worldwhisperer.category"));
+
+        copyCoordsKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.worldwhisperer.copy_coords", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_V, "key.worldwhisperer.category"));
     }
 
     private void registerEvents() {
@@ -133,6 +138,13 @@ public class WorldWhispererClient implements ClientModInitializer {
             if (toggleNorthLockKey.wasPressed()) {
                 config.northLocked = !config.northLocked;
                 config.save();
+            }
+            if (copyCoordsKey.wasPressed() && client.player != null) {
+                int px = net.minecraft.util.math.MathHelper.floor(client.player.getX());
+                int py = net.minecraft.util.math.MathHelper.floor(client.player.getY());
+                int pz = net.minecraft.util.math.MathHelper.floor(client.player.getZ());
+                String coords = px + " " + py + " " + pz;
+                client.keyboard.setClipboard(coords);
             }
 
             // Death detection
