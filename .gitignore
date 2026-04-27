@@ -1,0 +1,4 @@
+node_modules/
+behavior_pack/scripts/
+*.js.map
+.DS_Store

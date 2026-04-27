@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "target": "ES2021",
+    "moduleResolution": "node",
+    "rootDir": "scripts",
+    "outDir": "behavior_pack/scripts",
+    "strict": true,
+    "declaration": false,
+    "sourceMap": false,
+    "lib": ["ES2021"]
+  },
+  "include": ["scripts/**/*.ts"],
+  "exclude": ["node_modules"]
+}
