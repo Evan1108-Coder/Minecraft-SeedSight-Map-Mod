@@ -51,9 +51,10 @@ public class PanelRenderer {
                 "Day", dayWeather, labelColor, weatherColor);
         ty += LINE_H;
 
+        int light = gs.getLightLevel();
+        int lightColor = light == 0 ? ColorUtil.RED : light <= 7 ? ColorUtil.YELLOW : ColorUtil.GREEN;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Light", String.valueOf(gs.getLightLevel()), labelColor,
-                gs.getLightLevel() <= 7 ? ColorUtil.RED : ColorUtil.YELLOW);
+                "Light", String.valueOf(light), labelColor, lightColor);
         ty += LINE_H;
 
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
