@@ -151,7 +151,10 @@ public class MinimapRenderer {
 
         // Draw coordinates at bottom
         int playerY = MathHelper.floor(client.player.getY());
-        String coords = String.format("%d / %d / %d", centerBlockX, playerY, centerBlockZ);
+        String coords = w >= 200
+                ? String.format("%d / %d / %d  [%d, %d]", centerBlockX, playerY, centerBlockZ,
+                        centerBlockX >> 4, centerBlockZ >> 4)
+                : String.format("%d / %d / %d", centerBlockX, playerY, centerBlockZ);
         ctx.fill(x, y + h - 10, x + w, y + h, 0x99000000);
         ctx.drawText(client.textRenderer, coords,
                 x + (w - client.textRenderer.getWidth(coords)) / 2,
