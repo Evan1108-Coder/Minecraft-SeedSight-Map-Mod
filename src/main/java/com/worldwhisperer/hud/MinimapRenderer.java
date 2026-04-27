@@ -111,6 +111,15 @@ public class MinimapRenderer {
                 x + w - client.textRenderer.getWidth(zoomText) - 2,
                 y + 2, ColorUtil.GRAY, true);
 
+        // Draw biome change notification
+        if (mod.getGameStats().isBiomeChanged()) {
+            String biomeName = mod.getGameStats().getBiome();
+            int bw = client.textRenderer.getWidth(biomeName);
+            ctx.fill(x + w / 2 - bw / 2 - 2, y + 12, x + w / 2 + bw / 2 + 2, y + 23, 0xCC000000);
+            ctx.drawText(client.textRenderer, biomeName,
+                    x + (w - bw) / 2, y + 13, ColorUtil.GREEN, true);
+        }
+
         // Draw nearest structure indicator (top bar, below compass N)
         if (cfg.showStructures) {
             var markers = map.getStructureMarkers();
