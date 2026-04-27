@@ -134,9 +134,11 @@ public class PanelRenderer {
         ty += LINE_H;
 
         int hunger = gs.getFood();
+        float sat = gs.getSaturation();
         int hungerColor = hunger > 14 ? ColorUtil.GREEN : hunger > 6 ? ColorUtil.YELLOW : ColorUtil.RED;
+        String foodStr = sat > 0 ? String.format("%d/20 +%.0f", hunger, sat) : hunger + "/20";
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Food", hunger + "/20", labelColor, hungerColor);
+                "Food", foodStr, labelColor, hungerColor);
         ty += LINE_H;
 
         if (gs.getArmor() > 0) {
