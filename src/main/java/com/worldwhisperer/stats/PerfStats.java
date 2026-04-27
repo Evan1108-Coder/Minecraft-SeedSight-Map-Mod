@@ -16,31 +16,40 @@ public class PerfStats {
     private long lastTickTime;
     private int tickCount;
     private long tickAccumulator;
+    private int slowTickCounter;
 
     public void tick(MinecraftClient client) {
         fps = client.getCurrentFps();
 
-        // Memory
-        Runtime rt = Runtime.getRuntime();
-        long used = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
-        long max = rt.maxMemory() / (1024 * 1024);
-        memoryUsage = used + "/" + max + " MB";
+        slowTickCounter++;
+        boolean slowTick = slowTickCounter % 20 == 0;
 
-        // Chunks
-        if (client.worldRenderer != null) {
-            loadedChunks = client.worldRenderer.getChunksDebugString().length(); // fallback
-            try {
-                String debug = client.worldRenderer.getChunksDebugString();
-                if (debug.contains("/")) {
-                    String[] parts = debug.split("/");
-                    loadedChunks = Integer.parseInt(parts[0].replaceAll("[^0-9]", ""));
+        if (slowTick) {
+            Runtime rt = Runtime.getRuntime();
+            long used = (rt.totalMemory() - rt.freeMemory()) / (1024 * 1024);
+            long max = rt.maxMemory() / (1024 * 1024);
+            memoryUsage = used + "/" + max + " MB";
+
+            if (client.worldRenderer != null) {
+                try {
+                    String debug = client.worldRenderer.getChunksDebugString();
+                    if (debug.contains("/")) {
+                        String[] parts = debug.split("/");
+                        loadedChunks = Integer.parseInt(parts[0].replaceAll("[^0-9]", ""));
+                    }
+                } catch (Exception ignored) {}
+            }
+
+            if (client.world != null) {
+                entityCount = 0;
+                for (var ignored : client.world.getEntities()) {
+                    entityCount++;
                 }
-            } catch (Exception ignored) {}
+            }
         }
 
         renderDistance = client.options.getViewDistance().getValue();
 
-        // Ping
         if (client.getNetworkHandler() != null && client.player != null) {
             PlayerListEntry entry = client.getNetworkHandler()
                     .getPlayerListEntry(client.player.getUuid());
@@ -49,14 +58,6 @@ public class PerfStats {
             }
         } else {
             ping = -1;
-        }
-
-        // Entity count
-        if (client.world != null) {
-            entityCount = 0;
-            for (var ignored : client.world.getEntities()) {
-                entityCount++;
-            }
         }
 
         // TPS estimation (client-side approximation)
