@@ -72,9 +72,11 @@ public class PanelRenderer {
         }
 
         float hp = gs.getHealth();
+        float abs = gs.getAbsorption();
         int hpColor = hp > 10 ? ColorUtil.GREEN : hp > 4 ? ColorUtil.YELLOW : ColorUtil.RED;
+        String hpStr = abs > 0 ? String.format("%.0f+%.0f/20", hp, abs) : String.format("%.0f/20", hp);
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "HP", String.format("%.0f/20", hp), labelColor, hpColor);
+                "HP", hpStr, labelColor, hpColor);
         ty += LINE_H;
 
         int hunger = gs.getFood();
@@ -86,6 +88,20 @@ public class PanelRenderer {
         if (gs.getArmor() > 0) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Armor", String.valueOf(gs.getArmor()), labelColor, ColorUtil.AQUA);
+            ty += LINE_H;
+        }
+
+        if (gs.getXpLevel() > 0) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "XP", "Lv " + gs.getXpLevel(), labelColor, ColorUtil.GREEN);
+            ty += LINE_H;
+        }
+
+        if (gs.getAir() < gs.getMaxAir()) {
+            int airPct = gs.getMaxAir() > 0 ? gs.getAir() * 100 / gs.getMaxAir() : 0;
+            int airColor = airPct > 50 ? ColorUtil.AQUA : airPct > 25 ? ColorUtil.YELLOW : ColorUtil.RED;
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Air", airPct + "%", labelColor, airColor);
             ty += LINE_H;
         }
 

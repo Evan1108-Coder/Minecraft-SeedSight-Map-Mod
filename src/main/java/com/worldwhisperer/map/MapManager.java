@@ -124,10 +124,7 @@ public class MapManager {
                 MapColor mapColor = state.getMapColor(world, pos);
                 int color = mapColor.color;
 
-                // Add height shading
-                float shade = 1.0f;
-                if (topY < 63) shade = 0.8f;
-                else if (topY > 100) shade = 1.1f;
+                float shade = 0.8f + (Math.min(Math.max(topY, 40), 120) - 40) * 0.004f;
 
                 int r = Math.min(255, (int) (((color >> 16) & 0xFF) * shade));
                 int g = Math.min(255, (int) (((color >> 8) & 0xFF) * shade));
