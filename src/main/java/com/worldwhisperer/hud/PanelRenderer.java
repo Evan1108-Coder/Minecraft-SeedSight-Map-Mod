@@ -245,21 +245,37 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
-        // Distance to Home waypoint
+        // Distance + bearing to Home waypoint
         Waypoint home = null;
+        Waypoint death = null;
         for (Waypoint wp : mod.getWaypointManager().getWaypoints()) {
-            if (wp.name().equals("Home") && wp.dimension().equals(gs.getDimension())) {
-                home = wp;
-                break;
+            if (wp.dimension().equals(gs.getDimension())) {
+                if (wp.name().equals("Home") && home == null) home = wp;
+                if (wp.name().startsWith("Death") && death == null) death = wp;
             }
         }
         if (home != null) {
             net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
             if (mc.player != null) {
                 double dist = home.distanceTo(mc.player.getX(), mc.player.getY(), mc.player.getZ());
+                double hdx = home.x() - gs.getPlayerX();
+                double hdz = home.z() - gs.getPlayerZ();
+                double hBearing = Math.toDegrees(Math.atan2(hdx, -hdz));
+                if (hBearing < 0) hBearing += 360;
+                String dir = bearingToCardinal(hBearing);
                 String distStr = dist < 1000 ? String.format("%.0fm", dist) : String.format("%.1fkm", dist / 1000);
                 drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                        "Home", distStr, labelColor, ColorUtil.GREEN);
+                        "Home", dir + " " + distStr, labelColor, ColorUtil.GREEN);
+                ty += LINE_H;
+            }
+        }
+        if (death != null) {
+            net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
+            if (mc.player != null) {
+                double dist = death.distanceTo(mc.player.getX(), mc.player.getY(), mc.player.getZ());
+                String distStr = dist < 1000 ? String.format("%.0fm", dist) : String.format("%.1fkm", dist / 1000);
+                drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                        "Death", distStr, labelColor, ColorUtil.RED);
                 ty += LINE_H;
             }
         }
