@@ -175,7 +175,15 @@ public class MinimapRenderer {
                     x + (w - bw) / 2, y + 13, ColorUtil.GREEN, true);
         }
 
-        // Draw nearest structure indicator (top bar, below compass N)
+        // Draw hostile count badge (bottom-left, above coords bar)
+        int hostiles = mod.getGameStats().getHostileCount();
+        if (hostiles > 0 && cfg.showEntities) {
+            String badge = hostiles + " hostile" + (hostiles > 1 ? "s" : "");
+            int badgeColor = hostiles > 5 ? ColorUtil.RED : ColorUtil.YELLOW;
+            ctx.drawText(client.textRenderer, badge, x + 2, y + h - 19, badgeColor, true);
+        }
+
+        // Draw nearest structure indicator (bottom-right, above coords bar)
         if (cfg.showStructures) {
             var markers = map.getStructureMarkers();
             if (markers != null && !markers.isEmpty()) {
@@ -184,8 +192,9 @@ public class MinimapRenderer {
                         ? String.format("%.0fm", nearest.distance())
                         : String.format("%.1fkm", nearest.distance() / 1000);
                 String structText = nearest.label() + " " + distStr;
+                int tw = client.textRenderer.getWidth(structText);
                 ctx.drawText(client.textRenderer, structText,
-                        x + 2, y + h - 19, nearest.color(), true);
+                        x + w - tw - 2, y + h - 19, nearest.color(), true);
             }
         }
     }
