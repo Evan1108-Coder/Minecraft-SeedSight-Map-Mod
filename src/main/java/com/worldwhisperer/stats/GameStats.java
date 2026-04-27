@@ -25,6 +25,8 @@ public class GameStats {
     private int passiveCount;
     private boolean slimeChunk;
     private String dimension = "overworld";
+    private String weather = "Clear";
+    private int moonPhase;
     private int tickCounter;
 
     public void tick(MinecraftClient client) {
@@ -49,6 +51,12 @@ public class GameStats {
         lightLevel = Math.max(lightLevel, skyLight);
 
         facing = formatDirection(client.player.getHorizontalFacing());
+
+        if (client.world.isThundering()) weather = "Thunder";
+        else if (client.world.isRaining()) weather = "Rain";
+        else weather = "Clear";
+
+        moonPhase = client.world.getMoonPhase();
 
         tickCounter++;
         if (tickCounter % 20 == 0) {
@@ -103,4 +111,6 @@ public class GameStats {
     public String getDimension() { return dimension; }
     public boolean isInNether() { return "the_nether".equals(dimension); }
     public boolean isInEnd() { return "the_end".equals(dimension); }
+    public String getWeather() { return weather; }
+    public int getMoonPhase() { return moonPhase; }
 }

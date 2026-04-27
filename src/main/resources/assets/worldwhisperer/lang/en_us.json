@@ -1,8 +1,7 @@
 {
   "key.worldwhisperer.category": "WorldWhisperer",
   "key.worldwhisperer.toggle_hud": "Toggle HUD",
-  "key.worldwhisperer.open_fullscreen": "Open Full Map",
-  "key.worldwhisperer.toggle_minimap": "Toggle Minimap",
+  "key.worldwhisperer.open_fullscreen": "Expand/Shrink Map",
   "key.worldwhisperer.zoom_in": "Zoom In",
   "key.worldwhisperer.zoom_out": "Zoom Out",
   "key.worldwhisperer.add_waypoint": "Add Waypoint",
