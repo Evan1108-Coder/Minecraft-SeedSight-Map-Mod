@@ -136,7 +136,9 @@ public class PanelRenderer {
 
     public void renderWaypoints(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
         int ty = y + PAD;
-        ctx.drawText(font, "Waypoints", x + PAD, ty, ColorUtil.GOLD, true);
+        int wpCount = mod.getWaypointManager().size();
+        String title = wpCount > 0 ? "Waypoints (" + wpCount + ")" : "Waypoints";
+        ctx.drawText(font, title, x + PAD, ty, ColorUtil.GOLD, true);
         ty += LINE_H + 2;
         RenderUtil.drawHorizontalDivider(ctx, x + PAD, ty, w - PAD * 2);
         ty += 4;
