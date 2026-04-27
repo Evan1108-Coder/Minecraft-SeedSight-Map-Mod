@@ -172,6 +172,23 @@ public class PanelRenderer {
                 "Entities", entities, labelColor, valueColor);
         ty += LINE_H;
 
+        // Nearest structure with bearing
+        var markers = mod.getMapManager().getStructureMarkers();
+        if (markers != null && !markers.isEmpty() && mod.getConfig().showStructures) {
+            var nearest = markers.get(0);
+            double dx = nearest.pos().getX() - gs.getPlayerX();
+            double dz = nearest.pos().getZ() - gs.getPlayerZ();
+            double bearing = Math.toDegrees(Math.atan2(dx, -dz));
+            if (bearing < 0) bearing += 360;
+            String dir = bearingToCardinal(bearing);
+            String distStr = nearest.distance() < 1000
+                    ? String.format("%.0fm", nearest.distance())
+                    : String.format("%.1fkm", nearest.distance() / 1000);
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    nearest.label(), dir + " " + distStr, labelColor, nearest.color());
+            ty += LINE_H;
+        }
+
         if (gs.isSlimeChunk()) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Slime", "YES", labelColor, ColorUtil.GREEN);
@@ -511,10 +528,10 @@ public class PanelRenderer {
                 "Circular Map", cfg.circularMap ? "ON" : "OFF");
         ty += LINE_H + 2;
 
-        String posStr = cfg.hudX < 0 ? "Top-Right" : cfg.hudX + "," + cfg.hudY;
+        String posStr = cfg.hudX < 0 ? cfg.getCornerName() : cfg.hudX + "," + cfg.hudY;
         drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Position", posStr);
-        ty += LINE_H + 4;
+        ty += LINE_H + 2;
 
         if (!cfg.seedOverride.isEmpty()) {
             drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
@@ -529,7 +546,7 @@ public class PanelRenderer {
         ty += 4;
         String[] hints = {"H: Toggle HUD", "M: Expand map", "+/-: Zoom",
                 "B: Waypoint", "X: Delete WP", "N: Tab", "C: Circular",
-                "L: North lock", "V: Copy coords"};
+                "L: North lock", "V: Copy coords", "G: Cycle corner"};
         for (String hint : hints) {
             if (ty + LINE_H > y + h) break;
             ctx.drawText(font, hint, x + PAD, ty, ColorUtil.GRAY, true);
@@ -562,5 +579,10 @@ public class PanelRenderer {
         if (ping < 50) return ColorUtil.GREEN;
         if (ping < 150) return ColorUtil.YELLOW;
         return ColorUtil.RED;
+    }
+
+    private static String bearingToCardinal(double bearing) {
+        String[] dirs = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+        return dirs[(int) Math.round(bearing / 45) % 8];
     }
 }

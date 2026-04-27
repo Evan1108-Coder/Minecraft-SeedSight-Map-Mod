@@ -29,6 +29,7 @@ public class WorldWhispererConfig {
     public boolean showSlimeChunks = false;
     public boolean northLocked = true;
     public boolean circularMap = false;
+    public int hudCorner = 0; // 0=top-right, 1=top-left, 2=bottom-right, 3=bottom-left
 
     public boolean soundIndicators = true;
     public String seedOverride = "";
@@ -83,6 +84,21 @@ public class WorldWhispererConfig {
         mapSize = Math.max(64, Math.min(512, mapSize));
         panelHeight = Math.max(40, Math.min(256, panelHeight));
         if (seedOverride == null) seedOverride = "";
+    }
+
+    public void cycleCorner() {
+        hudCorner = (hudCorner + 1) % 4;
+        hudX = -1;
+        save();
+    }
+
+    public String getCornerName() {
+        return switch (hudCorner) {
+            case 1 -> "Top-Left";
+            case 2 -> "Bottom-Right";
+            case 3 -> "Bottom-Left";
+            default -> "Top-Right";
+        };
     }
 
     public int getTotalWidth() {
