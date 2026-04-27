@@ -501,17 +501,30 @@ public class MinimapRenderer {
     private void drawPlayerArrow(DrawContext ctx, int cx, int cy, float yaw, boolean northLocked) {
         float angle = northLocked ? yaw : 0;
         double rad = Math.toRadians(angle);
+        double sin = Math.sin(rad), cos = Math.cos(rad);
 
-        int size = 4;
-        int tipX = cx + (int) (Math.sin(rad) * size);
-        int tipY = cy - (int) (Math.cos(rad) * size);
+        // Front tip (white)
+        int tipX = cx + (int) (sin * 5);
+        int tipY = cy - (int) (cos * 5);
+        ctx.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, 0xFFFFFFFF);
 
-        // Arrow body
-        ctx.fill(cx - 2, cy - 2, cx + 3, cy + 3, 0xFFFFFFFF);
+        // Center body (green)
         ctx.fill(cx - 1, cy - 1, cx + 2, cy + 2, 0xFF00FF00);
 
-        // Direction tip
-        ctx.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, 0xFFFFFFFF);
+        // Left wing
+        int lwX = cx + (int) (-cos * 3 - sin * 2);
+        int lwY = cy + (int) (-sin * 3 + cos * 2);
+        ctx.fill(lwX, lwY, lwX + 1, lwY + 1, 0xFF00CC00);
+
+        // Right wing
+        int rwX = cx + (int) (cos * 3 - sin * 2);
+        int rwY = cy + (int) (sin * 3 + cos * 2);
+        ctx.fill(rwX, rwY, rwX + 1, rwY + 1, 0xFF00CC00);
+
+        // Tail (dark green)
+        int tailX = cx - (int) (sin * 3);
+        int tailY = cy + (int) (cos * 3);
+        ctx.fill(tailX, tailY, tailX + 1, tailY + 1, 0xFF008800);
     }
 
     private void drawRenderDistCircle(DrawContext ctx, int cx, int cy, int radius) {
