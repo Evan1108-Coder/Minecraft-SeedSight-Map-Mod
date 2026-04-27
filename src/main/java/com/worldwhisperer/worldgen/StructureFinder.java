@@ -5,9 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import com.worldwhisperer.ModVersion;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class StructureFinder {
@@ -42,27 +40,6 @@ public class StructureFinder {
     private static final int[] STRONGHOLDS_PER_RING = {3, 6, 10, 15, 21, 28, 36, 9};
     private static final int STRONGHOLD_RING_START = 1408;
     private static final int STRONGHOLD_RING_WIDTH = 1280;
-
-    public Map<String, BlockPos> findNearby(long worldSeed, int playerX, int playerZ, int radius) {
-        Map<String, BlockPos> found = new HashMap<>();
-
-        for (StructureType st : STRUCTURES) {
-            if (ModVersion.MC_MINOR < st.minMinor) continue;
-            BlockPos pos = findNearest(worldSeed, playerX, playerZ, radius, st.spacing, st.separation, st.salt);
-            if (pos != null) {
-                found.put(st.name, pos);
-            }
-        }
-
-        addNetherStructures(found, worldSeed, playerX, playerZ, radius);
-
-        BlockPos stronghold = findNearestStronghold(worldSeed, playerX, playerZ, radius);
-        if (stronghold != null) {
-            found.put("Stronghold", stronghold);
-        }
-
-        return found;
-    }
 
     public List<StructureMarker> findNearbyMarkers(long worldSeed, int playerX, int playerZ, int radius) {
         List<StructureMarker> markers = new ArrayList<>();
@@ -123,12 +100,6 @@ public class StructureFinder {
         }
 
         return nearest;
-    }
-
-    // Bastions and Fortresses share the same grid; each region picks one or the other
-    private void addNetherStructures(Map<String, BlockPos> found, long worldSeed,
-                                      int playerX, int playerZ, int radius) {
-        findNetherPair(worldSeed, playerX, playerZ, radius, (name, pos) -> found.put(name, pos));
     }
 
     private void addNetherMarkers(List<StructureMarker> markers, long worldSeed,
