@@ -342,6 +342,18 @@ public class PanelRenderer {
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Ancient", "Y 8 to 22 (best 15)", ColorUtil.GRAY, ColorUtil.MC_RED);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Mob Spawning", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Spawns", "Light = 0 (since 1.18)", ColorUtil.GRAY, ColorUtil.RED);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Despawn", ">128 blocks instant", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Mob Cap", "70 hostile / 10 passive", ColorUtil.GRAY, ColorUtil.GRAY);
     }
 
     public void renderSettings(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
