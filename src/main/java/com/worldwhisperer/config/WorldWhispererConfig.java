@@ -32,6 +32,7 @@ public class WorldWhispererConfig {
     public int hudCorner = 0; // 0=top-right, 1=top-left, 2=bottom-right, 3=bottom-left
 
     public boolean soundIndicators = true;
+    public boolean showTrail = true;
     public String seedOverride = "";
 
     public int mapSize = 128;

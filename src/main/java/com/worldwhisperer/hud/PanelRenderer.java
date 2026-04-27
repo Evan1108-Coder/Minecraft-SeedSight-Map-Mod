@@ -541,6 +541,10 @@ public class PanelRenderer {
                 "Circular Map", cfg.circularMap ? "ON" : "OFF");
         ty += LINE_H + 2;
 
+        drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Trail", cfg.showTrail ? "ON" : "OFF");
+        ty += LINE_H + 2;
+
         String posStr = cfg.hudX < 0 ? cfg.getCornerName() : cfg.hudX + "," + cfg.hudY;
         drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Position", posStr);
