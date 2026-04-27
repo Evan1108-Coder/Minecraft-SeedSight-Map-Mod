@@ -318,7 +318,11 @@ public class PanelRenderer {
         if (ps.getOnlinePlayers() > 1) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Players", String.valueOf(ps.getOnlinePlayers()), labelColor, ColorUtil.AQUA);
+            ty += LINE_H;
         }
+
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "MC", com.worldwhisperer.ModVersion.MC_VERSION, labelColor, ColorUtil.DARK_GRAY);
     }
 
     public void renderWaypoints(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
