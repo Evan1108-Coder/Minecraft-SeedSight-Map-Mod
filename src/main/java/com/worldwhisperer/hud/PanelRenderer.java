@@ -129,6 +129,16 @@ public class PanelRenderer {
                     "Slime", "YES", labelColor, ColorUtil.GREEN);
         }
 
+        // Active effects
+        List<String> effects = gs.getActiveEffects();
+        if (!effects.isEmpty()) {
+            for (int i = 0; i < Math.min(effects.size(), 3); i++) {
+                drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                        i == 0 ? "FX" : "", effects.get(i), labelColor, ColorUtil.LIGHT_PURPLE);
+                ty += LINE_H;
+            }
+        }
+
         // Sound indicators
         SoundIndicator si = mod.getSoundIndicator();
         List<String> sounds = si.getRecentSounds();
