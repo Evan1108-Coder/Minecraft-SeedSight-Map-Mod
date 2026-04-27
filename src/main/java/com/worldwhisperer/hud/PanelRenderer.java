@@ -214,6 +214,18 @@ public class PanelRenderer {
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Entities", String.valueOf(ps.getEntityCount()),
                 labelColor, ColorUtil.WHITE);
+        ty += LINE_H;
+
+        if (!ps.getServerBrand().isEmpty()) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Server", ps.getServerBrand(), labelColor, ColorUtil.GRAY);
+            ty += LINE_H;
+        }
+
+        if (ps.getOnlinePlayers() > 1) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Players", String.valueOf(ps.getOnlinePlayers()), labelColor, ColorUtil.AQUA);
+        }
     }
 
     public void renderWaypoints(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {

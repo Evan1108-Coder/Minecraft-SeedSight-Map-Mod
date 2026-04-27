@@ -160,8 +160,9 @@ public class MinimapRenderer {
                 x + (w - client.textRenderer.getWidth(coords)) / 2,
                 y + h - 9, ColorUtil.WHITE, true);
 
-        // Draw zoom level indicator (top-right corner)
-        String zoomText = zoom + "x";
+        // Draw zoom level + scale indicator (top-right corner)
+        int blocksVisible = w * blocksPerPixel;
+        String zoomText = zoom + "x " + blocksVisible + "b";
         ctx.drawText(client.textRenderer, zoomText,
                 x + w - client.textRenderer.getWidth(zoomText) - 2,
                 y + 2, ColorUtil.GRAY, true);
