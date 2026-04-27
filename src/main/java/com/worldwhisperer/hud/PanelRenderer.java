@@ -160,8 +160,10 @@ public class PanelRenderer {
         if (gs.getDurability() >= 0) {
             int pct = gs.getMaxDurability() > 0 ? gs.getDurability() * 100 / gs.getMaxDurability() : 0;
             int durColor = pct > 50 ? ColorUtil.GREEN : pct > 20 ? ColorUtil.YELLOW : ColorUtil.RED;
+            String toolName = gs.getHeldItemName();
+            String toolLabel = toolName.length() > 8 ? toolName.substring(0, 8) : toolName;
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                    "Tool", gs.getDurability() + "/" + gs.getMaxDurability(), labelColor, durColor);
+                    toolLabel, gs.getDurability() + "/" + gs.getMaxDurability(), labelColor, durColor);
             ty += LINE_H;
         }
 
@@ -230,6 +232,17 @@ public class PanelRenderer {
                         i == 0 ? "FX" : "", effects.get(i), labelColor, ColorUtil.LIGHT_PURPLE);
                 ty += LINE_H;
             }
+        }
+
+        // Session stats
+        long secs = gs.getSessionDurationSecs();
+        if (secs > 60) {
+            String sessionTime = String.format("%d:%02d", secs / 60, secs % 60);
+            double dist = gs.getTotalDistance();
+            String distStr = dist < 1000 ? String.format("%.0fm", dist) : String.format("%.1fkm", dist / 1000);
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Session", sessionTime + " / " + distStr, labelColor, ColorUtil.DARK_GRAY);
+            ty += LINE_H;
         }
 
         // Sound indicators
