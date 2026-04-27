@@ -13,9 +13,16 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Rotation-aware overlays**: entities, waypoints, and structures rotate with the minimap in rotation-following mode
 - Rotating compass labels (N/S/E/W track actual world directions in rotation mode)
 - Grid overlay and coordinate display (X / Y / Z)
-- Entity markers (players, hostile mobs, passive mobs) with screen-space clipping
+- Entity markers with type-specific colors and sizes:
+  - **Players**: Aqua dots (3px) with name labels
+  - **Ender Dragon / Wither**: Large purple dots (4px)
+  - **Warden**: Dark aqua dots (3px)
+  - **Hostile mobs**: Red dots (2px)
+  - **Villagers**: Gold dots (2px)
+  - **Passive mobs**: Green dots (2px)
 - Structure markers with labels (Villages, Temples, Monuments, etc.)
-- Nearest structure indicator with distance (e.g. "VLG 234m")
+- Nearest structure indicator with distance + direction arrow at minimap edge
+- Hostile mob count badge (yellow/red warning)
 - Biome change notification (3-second popup on minimap)
 - Expandable map mode (M key: 128px ↔ 256px)
 - Zoom level indicator
@@ -49,6 +56,11 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Player name labels**: other players show their name above their minimap marker
 - **Circular minimap mode**: toggle between square and circular shape (C key)
 - Compass bearing (degrees) shown alongside facing direction
+- Day/night countdown timer + moon phase display
+- Active status effects (up to 3, with timer)
+- Tool durability with color-coded warning
+- Ore Y-level reference in Calculator
+- Server brand + online player count in Perf Stats
 
 ### Performance Stats
 - FPS and TPS monitoring
