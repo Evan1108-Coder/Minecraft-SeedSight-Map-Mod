@@ -34,6 +34,10 @@ public class StructureFinder {
     private static final int NETHER_SEPARATION = 4;
     private static final long NETHER_SALT = 30084232L;
 
+    private static final int NETHER_PORTAL_SPACING = 25;
+    private static final int NETHER_PORTAL_SEPARATION = 15;
+    private static final long NETHER_PORTAL_SALT = 34222645L;
+
     public record StructureMarker(String name, String label, BlockPos pos, int color, double distance) {}
 
     private static final int STRONGHOLD_COLOR = 0xFF80FF80;
@@ -66,6 +70,13 @@ public class StructureFinder {
 
         if (isNether) {
             addNetherMarkers(markers, worldSeed, playerX, playerZ, radius);
+
+            BlockPos portal = findNearest(worldSeed, playerX, playerZ, radius,
+                    NETHER_PORTAL_SPACING, NETHER_PORTAL_SEPARATION, NETHER_PORTAL_SALT);
+            if (portal != null) {
+                double dist = Math.sqrt(Math.pow(portal.getX() - playerX, 2) + Math.pow(portal.getZ() - playerZ, 2));
+                markers.add(new StructureMarker("Ruined Portal", "PTL", portal, 0xFF4B0082, dist));
+            }
         }
 
         markers.sort((a, b) -> Double.compare(a.distance, b.distance));
