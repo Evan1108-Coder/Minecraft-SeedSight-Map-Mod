@@ -42,6 +42,11 @@ public class MinimapRenderer {
         int centerBlockZ = MathHelper.floor(playerZ);
 
         // Draw map tiles
+        double cosYaw = Math.cos(Math.toRadians(playerYaw));
+        double sinYaw = Math.sin(Math.toRadians(playerYaw));
+        int halfW = w / 2;
+        int halfH = h / 2;
+
         for (int px = 0; px < w; px++) {
             for (int pz = 0; pz < h; pz++) {
                 int worldX, worldZ;
@@ -49,11 +54,10 @@ public class MinimapRenderer {
                     worldX = centerBlockX - radiusBlocks + px * blocksPerPixel;
                     worldZ = centerBlockZ - radiusBlocks + pz * blocksPerPixel;
                 } else {
-                    double rad = Math.toRadians(playerYaw);
-                    int dx = px - w / 2;
-                    int dz = pz - h / 2;
-                    worldX = centerBlockX + (int) ((dx * Math.cos(rad) - dz * Math.sin(rad)) * blocksPerPixel);
-                    worldZ = centerBlockZ + (int) ((dx * Math.sin(rad) + dz * Math.cos(rad)) * blocksPerPixel);
+                    int dx = px - halfW;
+                    int dz = pz - halfH;
+                    worldX = centerBlockX + (int) ((dx * cosYaw - dz * sinYaw) * blocksPerPixel);
+                    worldZ = centerBlockZ + (int) ((dx * sinYaw + dz * cosYaw) * blocksPerPixel);
                 }
 
                 int color = map.getColorAt(worldX, worldZ);
