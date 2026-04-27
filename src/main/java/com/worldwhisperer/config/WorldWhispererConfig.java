@@ -43,7 +43,10 @@ public class WorldWhispererConfig {
             try {
                 String json = Files.readString(configPath);
                 WorldWhispererConfig cfg = GSON.fromJson(json, WorldWhispererConfig.class);
-                if (cfg != null) return cfg;
+                if (cfg != null) {
+                    cfg.validate();
+                    return cfg;
+                }
             } catch (IOException e) {
                 WorldWhispererClient.LOGGER.warn("Failed to load config, using defaults", e);
             }
@@ -65,6 +68,15 @@ public class WorldWhispererConfig {
 
     private static Path getConfigPath() {
         return FabricLoader.getInstance().getConfigDir().resolve("worldwhisperer.json");
+    }
+
+    private void validate() {
+        hudScale = Math.max(0.5f, Math.min(3.0f, hudScale));
+        hudOpacity = Math.max(0.1f, Math.min(1.0f, hudOpacity));
+        mapZoom = Math.max(minZoom, Math.min(maxZoom, mapZoom));
+        mapSize = Math.max(64, Math.min(512, mapSize));
+        panelHeight = Math.max(40, Math.min(256, panelHeight));
+        if (seedOverride == null) seedOverride = "";
     }
 
     public int getTotalWidth() {
