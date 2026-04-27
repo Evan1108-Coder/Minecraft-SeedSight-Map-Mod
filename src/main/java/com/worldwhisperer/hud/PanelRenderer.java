@@ -152,7 +152,11 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
-        if (gs.isFreezing()) {
+        if (gs.isOnFire()) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Status", "ON FIRE", labelColor, ColorUtil.RED);
+            ty += LINE_H;
+        } else if (gs.isFreezing()) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Status", "FREEZING", labelColor, ColorUtil.AQUA);
             ty += LINE_H;
@@ -173,8 +177,12 @@ public class PanelRenderer {
         }
 
         if (gs.getSpeed() > 0.5f) {
+            String speedLabel = gs.getRidingEntity().isEmpty() ? "Speed" : "Riding";
+            String speedValue = gs.getRidingEntity().isEmpty()
+                    ? String.format("%.1f m/s", gs.getSpeed())
+                    : String.format("%.1f m/s (%s)", gs.getSpeed(), gs.getRidingEntity());
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                    "Speed", String.format("%.1f m/s", gs.getSpeed()), labelColor, valueColor);
+                    speedLabel, speedValue, labelColor, valueColor);
             ty += LINE_H;
         }
 
