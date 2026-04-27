@@ -160,6 +160,23 @@ public class PanelRenderer {
             String displaySeed = seed.length() > 12 ? seed.substring(0, 12) + "..." : seed;
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Seed", displaySeed, labelColor, ColorUtil.DARK_GRAY);
+            ty += LINE_H;
+        }
+
+        // Distance to Home waypoint
+        var homeWps = mod.getWaypointManager().getWaypoints().stream()
+                .filter(wp -> wp.name().equals("Home") && wp.dimension().equals(gs.getDimension()))
+                .findFirst();
+        if (homeWps.isPresent()) {
+            net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
+            if (mc.player != null) {
+                var home = homeWps.get();
+                double dist = home.distanceTo(mc.player.getX(), mc.player.getY(), mc.player.getZ());
+                String distStr = dist < 1000 ? String.format("%.0fm", dist) : String.format("%.1fkm", dist / 1000);
+                drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                        "Home", distStr, labelColor, ColorUtil.GREEN);
+                ty += LINE_H;
+            }
         }
 
         // Active effects
@@ -362,6 +379,42 @@ public class PanelRenderer {
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Mob Cap", "70 hostile / 10 passive", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Elytra Flight", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Max Speed", "67.5 m/s (firework)", ColorUtil.GRAY, ColorUtil.WHITE);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Glide", "~33 m/s at -30\u00B0", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Duration", "431 durability (7min)", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Furnace Timing", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Furnace", "10s per item", ColorUtil.GRAY, ColorUtil.WHITE);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Blast", "5s per item (ores)", ColorUtil.GRAY, ColorUtil.WHITE);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Smoker", "5s per item (food)", ColorUtil.GRAY, ColorUtil.WHITE);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "Crop Growth", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Wheat", "~24 min (hydrated)", ColorUtil.GRAY, ColorUtil.GOLD);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Sugar Cane", "~18 min per block", ColorUtil.GRAY, ColorUtil.GREEN);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Bamboo", "~4 min per block", ColorUtil.GRAY, ColorUtil.GREEN);
     }
 
     public void renderSettings(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
@@ -434,7 +487,8 @@ public class PanelRenderer {
         RenderUtil.drawHorizontalDivider(ctx, x + PAD, ty, w - PAD * 2);
         ty += 4;
         String[] hints = {"H: Toggle HUD", "M: Expand map", "+/-: Zoom",
-                "B: Waypoint", "N: Tab", "C: Circular", "L: North lock"};
+                "B: Waypoint", "X: Delete WP", "N: Tab", "C: Circular",
+                "L: North lock", "V: Copy coords"};
         for (String hint : hints) {
             if (ty + LINE_H > y + h) break;
             ctx.drawText(font, hint, x + PAD, ty, ColorUtil.GRAY, true);
