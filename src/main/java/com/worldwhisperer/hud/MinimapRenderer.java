@@ -553,7 +553,8 @@ public class MinimapRenderer {
             int color = entry.hostile()
                     ? ColorUtil.withAlpha(0xFF5555, alpha)
                     : ColorUtil.withAlpha(0xFFFF55, alpha);
-            ctx.fill(sx, sy, sx + 1, sy + 1, color);
+            int sz = entry.hostile() ? 2 : 1;
+            ctx.fill(sx - sz / 2, sy - sz / 2, sx + sz / 2 + 1, sy + sz / 2 + 1, color);
         }
     }
 
