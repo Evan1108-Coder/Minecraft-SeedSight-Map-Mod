@@ -26,6 +26,7 @@ public class MapManager {
     private int lastPlayerChunkZ = Integer.MIN_VALUE;
     private int playerY = 64;
     private String lastDimension = "";
+    private boolean lastCaveScan = false;
     private int tickCounter = 0;
 
     private static final int TILE_SIZE = 16;
@@ -49,6 +50,12 @@ public class MapManager {
         int playerChunkX = client.player.getChunkPos().x;
         int playerChunkZ = client.player.getChunkPos().z;
         playerY = client.player.getBlockPos().getY();
+
+        boolean caveScan = isCaveScan(client);
+        if (caveScan != lastCaveScan) {
+            tileCache.clear();
+            lastCaveScan = caveScan;
+        }
 
         boolean moved = playerChunkX != lastPlayerChunkX || playerChunkZ != lastPlayerChunkZ;
 
@@ -92,7 +99,7 @@ public class MapManager {
         int cz = client.player.getChunkPos().z;
         int viewDist = client.options.getViewDistance().getValue();
         int scanRadius = Math.min(viewDist, 16);
-        boolean nether = isNether(world);
+        boolean caveScan = lastCaveScan;
 
         for (int dx = -scanRadius; dx <= scanRadius; dx++) {
             for (int dz = -scanRadius; dz <= scanRadius; dz++) {
@@ -105,13 +112,13 @@ public class MapManager {
                 WorldChunk chunk = world.getChunkManager().getWorldChunk(chunkX, chunkZ);
                 if (chunk == null) continue;
 
-                int[] colors = scanChunk(world, chunk, nether);
+                int[] colors = scanChunk(world, chunk, caveScan);
                 tileCache.put(key, colors);
             }
         }
     }
 
-    private int[] scanChunk(World world, WorldChunk chunk, boolean nether) {
+    private int[] scanChunk(World world, WorldChunk chunk, boolean caveScan) {
         int[] colors = new int[TILE_SIZE * TILE_SIZE];
         int startX = chunk.getPos().getStartX();
         int startZ = chunk.getPos().getStartZ();
@@ -121,7 +128,7 @@ public class MapManager {
                 int worldX = startX + x;
                 int worldZ = startZ + z;
                 int topY;
-                if (nether) {
+                if (caveScan) {
                     topY = findNetherSurface(world, worldX, worldZ);
                 } else {
                     topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, worldX, worldZ);
@@ -156,8 +163,21 @@ public class MapManager {
         return playerY;
     }
 
+    private boolean isCaveScan(MinecraftClient client) {
+        if (client.world == null || client.player == null) return false;
+        if (isNether(client.world)) return true;
+        if (isEnd(client.world)) return false;
+        int surfaceY = client.world.getTopY(Heightmap.Type.MOTION_BLOCKING,
+                client.player.getBlockPos().getX(), client.player.getBlockPos().getZ());
+        return playerY < surfaceY - 4;
+    }
+
     private static boolean isNether(World world) {
         return "the_nether".equals(world.getRegistryKey().getValue().getPath());
+    }
+
+    private static boolean isEnd(World world) {
+        return "the_end".equals(world.getRegistryKey().getValue().getPath());
     }
 
     private void updateStructures(MinecraftClient client) {
