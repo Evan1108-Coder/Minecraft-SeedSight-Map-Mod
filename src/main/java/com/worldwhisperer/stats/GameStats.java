@@ -59,6 +59,7 @@ public class GameStats {
     private double totalDistance;
     private String targetBlock = "";
     private boolean hasNightVision;
+    private boolean isFreezing;
     private final int[] trailX = new int[20];
     private final int[] trailZ = new int[20];
     private int trailIndex;
@@ -101,6 +102,7 @@ public class GameStats {
         xpLevel = client.player.experienceLevel;
         air = client.player.getAir();
         maxAir = client.player.getMaxAir();
+        isFreezing = client.player.getFrozenTicks() > 0;
         double dx = client.player.getX() - client.player.prevX;
         double dz = client.player.getZ() - client.player.prevZ;
         double distThisTick = Math.sqrt(dx * dx + dz * dz);
@@ -264,6 +266,7 @@ public class GameStats {
     public int getMaxDurability() { return maxDurability; }
     public List<String> getActiveEffects() { return activeEffects; }
     public boolean hasNightVision() { return hasNightVision; }
+    public boolean isFreezing() { return isFreezing; }
     public String getTargetBlock() { return targetBlock; }
     public double getTotalDistance() { return totalDistance; }
     public long getSessionDurationSecs() {
