@@ -9,7 +9,8 @@ public record Waypoint(String name, int x, int y, int z, int color, String dimen
     }
 
     public double distanceTo(double px, double py, double pz) {
-        return Math.sqrt(Math.pow(x - px, 2) + Math.pow(y - py, 2) + Math.pow(z - pz, 2));
+        double dx = x - px, dy = y - py, dz = z - pz;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     public String distanceStr() {

@@ -17,9 +17,26 @@ import net.minecraft.util.math.MathHelper;
 
 public class MinimapRenderer {
     private final WorldWhispererClient mod;
+    private double cosYaw, sinYaw;
+    private boolean curNorthLocked;
+    private int centerBX, centerBZ, screenCX, screenCY, curBpp;
 
     public MinimapRenderer(WorldWhispererClient mod) {
         this.mod = mod;
+    }
+
+    private int toScreenX(int worldX, int worldZ) {
+        int dx = worldX - centerBX;
+        int dz = worldZ - centerBZ;
+        if (curNorthLocked) return screenCX + dx / curBpp;
+        return screenCX + (int) ((dx * cosYaw + dz * sinYaw) / curBpp);
+    }
+
+    private int toScreenY(int worldX, int worldZ) {
+        int dx = worldX - centerBX;
+        int dz = worldZ - centerBZ;
+        if (curNorthLocked) return screenCY + dz / curBpp;
+        return screenCY + (int) ((-dx * sinYaw + dz * cosYaw) / curBpp);
     }
 
     public void render(DrawContext ctx, int x, int y, int w, int h) {
@@ -45,6 +62,14 @@ public class MinimapRenderer {
         double sinYaw = Math.sin(Math.toRadians(playerYaw));
         int halfW = w / 2;
         int halfH = h / 2;
+        this.cosYaw = cosYaw;
+        this.sinYaw = sinYaw;
+        this.curNorthLocked = cfg.northLocked;
+        this.centerBX = centerBlockX;
+        this.centerBZ = centerBlockZ;
+        this.screenCX = x + halfW;
+        this.screenCY = y + halfH;
+        this.curBpp = blocksPerPixel;
 
         for (int px = 0; px < w; px++) {
             for (int pz = 0; pz < h; pz++) {
@@ -64,13 +89,14 @@ public class MinimapRenderer {
             }
         }
 
-        // Draw slime chunk overlay (Overworld only)
-        if (cfg.showSlimeChunks && !mod.getGameStats().isInNether() && !mod.getGameStats().isInEnd()) {
+        // Draw slime chunk overlay (Overworld + north-locked only)
+        if (cfg.showSlimeChunks && cfg.northLocked
+                && !mod.getGameStats().isInNether() && !mod.getGameStats().isInEnd()) {
             drawSlimeChunks(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
         }
 
-        // Draw grid overlay
-        if (cfg.showGrid) {
+        // Draw grid overlay (north-locked only)
+        if (cfg.showGrid && cfg.northLocked) {
             drawGrid(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
         }
 
@@ -92,10 +118,8 @@ public class MinimapRenderer {
         // Draw player arrow (center)
         drawPlayerArrow(ctx, x + w / 2, y + h / 2, playerYaw, cfg.northLocked);
 
-        // Draw compass directions (only in north-locked mode where they're accurate)
-        if (cfg.northLocked) {
-            drawCompass(ctx, client.textRenderer, x, y, w, h);
-        }
+        // Draw compass directions (rotated in rotation-following mode)
+        drawCompass(ctx, client.textRenderer, x, y, w, h);
 
         // Draw coordinates at bottom
         int playerY = MathHelper.floor(client.player.getY());
@@ -211,13 +235,11 @@ public class MinimapRenderer {
 
             int ex = MathHelper.floor(entity.getX());
             int ez = MathHelper.floor(entity.getZ());
-            int dx = ex - centerX;
-            int dz = ez - centerZ;
+            if (Math.abs(ex - centerX) > radiusBlocks || Math.abs(ez - centerZ) > radiusBlocks) continue;
 
-            if (Math.abs(dx) > radiusBlocks || Math.abs(dz) > radiusBlocks) continue;
-
-            int px = x + w / 2 + dx / bpp;
-            int pz = y + h / 2 + dz / bpp;
+            int px = toScreenX(ex, ez);
+            int pz = toScreenY(ex, ez);
+            if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
 
             int color;
             int size;
@@ -250,13 +272,11 @@ public class MinimapRenderer {
         for (Waypoint wp : mod.getWaypointManager().getWaypoints()) {
             if (!wp.visible()) continue;
             if (!wp.dimension().equals(currentDim)) continue;
-            int dx = wp.x() - centerX;
-            int dz = wp.z() - centerZ;
+            if (Math.abs(wp.x() - centerX) > radiusBlocks || Math.abs(wp.z() - centerZ) > radiusBlocks) continue;
 
-            if (Math.abs(dx) > radiusBlocks || Math.abs(dz) > radiusBlocks) continue;
-
-            int px = x + w / 2 + dx / bpp;
-            int pz = y + h / 2 + dz / bpp;
+            int px = toScreenX(wp.x(), wp.z());
+            int pz = toScreenY(wp.x(), wp.z());
+            if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
 
             // Diamond shape
             ctx.fill(px - 1, pz - 2, px + 2, pz + 3, 0xFF000000);
@@ -277,13 +297,12 @@ public class MinimapRenderer {
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
 
         for (var marker : markers) {
-            int dx = marker.pos().getX() - centerX;
-            int dz = marker.pos().getZ() - centerZ;
+            if (Math.abs(marker.pos().getX() - centerX) > radiusBlocks
+                    || Math.abs(marker.pos().getZ() - centerZ) > radiusBlocks) continue;
 
-            if (Math.abs(dx) > radiusBlocks || Math.abs(dz) > radiusBlocks) continue;
-
-            int px = x + w / 2 + dx / bpp;
-            int pz = y + h / 2 + dz / bpp;
+            int px = toScreenX(marker.pos().getX(), marker.pos().getZ());
+            int pz = toScreenY(marker.pos().getX(), marker.pos().getZ());
+            if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
 
             int borderColor = ColorUtil.brighten(marker.color(), 0.6f) | 0xFF000000;
             ctx.fill(px - 3, pz - 3, px + 4, pz + 4, 0xFF000000);
@@ -312,10 +331,26 @@ public class MinimapRenderer {
 
     private void drawCompass(DrawContext ctx, TextRenderer font,
                               int x, int y, int w, int h) {
-        int color = ColorUtil.WHITE;
-        ctx.drawText(font, "N", x + w / 2 - 2, y + 2, color, true);
-        ctx.drawText(font, "S", x + w / 2 - 2, y + h - 11, ColorUtil.GRAY, true);
-        ctx.drawText(font, "W", x + 2, y + h / 2 - 4, ColorUtil.GRAY, true);
-        ctx.drawText(font, "E", x + w - 8, y + h / 2 - 4, ColorUtil.GRAY, true);
+        int cx = x + w / 2;
+        int cy = y + h / 2;
+        if (curNorthLocked) {
+            ctx.drawText(font, "N", cx - 2, y + 2, ColorUtil.WHITE, true);
+            ctx.drawText(font, "S", cx - 2, y + h - 11, ColorUtil.GRAY, true);
+            ctx.drawText(font, "W", x + 2, cy - 4, ColorUtil.GRAY, true);
+            ctx.drawText(font, "E", x + w - 8, cy - 4, ColorUtil.GRAY, true);
+        } else {
+            int r = w / 2 - 6;
+            drawDirLabel(ctx, font, "N", cx, cy, r, 0, -1, ColorUtil.WHITE);
+            drawDirLabel(ctx, font, "S", cx, cy, r, 0, 1, ColorUtil.GRAY);
+            drawDirLabel(ctx, font, "W", cx, cy, r, -1, 0, ColorUtil.GRAY);
+            drawDirLabel(ctx, font, "E", cx, cy, r, 1, 0, ColorUtil.GRAY);
+        }
+    }
+
+    private void drawDirLabel(DrawContext ctx, TextRenderer font, String label,
+                               int cx, int cy, int r, int wdx, int wdz, int color) {
+        int sx = cx + (int) ((wdx * cosYaw + wdz * sinYaw) * r) - font.getWidth(label) / 2;
+        int sy = cy + (int) ((-wdx * sinYaw + wdz * cosYaw) * r) - 4;
+        ctx.drawText(font, label, sx, sy, color, true);
     }
 }
