@@ -102,6 +102,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 | `N` | Cycle through tabs |
 | `C` | Toggle circular/square minimap |
 | `L` | Toggle north-locked/rotation-following mode |
+| `V` | Copy coordinates to clipboard |
 
 All keybindings are configurable in Minecraft's Controls settings under the "WorldWhisperer" category.
 
