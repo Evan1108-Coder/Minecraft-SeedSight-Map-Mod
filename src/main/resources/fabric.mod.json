@@ -12,7 +12,6 @@
     "sources": "https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod"
   },
   "license": "MIT",
-  "icon": "assets/worldwhisperer/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
