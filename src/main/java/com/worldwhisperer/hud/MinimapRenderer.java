@@ -88,6 +88,7 @@ public class MinimapRenderer {
         this.curCircular = cfg.circularMap;
         this.mapRadius = halfW;
 
+        boolean nightVision = mod.getGameStats().hasNightVision();
         int radiusSq = halfW * halfW;
         for (int px = 0; px < w; px++) {
             for (int pz = 0; pz < h; pz++) {
@@ -108,6 +109,7 @@ public class MinimapRenderer {
                 }
 
                 int color = map.getColorAt(worldX, worldZ);
+                if (nightVision) color = ColorUtil.brighten(color, 1.3f);
                 ctx.fill(x + px, y + pz, x + px + 1, y + pz + 1, color);
             }
         }
@@ -367,6 +369,7 @@ public class MinimapRenderer {
     private void drawEntities(DrawContext ctx, int x, int y, int w, int h,
                                int centerX, int centerZ, int bpp, WorldWhispererConfig cfg) {
         MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world == null || client.player == null) return;
         int radiusBlocks = (w / 2) * bpp;
 
         try {

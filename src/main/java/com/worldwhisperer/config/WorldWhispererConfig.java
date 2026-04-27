@@ -84,6 +84,7 @@ public class WorldWhispererConfig {
         mapZoom = Math.max(minZoom, Math.min(maxZoom, mapZoom));
         mapSize = Math.max(64, Math.min(512, mapSize));
         panelHeight = Math.max(40, Math.min(256, panelHeight));
+        hudCorner = Math.max(0, Math.min(3, hudCorner));
         if (seedOverride == null) seedOverride = "";
     }
 

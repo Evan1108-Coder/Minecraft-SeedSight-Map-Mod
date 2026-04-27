@@ -610,6 +610,7 @@ public class PanelRenderer {
 
     private static String bearingToCardinal(double bearing) {
         String[] dirs = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
-        return dirs[(int) Math.round(bearing / 45) % 8];
+        int idx = ((int) Math.round(bearing / 45) % 8 + 8) % 8;
+        return dirs[idx];
     }
 }
