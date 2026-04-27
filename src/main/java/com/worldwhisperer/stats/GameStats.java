@@ -32,9 +32,13 @@ public class GameStats {
     private long biomeChangeTime;
     private int tickCounter;
     private float health;
+    private float absorption;
     private int food;
     private int armor;
     private float speed;
+    private int xpLevel;
+    private int air;
+    private int maxAir;
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -64,8 +68,12 @@ public class GameStats {
         facing = formatDirection(client.player.getHorizontalFacing());
 
         health = client.player.getHealth();
+        absorption = client.player.getAbsorptionAmount();
         food = client.player.getHungerManager().getFoodLevel();
         armor = client.player.getArmor();
+        xpLevel = client.player.experienceLevel;
+        air = client.player.getAir();
+        maxAir = client.player.getMaxAir();
         double dx = client.player.getX() - client.player.prevX;
         double dz = client.player.getZ() - client.player.prevZ;
         speed = (float) Math.sqrt(dx * dx + dz * dz) * 20;
@@ -150,7 +158,11 @@ public class GameStats {
     public int getMoonPhase() { return moonPhase; }
     public boolean isBiomeChanged() { return System.currentTimeMillis() - biomeChangeTime < 3000; }
     public float getHealth() { return health; }
+    public float getAbsorption() { return absorption; }
     public int getFood() { return food; }
     public int getArmor() { return armor; }
     public float getSpeed() { return speed; }
+    public int getXpLevel() { return xpLevel; }
+    public int getAir() { return air; }
+    public int getMaxAir() { return maxAir; }
 }
