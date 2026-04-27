@@ -51,6 +51,8 @@ public class GameStats {
     private int durability = -1;
     private int maxDurability = -1;
     private volatile List<String> activeEffects = List.of();
+    private long sessionStartTime;
+    private double totalDistance;
     private final int[] trailX = new int[20];
     private final int[] trailZ = new int[20];
     private int trailIndex;
@@ -94,7 +96,10 @@ public class GameStats {
         maxAir = client.player.getMaxAir();
         double dx = client.player.getX() - client.player.prevX;
         double dz = client.player.getZ() - client.player.prevZ;
-        speed = (float) Math.sqrt(dx * dx + dz * dz) * 20;
+        double distThisTick = Math.sqrt(dx * dx + dz * dz);
+        speed = (float) distThisTick * 20;
+        totalDistance += distThisTick;
+        if (sessionStartTime == 0) sessionStartTime = System.currentTimeMillis();
 
         ItemStack held = client.player.getMainHandStack();
         if (held != null && !held.isEmpty() && held.isDamageable()) {
@@ -235,6 +240,10 @@ public class GameStats {
     public int getDurability() { return durability; }
     public int getMaxDurability() { return maxDurability; }
     public List<String> getActiveEffects() { return activeEffects; }
+    public double getTotalDistance() { return totalDistance; }
+    public long getSessionDurationSecs() {
+        return sessionStartTime > 0 ? (System.currentTimeMillis() - sessionStartTime) / 1000 : 0;
+    }
     public int getTrailSize() { return trailSize; }
     public int getTrailX(int i) { return trailX[((trailIndex - trailSize + i) % trailX.length + trailX.length) % trailX.length]; }
     public int getTrailZ(int i) { return trailZ[((trailIndex - trailSize + i) % trailZ.length + trailZ.length) % trailZ.length]; }
