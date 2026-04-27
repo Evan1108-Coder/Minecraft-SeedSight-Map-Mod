@@ -191,6 +191,15 @@ public class MinimapRenderer {
             ctx.fill(x + 1 + scalePixels, y + 2, x + 2 + scalePixels, y + 5, ColorUtil.WHITE);
         }
 
+        // Draw mode change notification
+        String modeNotif = mod.getModeNotification();
+        if (modeNotif != null) {
+            int mw = client.textRenderer.getWidth(modeNotif);
+            ctx.fill(x + w / 2 - mw / 2 - 3, y + h / 2 - 6, x + w / 2 + mw / 2 + 3, y + h / 2 + 6, 0xCC000000);
+            ctx.drawText(client.textRenderer, modeNotif,
+                    x + (w - mw) / 2, y + h / 2 - 4, ColorUtil.WHITE, true);
+        }
+
         // Draw structure proximity alert
         String structAlert = map.getNearbyStructureAlert();
         if (structAlert != null && cfg.showStructures) {
