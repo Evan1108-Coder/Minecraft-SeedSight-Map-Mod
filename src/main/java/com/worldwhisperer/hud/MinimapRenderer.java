@@ -4,6 +4,7 @@ import com.worldwhisperer.WorldWhispererClient;
 import com.worldwhisperer.config.WorldWhispererConfig;
 import com.worldwhisperer.data.Waypoint;
 import com.worldwhisperer.map.MapManager;
+import com.worldwhisperer.stats.SoundIndicator;
 import com.worldwhisperer.worldgen.SlimeChunkFinder;
 import com.worldwhisperer.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
@@ -113,6 +114,11 @@ public class MinimapRenderer {
         // Draw structure icons
         if (cfg.showStructures) {
             drawStructures(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
+        }
+
+        // Draw sound source markers on minimap
+        if (cfg.soundIndicators) {
+            drawSoundMarkers(ctx, x, y, w, h);
         }
 
         // Draw player arrow (center)
@@ -244,10 +250,16 @@ public class MinimapRenderer {
             int color;
             int size;
 
-            if (entity instanceof PlayerEntity) {
+            if (entity instanceof PlayerEntity otherPlayer) {
                 if (!cfg.showPlayers) continue;
                 color = ColorUtil.AQUA;
                 size = 3;
+                ctx.fill(px - size / 2, pz - size / 2,
+                        px + size / 2 + 1, pz + size / 2 + 1, color);
+                String name = otherPlayer.getName().getString();
+                TextRenderer font = client.textRenderer;
+                ctx.drawText(font, name, px - font.getWidth(name) / 2, pz - 8, ColorUtil.AQUA, true);
+                continue;
             } else if (entity instanceof HostileEntity) {
                 color = ColorUtil.RED;
                 size = 2;
@@ -331,6 +343,23 @@ public class MinimapRenderer {
 
         // Direction tip
         ctx.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, 0xFFFFFFFF);
+    }
+
+    private void drawSoundMarkers(DrawContext ctx, int x, int y, int w, int h) {
+        for (SoundIndicator.SoundEntry entry : mod.getSoundIndicator().getRecentEntries()) {
+            int sx = toScreenX((int) entry.x(), (int) entry.z());
+            int sy = toScreenY((int) entry.x(), (int) entry.z());
+            if (sx < x || sx >= x + w || sy < y || sy >= y + h) continue;
+
+            long age = System.currentTimeMillis() - entry.timestamp();
+            if (age > 2000) continue;
+
+            int alpha = (int) (200 * (1.0 - age / 2000.0));
+            int color = entry.hostile()
+                    ? ColorUtil.withAlpha(0xFF5555, alpha)
+                    : ColorUtil.withAlpha(0xFFFF55, alpha);
+            ctx.fill(sx, sy, sx + 1, sy + 1, color);
+        }
     }
 
     private void drawCompass(DrawContext ctx, TextRenderer font,
