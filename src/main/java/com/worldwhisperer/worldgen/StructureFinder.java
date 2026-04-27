@@ -38,6 +38,11 @@ public class StructureFinder {
 
     public record StructureMarker(String name, String label, BlockPos pos, int color, double distance) {}
 
+    private static final int STRONGHOLD_COLOR = 0xFF80FF80;
+    private static final int[] STRONGHOLDS_PER_RING = {3, 6, 10, 15, 21, 28, 36, 9};
+    private static final int STRONGHOLD_RING_START = 1408;
+    private static final int STRONGHOLD_RING_WIDTH = 1280;
+
     public Map<String, BlockPos> findNearby(long worldSeed, int playerX, int playerZ, int radius) {
         Map<String, BlockPos> found = new HashMap<>();
 
@@ -50,6 +55,12 @@ public class StructureFinder {
         }
 
         addNetherStructures(found, worldSeed, playerX, playerZ, radius);
+
+        BlockPos stronghold = findNearestStronghold(worldSeed, playerX, playerZ, radius);
+        if (stronghold != null) {
+            found.put("Stronghold", stronghold);
+        }
+
         return found;
     }
 
@@ -67,8 +78,51 @@ public class StructureFinder {
 
         addNetherMarkers(markers, worldSeed, playerX, playerZ, radius);
 
+        BlockPos stronghold = findNearestStronghold(worldSeed, playerX, playerZ, radius);
+        if (stronghold != null) {
+            double dist = Math.sqrt(Math.pow(stronghold.getX() - playerX, 2) + Math.pow(stronghold.getZ() - playerZ, 2));
+            markers.add(new StructureMarker("Stronghold", "STR", stronghold, STRONGHOLD_COLOR, dist));
+        }
+
         markers.sort((a, b) -> Double.compare(a.distance, b.distance));
         return markers;
+    }
+
+    // Strongholds use a ring-based placement algorithm (128 total across 8 rings)
+    private BlockPos findNearestStronghold(long worldSeed, int playerX, int playerZ, int radius) {
+        Random random = new Random(worldSeed);
+        double angle = random.nextDouble() * Math.PI * 2.0;
+
+        BlockPos nearest = null;
+        double nearestDist = Double.MAX_VALUE;
+
+        int ringStart = STRONGHOLD_RING_START;
+        for (int ring = 0; ring < STRONGHOLDS_PER_RING.length; ring++) {
+            int count = STRONGHOLDS_PER_RING[ring];
+            double ringEnd = ringStart + STRONGHOLD_RING_WIDTH;
+            double ringDist = (ringStart + ringEnd) / 2.0;
+
+            for (int i = 0; i < count; i++) {
+                int sx = (int) (Math.cos(angle) * ringDist);
+                int sz = (int) (Math.sin(angle) * ringDist);
+                // Snap to chunk center
+                sx = ((sx >> 4) << 4) + 8;
+                sz = ((sz >> 4) << 4) + 8;
+
+                double dist = Math.sqrt(Math.pow(sx - playerX, 2) + Math.pow(sz - playerZ, 2));
+                if (dist < radius && dist < nearestDist) {
+                    nearestDist = dist;
+                    nearest = new BlockPos(sx, 32, sz);
+                }
+
+                angle += 2.0 * Math.PI / count;
+            }
+
+            ringStart += STRONGHOLD_RING_WIDTH * 3;
+            angle += random.nextDouble() * Math.PI * 2.0;
+        }
+
+        return nearest;
     }
 
     // Bastions and Fortresses share the same grid; each region picks one or the other
