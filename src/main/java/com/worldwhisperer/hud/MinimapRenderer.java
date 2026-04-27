@@ -203,12 +203,14 @@ public class MinimapRenderer {
         // Draw compass directions (rotated in rotation-following mode)
         drawCompass(ctx, client.textRenderer, x, y, w, h);
 
-        // Draw coordinates at bottom (flashes red at low HP)
+        // Draw coordinates at bottom (flashes red at low HP, highlights mining Y)
         int playerY = MathHelper.floor(client.player.getY());
+        String yExtra = "";
+        if (playerY >= -64 && playerY <= 16) yExtra = " \u25C6"; // diamond range marker
         String coords = w >= 200
-                ? String.format("%d / %d / %d  [%d, %d]", centerBlockX, playerY, centerBlockZ,
+                ? String.format("%d / %d%s / %d  [%d, %d]", centerBlockX, playerY, yExtra, centerBlockZ,
                         centerBlockX >> 4, centerBlockZ >> 4)
-                : String.format("%d / %d / %d", centerBlockX, playerY, centerBlockZ);
+                : String.format("%d / %d%s / %d", centerBlockX, playerY, yExtra, centerBlockZ);
         float hp = client.player.getHealth();
         boolean lowHp = hp > 0 && hp <= 4;
         int barBg = lowHp ? 0x99AA0000 : 0x99000000;
