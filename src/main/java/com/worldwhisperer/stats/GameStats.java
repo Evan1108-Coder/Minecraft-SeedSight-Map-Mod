@@ -69,7 +69,9 @@ public class GameStats {
                 else if (entity instanceof AnimalEntity) passiveCount++;
             }
 
-            if (client.isIntegratedServerRunning() && client.getServer() != null) {
+            slimeChunk = false;
+            if (!isInNether() && !isInEnd()
+                    && client.isIntegratedServerRunning() && client.getServer() != null) {
                 long seed = client.getServer().getOverworld().getSeed();
                 slimeChunk = SlimeChunkFinder.isSlimeChunk(seed,
                         client.player.getChunkPos().x, client.player.getChunkPos().z);
