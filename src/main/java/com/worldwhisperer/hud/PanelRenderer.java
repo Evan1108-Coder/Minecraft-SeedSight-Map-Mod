@@ -71,6 +71,30 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
+        float hp = gs.getHealth();
+        int hpColor = hp > 10 ? ColorUtil.GREEN : hp > 4 ? ColorUtil.YELLOW : ColorUtil.RED;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "HP", String.format("%.0f/20", hp), labelColor, hpColor);
+        ty += LINE_H;
+
+        int hunger = gs.getFood();
+        int hungerColor = hunger > 14 ? ColorUtil.GREEN : hunger > 6 ? ColorUtil.YELLOW : ColorUtil.RED;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Food", hunger + "/20", labelColor, hungerColor);
+        ty += LINE_H;
+
+        if (gs.getArmor() > 0) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Armor", String.valueOf(gs.getArmor()), labelColor, ColorUtil.AQUA);
+            ty += LINE_H;
+        }
+
+        if (gs.getSpeed() > 0.5f) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Speed", String.format("%.1f m/s", gs.getSpeed()), labelColor, valueColor);
+            ty += LINE_H;
+        }
+
         String entities = String.format("H:%d P:%d", gs.getHostileCount(), gs.getPassiveCount());
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Entities", entities, labelColor, valueColor);
@@ -150,15 +174,18 @@ public class PanelRenderer {
             return;
         }
 
+        String currentDim = mod.getGameStats().getDimension();
         for (Waypoint wp : wps) {
             if (ty + LINE_H > y + h) break;
 
             ctx.fill(x + PAD, ty + 1, x + PAD + 6, ty + 7, wp.color());
             String text = String.format("%s  (%d, %d, %d)", wp.name(), wp.x(), wp.y(), wp.z());
-            ctx.drawText(font, text, x + PAD + 9, ty, ColorUtil.WHITE, true);
+            int nameColor = wp.dimension().equals(currentDim) ? ColorUtil.WHITE : ColorUtil.GRAY;
+            ctx.drawText(font, text, x + PAD + 9, ty, nameColor, true);
 
             String dist = wp.distanceStr();
-            RenderUtil.drawRightAlignedText(ctx, font, dist, x + w - PAD, ty, ColorUtil.GRAY);
+            int distColor = dist.startsWith("[") ? ColorUtil.DARK_GRAY : ColorUtil.GRAY;
+            RenderUtil.drawRightAlignedText(ctx, font, dist, x + w - PAD, ty, distColor);
 
             ty += LINE_H + 1;
         }
