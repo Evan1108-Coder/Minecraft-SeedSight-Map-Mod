@@ -95,8 +95,13 @@ public class WaypointManager {
         int iy = MathHelper.floor(y);
         int iz = MathHelper.floor(z);
         String dim = getCurrentDimension();
+        String markerName = switch (dim) {
+            case "the_nether" -> "Death (Nether)";
+            case "the_end" -> "Death (End)";
+            default -> "Death";
+        };
         waypoints.removeIf(wp -> wp.name().startsWith("Death") && wp.dimension().equals(dim));
-        addWaypoint(new Waypoint("Death", ix, iy, iz, 0xFFFF0000, dim, true));
+        addWaypoint(new Waypoint(markerName, ix, iy, iz, 0xFFFF0000, dim, true));
     }
 
     private String getCurrentDimension() {
