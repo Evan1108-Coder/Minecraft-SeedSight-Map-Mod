@@ -43,6 +43,7 @@ public class GameStats {
     private float health;
     private float absorption;
     private int food;
+    private float saturation;
     private int armor;
     private float speed;
     private int xpLevel;
@@ -92,6 +93,7 @@ public class GameStats {
         health = client.player.getHealth();
         absorption = client.player.getAbsorptionAmount();
         food = client.player.getHungerManager().getFoodLevel();
+        saturation = client.player.getHungerManager().getSaturationLevel();
         armor = client.player.getArmor();
         xpLevel = client.player.experienceLevel;
         air = client.player.getAir();
@@ -243,6 +245,7 @@ public class GameStats {
     public float getHealth() { return health; }
     public float getAbsorption() { return absorption; }
     public int getFood() { return food; }
+    public float getSaturation() { return saturation; }
     public int getArmor() { return armor; }
     public float getSpeed() { return speed; }
     public int getXpLevel() { return xpLevel; }
