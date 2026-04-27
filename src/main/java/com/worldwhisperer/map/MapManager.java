@@ -5,6 +5,7 @@ import com.worldwhisperer.config.WorldWhispererConfig;
 import com.worldwhisperer.worldgen.SeedPredictor;
 import com.worldwhisperer.worldgen.StructureFinder;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.BlockPos;
@@ -124,6 +125,7 @@ public class MapManager {
         int[] colors = new int[TILE_SIZE * TILE_SIZE];
         int startX = chunk.getPos().getStartX();
         int startZ = chunk.getPos().getStartZ();
+        BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 
         for (int x = 0; x < TILE_SIZE; x++) {
             for (int z = 0; z < TILE_SIZE; z++) {
@@ -135,13 +137,26 @@ public class MapManager {
                 } else {
                     topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, worldX, worldZ);
                 }
-                BlockPos pos = new BlockPos(worldX, topY - 1, worldZ);
-                BlockState state = world.getBlockState(pos);
+                mutablePos.set(worldX, topY - 1, worldZ);
+                BlockState state = world.getBlockState(mutablePos);
 
-                MapColor mapColor = state.getMapColor(world, pos);
+                MapColor mapColor = state.getMapColor(world, mutablePos);
                 int color = mapColor.color;
 
                 float shade = 0.8f + (Math.min(Math.max(topY, 40), 120) - 40) * 0.004f;
+
+                // Water depth shading: darken water based on depth
+                if (state.isOf(Blocks.WATER)) {
+                    int depth = 0;
+                    for (int dy = topY - 2; dy > topY - 12; dy--) {
+                        mutablePos.set(worldX, dy, worldZ);
+                        if (!world.getBlockState(mutablePos).isOf(Blocks.WATER)) break;
+                        depth++;
+                    }
+                    shade *= 1.0f - depth * 0.04f;
+                } else if (state.isOf(Blocks.LAVA)) {
+                    shade = 1.2f;
+                }
 
                 int r = Math.min(255, (int) (((color >> 16) & 0xFF) * shade));
                 int g = Math.min(255, (int) (((color >> 8) & 0xFF) * shade));
@@ -155,9 +170,10 @@ public class MapManager {
 
     private int findNetherSurface(World world, int worldX, int worldZ) {
         int startY = Math.min(playerY + 10, 120);
+        BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int y = startY; y > 30; y--) {
-            BlockState above = world.getBlockState(new BlockPos(worldX, y, worldZ));
-            BlockState below = world.getBlockState(new BlockPos(worldX, y - 1, worldZ));
+            BlockState above = world.getBlockState(pos.set(worldX, y, worldZ));
+            BlockState below = world.getBlockState(pos.set(worldX, y - 1, worldZ));
             if (above.isAir() && !below.isAir()) {
                 return y;
             }
