@@ -191,6 +191,16 @@ public class MinimapRenderer {
             ctx.fill(x + 1 + scalePixels, y + 2, x + 2 + scalePixels, y + 5, ColorUtil.WHITE);
         }
 
+        // Draw structure proximity alert
+        String structAlert = map.getNearbyStructureAlert();
+        if (structAlert != null && cfg.showStructures) {
+            String alertText = "Near: " + structAlert;
+            int aw = client.textRenderer.getWidth(alertText);
+            ctx.fill(x + w / 2 - aw / 2 - 2, y + 24, x + w / 2 + aw / 2 + 2, y + 35, 0xCC000000);
+            ctx.drawText(client.textRenderer, alertText,
+                    x + (w - aw) / 2, y + 25, ColorUtil.GOLD, true);
+        }
+
         // Draw biome change notification
         if (mod.getGameStats().isBiomeChanged()) {
             String biomeName = mod.getGameStats().getBiome();
