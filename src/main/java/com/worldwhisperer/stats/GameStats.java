@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class GameStats {
     private int yawDegrees;
     private int hostileCount;
     private int passiveCount;
+    private int villagerCount;
     private boolean slimeChunk;
     private String dimension = "overworld";
     private String weather = "Clear";
@@ -109,10 +111,12 @@ public class GameStats {
         if (tickCounter % 20 == 0) {
             hostileCount = 0;
             passiveCount = 0;
+            villagerCount = 0;
             for (Entity entity : client.world.getEntities()) {
                 double dist = entity.squaredDistanceTo(client.player);
                 if (dist > 128 * 128) continue;
                 if (entity instanceof HostileEntity) hostileCount++;
+                else if (entity instanceof VillagerEntity) villagerCount++;
                 else if (entity instanceof AnimalEntity) passiveCount++;
             }
 
@@ -182,6 +186,7 @@ public class GameStats {
     public int getYawDegrees() { return yawDegrees; }
     public int getHostileCount() { return hostileCount; }
     public int getPassiveCount() { return passiveCount; }
+    public int getVillagerCount() { return villagerCount; }
     public boolean isSlimeChunk() { return slimeChunk; }
     public String getDimension() { return dimension; }
     public boolean isInNether() { return "the_nether".equals(dimension); }

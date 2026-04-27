@@ -142,7 +142,9 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
-        String entities = String.format("H:%d P:%d", gs.getHostileCount(), gs.getPassiveCount());
+        String entities = gs.getVillagerCount() > 0
+                ? String.format("H:%d P:%d V:%d", gs.getHostileCount(), gs.getPassiveCount(), gs.getVillagerCount())
+                : String.format("H:%d P:%d", gs.getHostileCount(), gs.getPassiveCount());
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Entities", entities, labelColor, valueColor);
         ty += LINE_H;
