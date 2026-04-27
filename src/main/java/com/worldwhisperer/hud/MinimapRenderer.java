@@ -206,11 +206,15 @@ public class MinimapRenderer {
         // Draw coordinates at bottom (flashes red at low HP, highlights mining Y)
         int playerY = MathHelper.floor(client.player.getY());
         String yExtra = "";
-        if (playerY >= -64 && playerY <= 16) yExtra = " \u25C6"; // diamond range marker
-        String coords = w >= 200
-                ? String.format("%d / %d%s / %d  [%d, %d]", centerBlockX, playerY, yExtra, centerBlockZ,
-                        centerBlockX >> 4, centerBlockZ >> 4)
-                : String.format("%d / %d%s / %d", centerBlockX, playerY, yExtra, centerBlockZ);
+        if (playerY >= -64 && playerY <= 16) yExtra = " \u25C6";
+        String coords;
+        if (w >= 200) {
+            String biomeName = mod.getGameStats().getBiome();
+            if (biomeName.length() > 14) biomeName = biomeName.substring(0, 14);
+            coords = String.format("%d / %d%s / %d  %s", centerBlockX, playerY, yExtra, centerBlockZ, biomeName);
+        } else {
+            coords = String.format("%d / %d%s / %d", centerBlockX, playerY, yExtra, centerBlockZ);
+        }
         float hp = client.player.getHealth();
         boolean lowHp = hp > 0 && hp <= 4;
         int barBg = lowHp ? 0x99AA0000 : 0x99000000;
