@@ -112,12 +112,15 @@ public class GameStats {
             hostileCount = 0;
             passiveCount = 0;
             villagerCount = 0;
-            for (Entity entity : client.world.getEntities()) {
-                double dist = entity.squaredDistanceTo(client.player);
-                if (dist > 128 * 128) continue;
-                if (entity instanceof HostileEntity) hostileCount++;
-                else if (entity instanceof VillagerEntity) villagerCount++;
-                else if (entity instanceof AnimalEntity) passiveCount++;
+            try {
+                for (Entity entity : client.world.getEntities()) {
+                    double dist = entity.squaredDistanceTo(client.player);
+                    if (dist > 128 * 128) continue;
+                    if (entity instanceof HostileEntity) hostileCount++;
+                    else if (entity instanceof VillagerEntity) villagerCount++;
+                    else if (entity instanceof AnimalEntity) passiveCount++;
+                }
+            } catch (java.util.ConcurrentModificationException ignored) {
             }
 
             slimeChunk = false;
