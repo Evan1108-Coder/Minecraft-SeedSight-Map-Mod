@@ -54,6 +54,16 @@ public class PanelRenderer {
                 "Facing", gs.getFacing(), labelColor, valueColor);
         ty += LINE_H;
 
+        if (gs.isInNether()) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Dim", "Nether", labelColor, ColorUtil.RED);
+            ty += LINE_H;
+        } else if (gs.isInEnd()) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Dim", "The End", labelColor, ColorUtil.LIGHT_PURPLE);
+            ty += LINE_H;
+        }
+
         String entities = String.format("H:%d P:%d", gs.getHostileCount(), gs.getPassiveCount());
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Entities", entities, labelColor, valueColor);
