@@ -187,6 +187,19 @@ public class GameStats {
     public boolean isInEnd() { return "the_end".equals(dimension); }
     public String getWeather() { return weather; }
     public int getMoonPhase() { return moonPhase; }
+    public String getMoonPhaseName() {
+        return switch (moonPhase) {
+            case 0 -> "Full";
+            case 1 -> "Waning Gibbous";
+            case 2 -> "Third Quarter";
+            case 3 -> "Waning Crescent";
+            case 4 -> "New";
+            case 5 -> "Waxing Crescent";
+            case 6 -> "First Quarter";
+            case 7 -> "Waxing Gibbous";
+            default -> "?";
+        };
+    }
     public boolean isBiomeChanged() { return System.currentTimeMillis() - biomeChangeTime < 3000; }
     public float getHealth() { return health; }
     public float getAbsorption() { return absorption; }
