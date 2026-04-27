@@ -61,8 +61,8 @@ public class MinimapRenderer {
             }
         }
 
-        // Draw slime chunk overlay
-        if (cfg.showSlimeChunks) {
+        // Draw slime chunk overlay (Overworld only)
+        if (cfg.showSlimeChunks && !mod.getGameStats().isInNether() && !mod.getGameStats().isInEnd()) {
             drawSlimeChunks(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
         }
 
