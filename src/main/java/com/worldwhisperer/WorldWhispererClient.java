@@ -48,7 +48,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         instance = this;
-        LOGGER.info("SeedSight initializing...");
+        LOGGER.info("WorldWhisperer initializing...");
 
         config = WorldWhispererConfig.load();
         mapManager = new MapManager(config);
@@ -62,7 +62,7 @@ public class WorldWhispererClient implements ClientModInitializer {
         registerKeybindings();
         registerEvents();
 
-        LOGGER.info("SeedSight initialized.");
+        LOGGER.info("WorldWhisperer initialized.");
     }
 
     private void registerKeybindings() {
