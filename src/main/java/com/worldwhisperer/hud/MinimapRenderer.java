@@ -98,7 +98,8 @@ public class MinimapRenderer {
         }
 
         // Draw coordinates at bottom
-        String coords = String.format("X: %d  Z: %d", centerBlockX, centerBlockZ);
+        int playerY = MathHelper.floor(client.player.getY());
+        String coords = String.format("%d / %d / %d", centerBlockX, playerY, centerBlockZ);
         ctx.fill(x, y + h - 10, x + w, y + h, 0x99000000);
         ctx.drawText(client.textRenderer, coords,
                 x + (w - client.textRenderer.getWidth(coords)) / 2,
@@ -136,14 +137,15 @@ public class MinimapRenderer {
 
     private void drawSlimeChunks(DrawContext ctx, int x, int y, int w, int h,
                                   int centerX, int centerZ, int blocksPerPixel) {
-        MinecraftClient client = MinecraftClient.getInstance();
         long seed = 0;
-        if (client.isIntegratedServerRunning() && client.getServer() != null) {
-            seed = client.getServer().getOverworld().getSeed();
-        } else {
-            String override = mod.getConfig().seedOverride;
-            if (!override.isEmpty()) {
-                try { seed = Long.parseLong(override); } catch (NumberFormatException e) { seed = override.hashCode(); }
+        String override = mod.getConfig().seedOverride;
+        if (!override.isEmpty()) {
+            try { seed = Long.parseLong(override); } catch (NumberFormatException e) { seed = override.hashCode(); }
+        }
+        if (seed == 0) {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client.isIntegratedServerRunning() && client.getServer() != null) {
+                seed = client.getServer().getOverworld().getSeed();
             }
         }
         if (seed == 0) return;

@@ -38,6 +38,12 @@ public class StructureFinder {
     private static final int NETHER_PORTAL_SEPARATION = 15;
     private static final long NETHER_PORTAL_SALT = 34222645L;
 
+    private static final int END_CITY_SPACING = 20;
+    private static final int END_CITY_SEPARATION = 11;
+    private static final long END_CITY_SALT = 10387313L;
+    private static final int END_CITY_COLOR = 0xFFCC66FF;
+    private static final int END_GATEWAY_MIN_DIST = 1024;
+
     public record StructureMarker(String name, String label, BlockPos pos, int color, double distance) {}
 
     private static final int STRONGHOLD_COLOR = 0xFF80FF80;
@@ -56,14 +62,14 @@ public class StructureFinder {
                 if (ModVersion.MC_MINOR < st.minMinor) continue;
                 BlockPos pos = findNearest(worldSeed, playerX, playerZ, radius, st.spacing, st.separation, st.salt);
                 if (pos != null) {
-                    double dist = Math.sqrt(Math.pow(pos.getX() - playerX, 2) + Math.pow(pos.getZ() - playerZ, 2));
+                    double dist = distanceBetween(pos.getX(), pos.getZ(), playerX, playerZ);
                     markers.add(new StructureMarker(st.name, st.label, pos, st.color, dist));
                 }
             }
 
             BlockPos stronghold = findNearestStronghold(worldSeed, playerX, playerZ, radius);
             if (stronghold != null) {
-                double dist = Math.sqrt(Math.pow(stronghold.getX() - playerX, 2) + Math.pow(stronghold.getZ() - playerZ, 2));
+                double dist = distanceBetween(stronghold.getX(), stronghold.getZ(), playerX, playerZ);
                 markers.add(new StructureMarker("Stronghold", "STR", stronghold, STRONGHOLD_COLOR, dist));
             }
         }
@@ -74,9 +80,13 @@ public class StructureFinder {
             BlockPos portal = findNearest(worldSeed, playerX, playerZ, radius,
                     NETHER_PORTAL_SPACING, NETHER_PORTAL_SEPARATION, NETHER_PORTAL_SALT);
             if (portal != null) {
-                double dist = Math.sqrt(Math.pow(portal.getX() - playerX, 2) + Math.pow(portal.getZ() - playerZ, 2));
+                double dist = distanceBetween(portal.getX(), portal.getZ(), playerX, playerZ);
                 markers.add(new StructureMarker("Ruined Portal", "PTL", portal, 0xFF4B0082, dist));
             }
+        }
+
+        if (isEnd) {
+            addEndMarkers(markers, worldSeed, playerX, playerZ, radius);
         }
 
         markers.sort((a, b) -> Double.compare(a.distance, b.distance));
@@ -104,7 +114,7 @@ public class StructureFinder {
                 sx = ((sx >> 4) << 4) + 8;
                 sz = ((sz >> 4) << 4) + 8;
 
-                double dist = Math.sqrt(Math.pow(sx - playerX, 2) + Math.pow(sz - playerZ, 2));
+                double dist = distanceBetween(sx, sz, playerX, playerZ);
                 if (dist < radius && dist < nearestDist) {
                     nearestDist = dist;
                     nearest = new BlockPos(sx, 32, sz);
@@ -123,7 +133,7 @@ public class StructureFinder {
     private void addNetherMarkers(List<StructureMarker> markers, long worldSeed,
                                    int playerX, int playerZ, int radius) {
         findNetherPair(worldSeed, playerX, playerZ, radius, (name, pos) -> {
-            double dist = Math.sqrt(Math.pow(pos.getX() - playerX, 2) + Math.pow(pos.getZ() - playerZ, 2));
+            double dist = distanceBetween(pos.getX(), pos.getZ(), playerX, playerZ);
             boolean isFortress = name.equals("Fortress");
             markers.add(new StructureMarker(name,
                     isFortress ? "FOR" : "BAS", pos,
@@ -156,7 +166,7 @@ public class StructureFinder {
                 int structBlockX = (structChunkX << 4) + 8;
                 int structBlockZ = (structChunkZ << 4) + 8;
 
-                double dist = Math.sqrt(Math.pow(structBlockX - playerX, 2) + Math.pow(structBlockZ - playerZ, 2));
+                double dist = distanceBetween(structBlockX, structBlockZ, playerX, playerZ);
                 if (dist >= radius) continue;
 
                 // Determine bastion vs fortress: use a second random roll
@@ -168,6 +178,25 @@ public class StructureFinder {
                         new BlockPos(structBlockX, 64, structBlockZ));
             }
         }
+    }
+
+    private void addEndMarkers(List<StructureMarker> markers, long worldSeed,
+                                int playerX, int playerZ, int radius) {
+        BlockPos endCity = findNearest(worldSeed, playerX, playerZ, radius,
+                END_CITY_SPACING, END_CITY_SEPARATION, END_CITY_SALT);
+        if (endCity != null) {
+            double distFromOrigin = distanceBetween(endCity.getX(), endCity.getZ(), 0, 0);
+            if (distFromOrigin > END_GATEWAY_MIN_DIST) {
+                double dist = distanceBetween(endCity.getX(), endCity.getZ(), playerX, playerZ);
+                markers.add(new StructureMarker("End City", "END", endCity, END_CITY_COLOR, dist));
+            }
+        }
+    }
+
+    private static double distanceBetween(int x1, int z1, int x2, int z2) {
+        double dx = x1 - x2;
+        double dz = z1 - z2;
+        return Math.sqrt(dx * dx + dz * dz);
     }
 
     private BlockPos findNearest(long worldSeed, int playerX, int playerZ, int radius,
@@ -200,9 +229,7 @@ public class StructureFinder {
                 int structBlockX = (structChunkX << 4) + 8;
                 int structBlockZ = (structChunkZ << 4) + 8;
 
-                double dist = Math.sqrt(
-                        Math.pow(structBlockX - playerX, 2) +
-                                Math.pow(structBlockZ - playerZ, 2));
+                double dist = distanceBetween(structBlockX, structBlockZ, playerX, playerZ);
 
                 if (dist < radius && dist < nearestDist) {
                     nearestDist = dist;
