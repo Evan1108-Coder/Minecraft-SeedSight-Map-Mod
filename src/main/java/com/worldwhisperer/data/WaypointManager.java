@@ -79,6 +79,25 @@ public class WaypointManager {
         }
     }
 
+    public void deleteNearest(double px, double py, double pz, String dimension) {
+        if (waypoints.isEmpty()) return;
+        int nearestIdx = -1;
+        double nearestDist = Double.MAX_VALUE;
+        for (int i = 0; i < waypoints.size(); i++) {
+            Waypoint wp = waypoints.get(i);
+            if (!wp.dimension().equals(dimension)) continue;
+            double dist = wp.distanceTo(px, py, pz);
+            if (dist < nearestDist) {
+                nearestDist = dist;
+                nearestIdx = i;
+            }
+        }
+        if (nearestIdx >= 0 && nearestDist < 32) {
+            waypoints.remove(nearestIdx);
+            save();
+        }
+    }
+
     public List<Waypoint> getWaypoints() {
         return List.copyOf(waypoints);
     }

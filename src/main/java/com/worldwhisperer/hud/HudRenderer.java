@@ -118,8 +118,7 @@ public class HudRenderer {
                 ctx.fill(x, tabY, x + 2, tabY + TAB_H, 0xFF55FF55);
             }
 
-            // Tab icon as first letter
-            String icon = tabs[i].label.substring(0, 1);
+            String icon = tabs[i].icon;
             int textX = x + (TAB_W - font.getWidth(icon)) / 2;
             int textY = tabY + (TAB_H - 8) / 2;
             int textColor = active ? ColorUtil.WHITE : ColorUtil.GRAY;
