@@ -51,6 +51,22 @@ public class PanelRenderer {
                 "Day", dayWeather, labelColor, weatherColor);
         ty += LINE_H;
 
+        long tickTime = gs.getTickTime();
+        String phaseStr;
+        int phaseColor;
+        if (tickTime < 12000) {
+            int secsLeft = (int) ((13000 - tickTime) / 20);
+            phaseStr = String.format("Night in %d:%02d", secsLeft / 60, secsLeft % 60);
+            phaseColor = ColorUtil.GOLD;
+        } else {
+            int secsLeft = (int) ((24000 - tickTime) / 20);
+            phaseStr = String.format("Dawn in %d:%02d", secsLeft / 60, secsLeft % 60);
+            phaseColor = ColorUtil.AQUA;
+        }
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "", phaseStr, labelColor, phaseColor);
+        ty += LINE_H;
+
         int light = gs.getLightLevel();
         int lightColor = light == 0 ? ColorUtil.RED : light <= 7 ? ColorUtil.YELLOW : ColorUtil.GREEN;
         String lightStr = light == 0 ? "0 DANGER" : String.valueOf(light);
@@ -354,6 +370,20 @@ public class PanelRenderer {
         if (!cfg.seedOverride.isEmpty()) {
             drawSettingLine(ctx, font, x + PAD, ty, w - PAD * 2,
                     "Seed", cfg.seedOverride);
+            ty += LINE_H + 4;
+        }
+
+        // Keybinding hints
+        ctx.drawText(font, "Keybindings", x + PAD, ty, ColorUtil.GOLD, true);
+        ty += LINE_H;
+        RenderUtil.drawHorizontalDivider(ctx, x + PAD, ty, w - PAD * 2);
+        ty += 4;
+        String[] hints = {"H: Toggle HUD", "M: Expand map", "+/-: Zoom",
+                "B: Waypoint", "N: Tab", "C: Circular", "L: North lock"};
+        for (String hint : hints) {
+            if (ty + LINE_H > y + h) break;
+            ctx.drawText(font, hint, x + PAD, ty, ColorUtil.GRAY, true);
+            ty += LINE_H;
         }
     }
 
