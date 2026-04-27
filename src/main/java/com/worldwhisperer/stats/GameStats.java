@@ -24,6 +24,7 @@ public class GameStats {
     private int hostileCount;
     private int passiveCount;
     private boolean slimeChunk;
+    private String dimension = "overworld";
     private int tickCounter;
 
     public void tick(MinecraftClient client) {
@@ -34,6 +35,8 @@ public class GameStats {
         playerZ = MathHelper.floor(client.player.getZ());
 
         biome = biomePredictor.getBiomeAt(playerX, playerY, playerZ);
+
+        dimension = client.world.getRegistryKey().getValue().getPath();
 
         long worldTime = client.world.getTimeOfDay();
         tickTime = worldTime % 24000;
@@ -97,4 +100,7 @@ public class GameStats {
     public int getHostileCount() { return hostileCount; }
     public int getPassiveCount() { return passiveCount; }
     public boolean isSlimeChunk() { return slimeChunk; }
+    public String getDimension() { return dimension; }
+    public boolean isInNether() { return "the_nether".equals(dimension); }
+    public boolean isInEnd() { return "the_end".equals(dimension); }
 }
