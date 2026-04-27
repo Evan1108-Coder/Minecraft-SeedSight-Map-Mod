@@ -149,6 +149,16 @@ public class MinimapRenderer {
             drawStructures(ctx, x, y, w, h, centerBlockX, centerBlockZ, blocksPerPixel);
         }
 
+        // Draw world spawn marker (0,0) in Overworld
+        if (!mod.getGameStats().isInNether() && !mod.getGameStats().isInEnd()) {
+            int spx = toScreenX(0, 0);
+            int spy = toScreenY(0, 0);
+            if (!isOutsideMap(spx, spy, x, y, w, h)) {
+                ctx.fill(spx - 1, spy - 3, spx + 2, spy + 4, 0xCCFFFFFF);
+                ctx.fill(spx - 3, spy - 1, spx + 4, spy + 2, 0xCCFFFFFF);
+            }
+        }
+
         // Draw sound source markers on minimap
         if (cfg.soundIndicators) {
             drawSoundMarkers(ctx, x, y, w, h);
