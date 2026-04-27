@@ -177,12 +177,22 @@ public class PanelRenderer {
         }
 
         if (gs.getSpeed() > 0.5f) {
-            String speedLabel = gs.getRidingEntity().isEmpty() ? "Speed" : "Riding";
-            String speedValue = gs.getRidingEntity().isEmpty()
-                    ? String.format("%.1f m/s", gs.getSpeed())
-                    : String.format("%.1f m/s (%s)", gs.getSpeed(), gs.getRidingEntity());
+            String speedLabel;
+            String speedValue;
+            int speedColor = valueColor;
+            if (gs.isGliding()) {
+                speedLabel = "Elytra";
+                speedValue = String.format("%.1f m/s", gs.getSpeed());
+                speedColor = ColorUtil.LIGHT_PURPLE;
+            } else if (!gs.getRidingEntity().isEmpty()) {
+                speedLabel = "Riding";
+                speedValue = String.format("%.1f m/s (%s)", gs.getSpeed(), gs.getRidingEntity());
+            } else {
+                speedLabel = "Speed";
+                speedValue = String.format("%.1f m/s", gs.getSpeed());
+            }
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                    speedLabel, speedValue, labelColor, valueColor);
+                    speedLabel, speedValue, labelColor, speedColor);
             ty += LINE_H;
         }
 
