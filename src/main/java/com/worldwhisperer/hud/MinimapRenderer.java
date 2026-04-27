@@ -334,54 +334,57 @@ public class MinimapRenderer {
         MinecraftClient client = MinecraftClient.getInstance();
         int radiusBlocks = (w / 2) * bpp;
 
-        for (Entity entity : client.world.getEntities()) {
-            if (entity == client.player) continue;
+        try {
+            for (Entity entity : client.world.getEntities()) {
+                if (entity == client.player) continue;
 
-            int ex = MathHelper.floor(entity.getX());
-            int ez = MathHelper.floor(entity.getZ());
-            if (Math.abs(ex - centerX) > radiusBlocks || Math.abs(ez - centerZ) > radiusBlocks) continue;
+                int ex = MathHelper.floor(entity.getX());
+                int ez = MathHelper.floor(entity.getZ());
+                if (Math.abs(ex - centerX) > radiusBlocks || Math.abs(ez - centerZ) > radiusBlocks) continue;
 
-            int px = toScreenX(ex, ez);
-            int pz = toScreenY(ex, ez);
-            if (isOutsideMap(px, pz, x, y, w, h)) continue;
+                int px = toScreenX(ex, ez);
+                int pz = toScreenY(ex, ez);
+                if (isOutsideMap(px, pz, x, y, w, h)) continue;
 
-            int color;
-            int size;
+                int color;
+                int size;
 
-            if (entity instanceof PlayerEntity otherPlayer) {
-                if (!cfg.showPlayers) continue;
-                color = ColorUtil.AQUA;
-                size = 3;
+                if (entity instanceof PlayerEntity otherPlayer) {
+                    if (!cfg.showPlayers) continue;
+                    color = ColorUtil.AQUA;
+                    size = 3;
+                    ctx.fill(px - size / 2, pz - size / 2,
+                            px + size / 2 + 1, pz + size / 2 + 1, color);
+                    String name = otherPlayer.getName().getString();
+                    TextRenderer font = client.textRenderer;
+                    ctx.drawText(font, name, px - font.getWidth(name) / 2, pz - 8, ColorUtil.AQUA, true);
+                    continue;
+                } else if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity) {
+                    color = ColorUtil.LIGHT_PURPLE;
+                    size = 4;
+                } else if (entity instanceof WardenEntity) {
+                    color = ColorUtil.MC_DARK_AQUA;
+                    size = 3;
+                } else if (entity instanceof HostileEntity) {
+                    color = ColorUtil.RED;
+                    size = 2;
+                } else if (entity instanceof VillagerEntity) {
+                    color = ColorUtil.GOLD;
+                    size = 2;
+                } else if (entity instanceof AnimalEntity) {
+                    color = ColorUtil.GREEN;
+                    size = 2;
+                } else if (entity instanceof ItemEntity) {
+                    color = ColorUtil.WHITE;
+                    size = 1;
+                } else {
+                    continue;
+                }
+
                 ctx.fill(px - size / 2, pz - size / 2,
                         px + size / 2 + 1, pz + size / 2 + 1, color);
-                String name = otherPlayer.getName().getString();
-                TextRenderer font = client.textRenderer;
-                ctx.drawText(font, name, px - font.getWidth(name) / 2, pz - 8, ColorUtil.AQUA, true);
-                continue;
-            } else if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity) {
-                color = ColorUtil.LIGHT_PURPLE;
-                size = 4;
-            } else if (entity instanceof WardenEntity) {
-                color = ColorUtil.MC_DARK_AQUA;
-                size = 3;
-            } else if (entity instanceof HostileEntity) {
-                color = ColorUtil.RED;
-                size = 2;
-            } else if (entity instanceof VillagerEntity) {
-                color = ColorUtil.GOLD;
-                size = 2;
-            } else if (entity instanceof AnimalEntity) {
-                color = ColorUtil.GREEN;
-                size = 2;
-            } else if (entity instanceof ItemEntity) {
-                color = ColorUtil.WHITE;
-                size = 1;
-            } else {
-                continue;
             }
-
-            ctx.fill(px - size / 2, pz - size / 2,
-                    px + size / 2 + 1, pz + size / 2 + 1, color);
+        } catch (java.util.ConcurrentModificationException ignored) {
         }
     }
 
