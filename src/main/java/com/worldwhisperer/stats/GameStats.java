@@ -48,7 +48,7 @@ public class GameStats {
     private String heldItemName = "";
     private int durability = -1;
     private int maxDurability = -1;
-    private final List<String> activeEffects = new ArrayList<>();
+    private volatile List<String> activeEffects = List.of();
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -125,14 +125,15 @@ public class GameStats {
                 }
             }
 
-            activeEffects.clear();
+            List<String> effects = new ArrayList<>();
             for (StatusEffectInstance effect : client.player.getStatusEffects()) {
                 int amp = effect.getAmplifier();
                 int secs = effect.getDuration() / 20;
                 String time = String.format("%d:%02d", secs / 60, secs % 60);
                 String name = effect.getEffectType().value().getName().getString();
-                activeEffects.add(name + (amp > 0 ? " " + (amp + 1) : "") + " " + time);
+                effects.add(name + (amp > 0 ? " " + (amp + 1) : "") + " " + time);
             }
+            activeEffects = List.copyOf(effects);
         }
     }
 

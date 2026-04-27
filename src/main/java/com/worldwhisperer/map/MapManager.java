@@ -21,7 +21,7 @@ public class MapManager {
     private final SeedPredictor seedPredictor = new SeedPredictor();
     private final StructureFinder structureFinder = new StructureFinder();
 
-    private List<StructureFinder.StructureMarker> structureMarkers = List.of();
+    private volatile List<StructureFinder.StructureMarker> structureMarkers = List.of();
     private int lastPlayerChunkX = Integer.MIN_VALUE;
     private int lastPlayerChunkZ = Integer.MIN_VALUE;
     private int playerY = 64;
