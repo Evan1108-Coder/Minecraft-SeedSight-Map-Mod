@@ -56,7 +56,12 @@ public class WorldWhispererConfig {
         return cfg;
     }
 
+    private transient long lastSaveTime;
+
     public void save() {
+        long now = System.currentTimeMillis();
+        if (now - lastSaveTime < 500) return;
+        lastSaveTime = now;
         try {
             Path configPath = getConfigPath();
             Files.createDirectories(configPath.getParent());
