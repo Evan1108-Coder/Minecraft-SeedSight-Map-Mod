@@ -6,6 +6,9 @@
   "key.worldwhisperer.zoom_out": "Zoom Out",
   "key.worldwhisperer.add_waypoint": "Add Waypoint",
   "key.worldwhisperer.cycle_tab": "Cycle Tab",
+  "key.worldwhisperer.toggle_circular": "Toggle Circular Map",
+  "key.worldwhisperer.toggle_north_lock": "Toggle North Lock",
+  "key.worldwhisperer.copy_coords": "Copy Coordinates",
 
   "worldwhisperer.tab.minimap": "MiniMap",
   "worldwhisperer.tab.stats": "Statistics",
