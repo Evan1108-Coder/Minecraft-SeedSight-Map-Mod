@@ -41,24 +41,31 @@ public class StructureFinder {
     private static final int STRONGHOLD_RING_START = 1408;
     private static final int STRONGHOLD_RING_WIDTH = 1280;
 
-    public List<StructureMarker> findNearbyMarkers(long worldSeed, int playerX, int playerZ, int radius) {
+    public List<StructureMarker> findNearbyMarkers(long worldSeed, int playerX, int playerZ, int radius,
+                                                      String dimension) {
         List<StructureMarker> markers = new ArrayList<>();
+        boolean isNether = "the_nether".equals(dimension);
+        boolean isEnd = "the_end".equals(dimension);
 
-        for (StructureType st : STRUCTURES) {
-            if (ModVersion.MC_MINOR < st.minMinor) continue;
-            BlockPos pos = findNearest(worldSeed, playerX, playerZ, radius, st.spacing, st.separation, st.salt);
-            if (pos != null) {
-                double dist = Math.sqrt(Math.pow(pos.getX() - playerX, 2) + Math.pow(pos.getZ() - playerZ, 2));
-                markers.add(new StructureMarker(st.name, st.label, pos, st.color, dist));
+        if (!isNether && !isEnd) {
+            for (StructureType st : STRUCTURES) {
+                if (ModVersion.MC_MINOR < st.minMinor) continue;
+                BlockPos pos = findNearest(worldSeed, playerX, playerZ, radius, st.spacing, st.separation, st.salt);
+                if (pos != null) {
+                    double dist = Math.sqrt(Math.pow(pos.getX() - playerX, 2) + Math.pow(pos.getZ() - playerZ, 2));
+                    markers.add(new StructureMarker(st.name, st.label, pos, st.color, dist));
+                }
+            }
+
+            BlockPos stronghold = findNearestStronghold(worldSeed, playerX, playerZ, radius);
+            if (stronghold != null) {
+                double dist = Math.sqrt(Math.pow(stronghold.getX() - playerX, 2) + Math.pow(stronghold.getZ() - playerZ, 2));
+                markers.add(new StructureMarker("Stronghold", "STR", stronghold, STRONGHOLD_COLOR, dist));
             }
         }
 
-        addNetherMarkers(markers, worldSeed, playerX, playerZ, radius);
-
-        BlockPos stronghold = findNearestStronghold(worldSeed, playerX, playerZ, radius);
-        if (stronghold != null) {
-            double dist = Math.sqrt(Math.pow(stronghold.getX() - playerX, 2) + Math.pow(stronghold.getZ() - playerZ, 2));
-            markers.add(new StructureMarker("Stronghold", "STR", stronghold, STRONGHOLD_COLOR, dist));
+        if (isNether) {
+            addNetherMarkers(markers, worldSeed, playerX, playerZ, radius);
         }
 
         markers.sort((a, b) -> Double.compare(a.distance, b.distance));
