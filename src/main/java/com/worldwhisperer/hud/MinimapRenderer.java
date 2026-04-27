@@ -111,9 +111,15 @@ public class MinimapRenderer {
             }
         }
 
-        // Draw circular border
+        // Draw minimap border
         if (curCircular) {
             drawCircleBorder(ctx, x + halfW, y + halfH, halfW);
+        } else {
+            int bc = 0xFF333333;
+            ctx.fill(x, y, x + w, y + 1, bc);
+            ctx.fill(x, y + h - 1, x + w, y + h, bc);
+            ctx.fill(x, y, x + 1, y + h, bc);
+            ctx.fill(x + w - 1, y, x + w, y + h, bc);
         }
 
         // Draw slime chunk overlay (Overworld + north-locked only)
