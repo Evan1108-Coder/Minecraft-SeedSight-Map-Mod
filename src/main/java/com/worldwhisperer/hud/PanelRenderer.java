@@ -41,8 +41,14 @@ public class PanelRenderer {
                 "Time", gs.getTimeOfDay(), labelColor, ColorUtil.GOLD);
         ty += LINE_H;
 
+        String dayWeather = gs.getDayCount() + " " + gs.getWeather();
+        int weatherColor = switch (gs.getWeather()) {
+            case "Rain" -> ColorUtil.AQUA;
+            case "Thunder" -> ColorUtil.YELLOW;
+            default -> valueColor;
+        };
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Day", String.valueOf(gs.getDayCount()), labelColor, valueColor);
+                "Day", dayWeather, labelColor, weatherColor);
         ty += LINE_H;
 
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
