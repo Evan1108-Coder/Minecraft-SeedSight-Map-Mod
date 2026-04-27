@@ -44,6 +44,8 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding copyCoordsKey;
     private boolean wasAlive = true;
     private boolean wasSleeping = false;
+    private String modeNotification = "";
+    private long modeNotificationTime;
 
     public static WorldWhispererClient getInstance() {
         return instance;
@@ -135,10 +137,12 @@ public class WorldWhispererClient implements ClientModInitializer {
             if (toggleCircularKey.wasPressed()) {
                 config.circularMap = !config.circularMap;
                 config.save();
+                showModeNotification(config.circularMap ? "Circular Mode" : "Square Mode");
             }
             if (toggleNorthLockKey.wasPressed()) {
                 config.northLocked = !config.northLocked;
                 config.save();
+                showModeNotification(config.northLocked ? "North Locked" : "Rotation Mode");
             }
             if (copyCoordsKey.wasPressed() && client.player != null) {
                 int px = net.minecraft.util.math.MathHelper.floor(client.player.getX());
@@ -171,6 +175,17 @@ public class WorldWhispererClient implements ClientModInitializer {
             perfStats.tick(client);
             soundIndicator.tick(client);
         });
+    }
+
+    private void showModeNotification(String text) {
+        modeNotification = text;
+        modeNotificationTime = System.currentTimeMillis();
+    }
+
+    public String getModeNotification() {
+        if (modeNotification.isEmpty()) return null;
+        if (System.currentTimeMillis() - modeNotificationTime > 2000) return null;
+        return modeNotification;
     }
 
     public WorldWhispererConfig getConfig() { return config; }
