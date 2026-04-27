@@ -37,6 +37,9 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Visual scale bar**: 32-block reference ruler at top-left of minimap
 - **Dropped items**: shown as white dots (1px) on minimap
 - **Mode change notifications**: centered popup when toggling circular/north-lock modes
+- **Night vision boost**: minimap brightens 30% when player has Night Vision effect
+- **Water depth shading**: deeper water renders progressively darker blue (up to 10 blocks)
+- **Lava glow**: lava surface blocks render with brighter orange on minimap
 - Smooth gradient-based height shading for terrain elevation
 - Slime chunk overlay (Overworld, north-locked mode)
 - Map cache auto-clears on dimension change and surface/underground transitions
@@ -58,12 +61,12 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - **Session tracker**: time played and distance walked this session
 - **Nearest structure bearing**: cardinal direction + distance to closest predicted structure
 - **Air/oxygen meter**: appears when underwater with color-coded threshold
-- Light level (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
+- Light level with **block/sky breakdown** (color-coded: red=spawn danger, yellow=dim, green=safe), facing direction
 - Dimension indicator (shows when in Nether or End)
 - **Cross-dimension coordinates**: always shows corresponding Nether/Overworld coordinates
 - **Distance to Home**: shows distance to your bed/home waypoint
 - **Day/night progress bar**: visual timeline with sunset marker
-- Hostile/passive/villager entity counts within 128 blocks
+- Hostile/passive/villager entity counts with total within 128 blocks
 - Slime chunk indicator
 - Sound indicators (25+ mob types: Creeper, Zombie, Skeleton, Enderman, Witch, Pillager, Ravager, Evoker, and more)
 - **Sound source markers**: hostile sounds appear as fading red dots on minimap, other sounds as yellow
@@ -74,7 +77,6 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Active status effects (up to 3, with name + level + timer)
 - Tool durability with color-coded warning (green/yellow/red)
 - Ore Y-level reference in Calculator (Diamond, Iron, Gold, Lapis, Emerald, Ancient Debris)
-- Server brand + online player count in Perf Stats
 - Danger-responsive HUD border (tints red near hostiles or at light level 0)
 - Low HP warning (coordinate bar flashes red at 2 hearts)
 - **Automatic "Home" waypoint** when sleeping in a bed (per-dimension)
@@ -89,6 +91,8 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Render distance
 - Multiplayer ping
 - Entity count
+- **Minecraft version display**
+- Server brand + online player count
 
 ### Waypoint System
 - Quick-add waypoints at current position (B key)
