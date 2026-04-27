@@ -22,7 +22,8 @@ public class McCalculator {
     }
 
     public boolean isCircleBlock(int cx, int cz, int radius, int x, int z) {
-        double dist = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(z - cz, 2));
+        double dx = x - cx, dz = z - cz;
+        double dist = Math.sqrt(dx * dx + dz * dz);
         return dist >= radius - 0.5 && dist <= radius + 0.5;
     }
 
@@ -31,7 +32,8 @@ public class McCalculator {
         int[][] grid = new int[diameter][diameter];
         for (int x = 0; x < diameter; x++) {
             for (int z = 0; z < diameter; z++) {
-                double dist = Math.sqrt(Math.pow(x - radius, 2) + Math.pow(z - radius, 2));
+                double dx = x - radius, dz = z - radius;
+                double dist = Math.sqrt(dx * dx + dz * dz);
                 grid[x][z] = (dist <= radius + 0.5) ? 1 : 0;
             }
         }
