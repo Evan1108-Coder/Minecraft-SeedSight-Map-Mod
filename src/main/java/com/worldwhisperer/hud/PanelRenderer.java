@@ -34,6 +34,11 @@ public class PanelRenderer {
         ty += LINE_H;
 
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Chunk", String.format("%d, %d", gs.getPlayerX() >> 4, gs.getPlayerZ() >> 4),
+                labelColor, ColorUtil.DARK_GRAY);
+        ty += LINE_H;
+
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Biome", gs.getBiome(), labelColor, ColorUtil.GREEN);
         ty += LINE_H;
 
@@ -237,7 +242,7 @@ public class PanelRenderer {
 
         if (gs.isSlimeChunk()) {
             drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                    "Slime", "YES", labelColor, ColorUtil.GREEN);
+                    "Slime", "YES (Y<40 to spawn)", labelColor, ColorUtil.GREEN);
             ty += LINE_H;
         }
 
