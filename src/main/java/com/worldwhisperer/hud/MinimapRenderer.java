@@ -112,11 +112,19 @@ public class MinimapRenderer {
             }
         }
 
-        // Draw minimap border
+        // Draw minimap border (pulses red when hostiles are very close)
+        int hostileCount = mod.getGameStats().getHostileCount();
+        int borderColor = 0xFF333333;
+        if (hostileCount > 5) {
+            float pulse = (float) (0.5 + 0.5 * Math.sin(System.currentTimeMillis() / 200.0));
+            borderColor = ColorUtil.lerp(0xFF660000, 0xFFFF0000, pulse);
+        } else if (hostileCount > 0) {
+            borderColor = 0xFF663333;
+        }
         if (curCircular) {
             drawCircleBorder(ctx, x + halfW, y + halfH, halfW);
         } else {
-            int bc = 0xFF333333;
+            int bc = borderColor;
             ctx.fill(x, y, x + w, y + 1, bc);
             ctx.fill(x, y + h - 1, x + w, y + h, bc);
             ctx.fill(x, y, x + 1, y + h, bc);
@@ -173,15 +181,17 @@ public class MinimapRenderer {
         }
 
         // Draw player breadcrumb trail
-        int trailSize = mod.getGameStats().getTrailSize();
-        for (int i = 0; i < trailSize; i++) {
-            int tx = mod.getGameStats().getTrailX(i);
-            int tz = mod.getGameStats().getTrailZ(i);
-            int tpx = toScreenX(tx, tz);
-            int tpy = toScreenY(tx, tz);
-            if (!isOutsideMap(tpx, tpy, x, y, w, h)) {
-                int alpha = 40 + (i * 160 / Math.max(trailSize, 1));
-                ctx.fill(tpx, tpy, tpx + 1, tpy + 1, ColorUtil.withAlpha(0x55FF55, alpha));
+        if (cfg.showTrail) {
+            int trailSize = mod.getGameStats().getTrailSize();
+            for (int i = 0; i < trailSize; i++) {
+                int tx = mod.getGameStats().getTrailX(i);
+                int tz = mod.getGameStats().getTrailZ(i);
+                int tpx = toScreenX(tx, tz);
+                int tpy = toScreenY(tx, tz);
+                if (!isOutsideMap(tpx, tpy, x, y, w, h)) {
+                    int alpha = 40 + (i * 160 / Math.max(trailSize, 1));
+                    ctx.fill(tpx, tpy, tpx + 1, tpy + 1, ColorUtil.withAlpha(0x55FF55, alpha));
+                }
             }
         }
 
