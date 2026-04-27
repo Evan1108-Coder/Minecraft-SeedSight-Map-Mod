@@ -181,6 +181,15 @@ public class MinimapRenderer {
                 x + w - client.textRenderer.getWidth(zoomText) - 2,
                 y + 2, ColorUtil.GRAY, true);
 
+        // Scale bar (top-left, 32 blocks)
+        int scaleBlocks = 32;
+        int scalePixels = scaleBlocks / blocksPerPixel;
+        if (scalePixels >= 8 && scalePixels <= w / 3) {
+            ctx.fill(x + 2, y + 2, x + 2 + scalePixels, y + 3, ColorUtil.WHITE);
+            ctx.fill(x + 2, y + 2, x + 3, y + 5, ColorUtil.WHITE);
+            ctx.fill(x + 1 + scalePixels, y + 2, x + 2 + scalePixels, y + 5, ColorUtil.WHITE);
+        }
+
         // Draw biome change notification
         if (mod.getGameStats().isBiomeChanged()) {
             String biomeName = mod.getGameStats().getBiome();
