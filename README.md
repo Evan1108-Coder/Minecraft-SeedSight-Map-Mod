@@ -1,4 +1,4 @@
-# WorldWhisperer - Minecraft Minimap & Intelligence Mod
+# SeedSight - Minecraft Minimap & Intelligence Mod
 
 A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a feature-rich minimap HUD with seed-based world generation prediction, game statistics, performance monitoring, waypoints, and more.
 
@@ -162,7 +162,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 | `X` | Delete nearest waypoint (within 32 blocks) |
 | `G` | Cycle HUD corner position |
 
-All keybindings are configurable in Minecraft's Controls settings under the "WorldWhisperer" category.
+All keybindings are configurable in Minecraft's Controls settings under the "SeedSight" category.
 
 ## Version-Specific Features
 
@@ -204,14 +204,14 @@ Bedrock branches use the [Script API](https://learn.microsoft.com/en-us/minecraf
 ### Steps
 1. Install Fabric Loader for your Minecraft version
 2. Download the Fabric API mod and place it in your `mods` folder
-3. Download the WorldWhisperer JAR for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod/releases)
-4. Place the WorldWhisperer JAR in your `mods` folder
+3. Download the SeedSight JAR for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod/releases)
+4. Place the SeedSight JAR in your `mods` folder
 5. Launch Minecraft with the Fabric profile
 
 ### Multiplayer Note
 On multiplayer servers, the world seed is not sent to clients. To use seed-based prediction features:
 - Use the `/seed` command if you have operator permissions
-- Or manually enter the seed in WorldWhisperer Settings (press `N` to cycle to Settings tab)
+- Or manually enter the seed in SeedSight Settings (press `N` to cycle to Settings tab)
 
 ## Building from Source
 
@@ -221,16 +221,16 @@ On multiplayer servers, the world seed is not sent to clients. To use seed-based
 
 ### Build
 ```bash
-git clone https://github.com/Evan1108-Coder/Minecraft-WorldWhisperer-Map-Mod.git
-cd Minecraft-WorldWhisperer-Map-Mod
+git clone https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod.git
+cd Minecraft-SeedSight-Map-Mod
 ./gradlew build
 ```
 
-The built mod JAR will be in `build/libs/worldwhisperer-1.0.0.jar`.
+The built mod JAR will be in `build/libs/seedsight-1.0.0.jar`.
 
 ## Configuration
 
-Config file is stored at `.minecraft/config/worldwhisperer.json`. All settings can be changed in-game via the Settings tab.
+Config file is stored at `.minecraft/config/seedsight.json`. All settings can be changed in-game via the Settings tab.
 
 ## License
 
