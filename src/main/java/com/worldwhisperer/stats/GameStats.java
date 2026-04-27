@@ -63,6 +63,8 @@ public class GameStats {
     private boolean isOnFire;
     private String ridingEntity = "";
     private boolean isGliding;
+    private boolean isSprinting;
+    private boolean isSwimming;
     private final int[] trailX = new int[20];
     private final int[] trailZ = new int[20];
     private int trailIndex;
@@ -108,6 +110,8 @@ public class GameStats {
         isFreezing = client.player.getFrozenTicks() > 0;
         isOnFire = client.player.isOnFire();
         isGliding = client.player.isFallFlying();
+        isSprinting = client.player.isSprinting();
+        isSwimming = client.player.isSwimming();
         if (client.player.hasVehicle() && client.player.getVehicle() != null) {
             ridingEntity = client.player.getVehicle().getName().getString();
         } else {
@@ -280,6 +284,8 @@ public class GameStats {
     public boolean isOnFire() { return isOnFire; }
     public String getRidingEntity() { return ridingEntity; }
     public boolean isGliding() { return isGliding; }
+    public boolean isSprinting() { return isSprinting; }
+    public boolean isSwimming() { return isSwimming; }
     public String getTargetBlock() { return targetBlock; }
     public double getTotalDistance() { return totalDistance; }
     public long getSessionDurationSecs() {
