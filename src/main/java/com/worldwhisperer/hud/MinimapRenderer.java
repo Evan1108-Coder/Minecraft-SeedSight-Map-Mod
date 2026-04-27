@@ -110,6 +110,20 @@ public class MinimapRenderer {
         ctx.drawText(client.textRenderer, zoomText,
                 x + w - client.textRenderer.getWidth(zoomText) - 2,
                 y + 2, ColorUtil.GRAY, true);
+
+        // Draw nearest structure indicator (top bar, below compass N)
+        if (cfg.showStructures) {
+            var markers = map.getStructureMarkers();
+            if (markers != null && !markers.isEmpty()) {
+                var nearest = markers.get(0);
+                String distStr = nearest.distance() < 1000
+                        ? String.format("%.0fm", nearest.distance())
+                        : String.format("%.1fkm", nearest.distance() / 1000);
+                String structText = nearest.label() + " " + distStr;
+                ctx.drawText(client.textRenderer, structText,
+                        x + 2, y + h - 19, nearest.color(), true);
+            }
+        }
     }
 
     private void drawSlimeChunks(DrawContext ctx, int x, int y, int w, int h,
