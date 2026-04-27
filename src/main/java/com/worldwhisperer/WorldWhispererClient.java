@@ -43,6 +43,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding toggleNorthLockKey;
     private KeyBinding copyCoordsKey;
     private boolean wasAlive = true;
+    private boolean wasSleeping = false;
 
     public static WorldWhispererClient getInstance() {
         return instance;
@@ -155,6 +156,14 @@ public class WorldWhispererClient implements ClientModInitializer {
                             client.player.getX(), client.player.getY(), client.player.getZ());
                 }
                 wasAlive = alive;
+
+                // Bed/sleep detection — save "Home" waypoint
+                boolean sleeping = client.player.isSleeping();
+                if (!wasSleeping && sleeping) {
+                    waypointManager.updateHomeMarker(
+                            client.player.getX(), client.player.getY(), client.player.getZ());
+                }
+                wasSleeping = sleeping;
             }
 
             mapManager.tick(client);
