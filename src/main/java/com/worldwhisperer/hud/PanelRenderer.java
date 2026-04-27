@@ -314,11 +314,14 @@ public class PanelRenderer {
 
         // Sound indicators
         SoundIndicator si = mod.getSoundIndicator();
-        List<String> sounds = si.getRecentSounds();
-        if (!sounds.isEmpty()) {
-            ty = y + h - LINE_H * Math.min(sounds.size(), 2) - PAD;
-            for (int i = 0; i < Math.min(sounds.size(), 2); i++) {
-                ctx.drawText(font, "\u266A " + sounds.get(i), x + PAD, ty, ColorUtil.AQUA, true);
+        var soundEntries = si.getRecentEntries();
+        if (!soundEntries.isEmpty()) {
+            int maxShown = Math.min(soundEntries.size(), 3);
+            ty = y + h - LINE_H * maxShown - PAD;
+            for (int i = 0; i < maxShown; i++) {
+                var entry = soundEntries.get(i);
+                int soundColor = entry.hostile() ? ColorUtil.RED : ColorUtil.AQUA;
+                ctx.drawText(font, "\u266A " + entry.name(), x + PAD, ty, soundColor, true);
                 ty += LINE_H;
             }
         }
