@@ -62,9 +62,19 @@ public class HudRenderer {
 
         float alpha = cfg.hudOpacity;
 
+        // Danger-responsive border: red tint when hostile mobs nearby or light level 0
+        int bgBase = 0x181818;
+        int hostiles = mod.getGameStats().getHostileCount();
+        int light = mod.getGameStats().getLightLevel();
+        if (hostiles > 5 || light == 0) {
+            bgBase = 0x301010;
+        } else if (hostiles > 0) {
+            bgBase = 0x201818;
+        }
+
         // Draw outer container border
         RenderUtil.drawMcPanel(ctx, baseX, baseY, totalW, totalH,
-                ColorUtil.withAlpha(0x181818, (int) (alpha * 255)));
+                ColorUtil.withAlpha(bgBase, (int) (alpha * 255)));
 
         // Tab bar area (left side inside border)
         int tabX = baseX + BORDER;
