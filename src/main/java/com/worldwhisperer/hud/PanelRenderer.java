@@ -153,23 +153,24 @@ public class PanelRenderer {
         ty += 4;
 
         McCalculator calc = McCalculator.getInstance();
+        GameStats gs = mod.getGameStats();
+        int px = gs.getPlayerX();
+        int pz = gs.getPlayerZ();
 
-        // Nether portal calculator
         ctx.drawText(font, "Nether Portal", x + PAD, ty, ColorUtil.AQUA, true);
         ty += LINE_H;
 
-        int[] nether = calc.overworldToNether(
-                mod.getGameStats().getPlayerX(), mod.getGameStats().getPlayerZ());
-        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "OW\u2192Nether", String.format("%d, %d", nether[0], nether[1]),
-                ColorUtil.GRAY, ColorUtil.RED);
-        ty += LINE_H;
-
-        int[] overworld = calc.netherToOverworld(
-                mod.getGameStats().getPlayerX(), mod.getGameStats().getPlayerZ());
-        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Nether\u2192OW", String.format("%d, %d", overworld[0], overworld[1]),
-                ColorUtil.GRAY, ColorUtil.GREEN);
+        if (gs.isInNether()) {
+            int[] overworld = calc.netherToOverworld(px, pz);
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Nether\u2192OW", String.format("%d, %d", overworld[0], overworld[1]),
+                    ColorUtil.GRAY, ColorUtil.GREEN);
+        } else {
+            int[] nether = calc.overworldToNether(px, pz);
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "OW\u2192Nether", String.format("%d, %d", nether[0], nether[1]),
+                    ColorUtil.GRAY, ColorUtil.RED);
+        }
         ty += LINE_H + 4;
 
         // Spawn chunk info
@@ -184,6 +185,15 @@ public class PanelRenderer {
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Max (30)", "15 bookshelves", ColorUtil.GRAY, ColorUtil.LIGHT_PURPLE);
+        ty += LINE_H + 4;
+
+        ctx.drawText(font, "XP Levels", x + PAD, ty, ColorUtil.AQUA, true);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Lv 30", String.format("%.0f XP", calc.xpForLevel(30)), ColorUtil.GRAY, ColorUtil.GREEN);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Lv 50", String.format("%.0f XP", calc.xpForLevel(50)), ColorUtil.GRAY, ColorUtil.YELLOW);
     }
 
     public void renderSettings(DrawContext ctx, TextRenderer font, int x, int y, int w, int h) {
