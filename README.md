@@ -27,7 +27,7 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Player coordinates (X, Y, Z)
 - Current biome name
 - In-game time (12-hour format) and day count
-- Light level, facing direction
+- Light level, facing direction, dimension indicator
 - Hostile/passive entity counts within 128 blocks
 - Slime chunk indicator
 - Sound indicators (nearby mob sounds, footsteps, block breaking, ambient)
@@ -48,7 +48,8 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 - Visible on minimap with labels
 
 ### Calculator
-- Nether portal coordinate converter (Overworld <-> Nether)
+- Dimension-aware Nether portal coordinate converter (auto-detects current dimension)
+- XP level reference (Level 30, Level 50)
 - Spawn chunk radius calculator
 - Enchanting power calculator (bookshelves needed)
 
