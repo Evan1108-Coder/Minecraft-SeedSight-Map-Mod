@@ -406,9 +406,18 @@ public class MinimapRenderer {
                 } else if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity) {
                     color = ColorUtil.LIGHT_PURPLE;
                     size = 4;
+                    ctx.fill(px - size / 2, pz - size / 2,
+                            px + size / 2 + 1, pz + size / 2 + 1, color);
+                    String bossName = entity instanceof EnderDragonEntity ? "Dragon" : "Wither";
+                    ctx.drawText(client.textRenderer, bossName, px + 4, pz - 3, color, true);
+                    continue;
                 } else if (entity instanceof WardenEntity) {
                     color = ColorUtil.MC_DARK_AQUA;
                     size = 3;
+                    ctx.fill(px - size / 2, pz - size / 2,
+                            px + size / 2 + 1, pz + size / 2 + 1, color);
+                    ctx.drawText(client.textRenderer, "Warden", px + 4, pz - 3, color, true);
+                    continue;
                 } else if (entity instanceof HostileEntity) {
                     color = ColorUtil.RED;
                     size = 2;

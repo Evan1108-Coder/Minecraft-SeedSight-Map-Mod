@@ -111,6 +111,9 @@ public class SoundIndicator {
         if (soundId.contains("entity.zombie_villager")) return "Zombie Villager";
         if (soundId.contains("entity.zoglin")) return "Zoglin";
         if (soundId.contains("entity.wither_skeleton")) return "Wither Skeleton";
+        if (soundId.contains("entity.bogged")) return "Bogged";
+        if (soundId.contains("entity.cave_spider")) return "Cave Spider";
+        if (soundId.contains("entity.zombified_piglin")) return "Zombified Piglin";
         if (ModVersion.hasCreaking() && soundId.contains("entity.creaking")) return "Creaking";
         if (soundId.contains("entity.player.attack")) return "Player Attack";
         if (soundId.contains("block.anvil")) return "Anvil";
