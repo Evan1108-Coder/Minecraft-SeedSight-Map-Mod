@@ -258,16 +258,17 @@ public class MinimapRenderer {
         double rad = Math.toRadians(angle);
 
         int size = 4;
-        double tipX = cx + Math.sin(rad) * size;
-        double tipY = cy - Math.cos(rad) * size;
-        double leftX = cx + Math.sin(rad + 2.5) * (size - 1);
-        double leftY = cy - Math.cos(rad + 2.5) * (size - 1);
-        double rightX = cx + Math.sin(rad - 2.5) * (size - 1);
-        double rightY = cy - Math.cos(rad - 2.5) * (size - 1);
+        int tipX = cx + (int) (Math.sin(rad) * size);
+        int tipY = cy - (int) (Math.cos(rad) * size);
+        int tailX = cx - (int) (Math.sin(rad) * (size - 1));
+        int tailY = cy + (int) (Math.cos(rad) * (size - 1));
 
-        // Simple arrow approximation using rectangles
+        // Arrow body
         ctx.fill(cx - 2, cy - 2, cx + 3, cy + 3, 0xFFFFFFFF);
         ctx.fill(cx - 1, cy - 1, cx + 2, cy + 2, 0xFF00FF00);
+
+        // Direction tip
+        ctx.fill(tipX - 1, tipY - 1, tipX + 2, tipY + 2, 0xFFFFFFFF);
     }
 
     private void drawCompass(DrawContext ctx, TextRenderer font,

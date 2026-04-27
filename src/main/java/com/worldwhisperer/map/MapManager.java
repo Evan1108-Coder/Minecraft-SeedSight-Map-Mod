@@ -12,9 +12,7 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MapManager {
@@ -23,7 +21,6 @@ public class MapManager {
     private final SeedPredictor seedPredictor = new SeedPredictor();
     private final StructureFinder structureFinder = new StructureFinder();
 
-    private Map<String, BlockPos> nearbyStructures = new HashMap<>();
     private List<StructureFinder.StructureMarker> structureMarkers = List.of();
     private int lastPlayerChunkX = Integer.MIN_VALUE;
     private int lastPlayerChunkZ = Integer.MIN_VALUE;
@@ -142,7 +139,6 @@ public class MapManager {
 
         int playerX = (int) client.player.getX();
         int playerZ = (int) client.player.getZ();
-        nearbyStructures = structureFinder.findNearby(seed, playerX, playerZ, 2048);
         structureMarkers = structureFinder.findNearbyMarkers(seed, playerX, playerZ, 2048);
     }
 
@@ -159,10 +155,6 @@ public class MapManager {
             return client.getServer().getOverworld().getSeed();
         }
         return 0;
-    }
-
-    public Map<String, BlockPos> getNearbyStructures() {
-        return nearbyStructures;
     }
 
     public List<StructureFinder.StructureMarker> getStructureMarkers() {
