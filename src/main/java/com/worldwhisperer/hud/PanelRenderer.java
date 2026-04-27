@@ -58,7 +58,7 @@ public class PanelRenderer {
         ty += LINE_H;
 
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Facing", gs.getFacing(), labelColor, valueColor);
+                "Facing", gs.getFacing() + " " + gs.getYawDegrees() + "\u00B0", labelColor, valueColor);
         ty += LINE_H;
 
         if (gs.isInNether()) {

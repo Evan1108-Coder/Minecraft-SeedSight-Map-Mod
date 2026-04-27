@@ -22,6 +22,7 @@ public class GameStats {
     private int dayCount;
     private int lightLevel;
     private String facing = "N";
+    private int yawDegrees;
     private int hostileCount;
     private int passiveCount;
     private boolean slimeChunk;
@@ -66,6 +67,7 @@ public class GameStats {
         lightLevel = Math.max(lightLevel, skyLight);
 
         facing = formatDirection(client.player.getHorizontalFacing());
+        yawDegrees = ((int) client.player.getYaw() % 360 + 360) % 360;
 
         health = client.player.getHealth();
         absorption = client.player.getAbsorptionAmount();
@@ -148,6 +150,7 @@ public class GameStats {
     public int getDayCount() { return dayCount; }
     public int getLightLevel() { return lightLevel; }
     public String getFacing() { return facing; }
+    public int getYawDegrees() { return yawDegrees; }
     public int getHostileCount() { return hostileCount; }
     public int getPassiveCount() { return passiveCount; }
     public boolean isSlimeChunk() { return slimeChunk; }
