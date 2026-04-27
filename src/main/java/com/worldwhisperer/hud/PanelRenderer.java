@@ -33,8 +33,10 @@ public class PanelRenderer {
                 labelColor, valueColor);
         ty += LINE_H;
 
+        int localX = ((gs.getPlayerX() % 16) + 16) % 16;
+        int localZ = ((gs.getPlayerZ() % 16) + 16) % 16;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Chunk", String.format("%d, %d", gs.getPlayerX() >> 4, gs.getPlayerZ() >> 4),
+                "Chunk", String.format("%d, %d  (%d, %d)", gs.getPlayerX() >> 4, gs.getPlayerZ() >> 4, localX, localZ),
                 labelColor, ColorUtil.DARK_GRAY);
         ty += LINE_H;
 

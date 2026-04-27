@@ -554,11 +554,13 @@ public class MinimapRenderer {
     }
 
     private void drawCircleBorder(DrawContext ctx, int cx, int cy, int radius, int c) {
-        int x0 = 0, y0 = radius, d = 3 - 2 * radius;
-        while (y0 >= x0) {
-            drawCircleOctants(ctx, cx, cy, x0, y0, c);
-            x0++;
-            if (d > 0) { y0--; d += 4 * (x0 - y0) + 10; } else { d += 4 * x0 + 6; }
+        for (int r = radius; r <= radius + 1; r++) {
+            int x0 = 0, y0 = r, d = 3 - 2 * r;
+            while (y0 >= x0) {
+                drawCircleOctants(ctx, cx, cy, x0, y0, c);
+                x0++;
+                if (d > 0) { y0--; d += 4 * (x0 - y0) + 10; } else { d += 4 * x0 + 6; }
+            }
         }
     }
 
