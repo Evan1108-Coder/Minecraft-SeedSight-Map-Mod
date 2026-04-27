@@ -1,31 +1,31 @@
 # WorldWhisperer - Bedrock Edition
 
-Minimap & Intelligence Addon for Minecraft Bedrock 1.21.132+
+Minimap & Intelligence Addon for Minecraft Bedrock Edition using the Script API.
 
-## Status: Early Development
+## Features
 
-The Bedrock edition uses the Script API (@minecraft/server) for game interaction.
-Due to Bedrock's limited HUD rendering capabilities, this version uses:
-
-- **Actionbar text** for stats display (coordinates, time, entity counts)
-- **Chat commands** (!ww) for waypoints, calculator, and settings
-- **Forms UI** for interactive settings (planned)
-
-A full graphical minimap will require a resource pack with the JSON UI system.
+- **HUD Overlay** — Coordinates, direction, time, day counter, entity counts via actionbar
+- **Dimension-aware** — Shows [Nether] or [End] label in coordinates
+- **Waypoint System** — Add, list, remove, find nearest waypoints with color coding
+- **Death Markers** — Auto-tracked on player death with location display
+- **Portal Calculator** — Auto-detects dimension: shows OW→Nether or Nether→OW
+- **Per-Setting Toggles** — Toggle HUD, coords, direction, time, entities independently
+- **Entity Detection** — Counts 25 hostile and 26 passive mob types within 128 blocks
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
 | `!ww help` | Show all commands |
-| `!ww toggle` | Toggle HUD on/off |
+| `!ww toggle [setting]` | Toggle HUD/coords/time/entities/direction |
 | `!ww wp add <name>` | Add waypoint at current position |
-| `!ww wp list` | List all waypoints |
+| `!ww wp list` | List all waypoints with distance |
 | `!ww wp remove <name>` | Remove a waypoint |
-| `!ww calc` | Open calculator |
-| `!ww nether` | Convert coords to Nether |
-| `!ww overworld` | Convert coords to Overworld |
-| `!ww settings` | Show settings |
+| `!ww wp nearest` | Show nearest waypoint |
+| `!ww portal` | Auto-convert coords (detects dimension) |
+| `!ww calc` | Show calculator (Nether coords, XP, enchanting) |
+| `!ww death` | Show last death location |
+| `!ww settings` | Show current settings |
 
 ## Installation
 
@@ -39,6 +39,13 @@ A full graphical minimap will require a resource pack with the JSON UI system.
 npm install
 npm run build
 ```
+
+## Supported Versions
+
+| Branch | Minecraft | Script API |
+|--------|-----------|------------|
+| `bedrock-1.21.80` | 1.21.80 | @minecraft/server 1.17.0-beta |
+| `bedrock-1.21.132` | 1.21.132 | @minecraft/server 1.18.0-beta |
 
 ## License
 
