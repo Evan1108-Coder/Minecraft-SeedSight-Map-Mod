@@ -90,6 +90,15 @@ public class WaypointManager {
 
     public int size() { return waypoints.size(); }
 
+    public void updateHomeMarker(double x, double y, double z) {
+        int ix = MathHelper.floor(x);
+        int iy = MathHelper.floor(y);
+        int iz = MathHelper.floor(z);
+        String dim = getCurrentDimension();
+        waypoints.removeIf(wp -> wp.name().equals("Home") && wp.dimension().equals(dim));
+        addWaypoint(new Waypoint("Home", ix, iy, iz, 0xFF55FF55, dim, true));
+    }
+
     public void addDeathMarker(double x, double y, double z) {
         int ix = MathHelper.floor(x);
         int iy = MathHelper.floor(y);
