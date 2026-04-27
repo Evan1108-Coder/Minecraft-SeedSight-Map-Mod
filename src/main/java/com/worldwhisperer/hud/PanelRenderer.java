@@ -470,7 +470,13 @@ public class PanelRenderer {
         ctx.drawText(font, "Spawn Chunks", x + PAD, ty, ColorUtil.AQUA, true);
         ty += LINE_H;
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
-                "Radius", "11 chunks (Lazy: 12-21)", ColorUtil.GRAY, ColorUtil.WHITE);
+                "Active", "11 chunks (always ticking)", ColorUtil.GRAY, ColorUtil.WHITE);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Lazy", "12-21 chunks (loaded)", ColorUtil.GRAY, ColorUtil.GRAY);
+        ty += LINE_H;
+        drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                "Protect", "16 blocks (default)", ColorUtil.GRAY, ColorUtil.GRAY);
         ty += LINE_H + 4;
 
         // Enchanting levels
