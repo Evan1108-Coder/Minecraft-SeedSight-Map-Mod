@@ -42,6 +42,7 @@ public class WorldWhispererClient implements ClientModInitializer {
     private KeyBinding toggleCircularKey;
     private KeyBinding toggleNorthLockKey;
     private KeyBinding copyCoordsKey;
+    private KeyBinding deleteWaypointKey;
     private boolean wasAlive = true;
     private boolean wasSleeping = false;
     private String modeNotification = "";
@@ -107,6 +108,10 @@ public class WorldWhispererClient implements ClientModInitializer {
         copyCoordsKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.worldwhisperer.copy_coords", InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_V, "key.worldwhisperer.category"));
+
+        deleteWaypointKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.worldwhisperer.delete_waypoint", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_X, "key.worldwhisperer.category"));
     }
 
     private void registerEvents() {
@@ -150,6 +155,11 @@ public class WorldWhispererClient implements ClientModInitializer {
                 int pz = net.minecraft.util.math.MathHelper.floor(client.player.getZ());
                 String coords = px + " " + py + " " + pz;
                 client.keyboard.setClipboard(coords);
+            }
+            if (deleteWaypointKey.wasPressed() && client.player != null) {
+                waypointManager.deleteNearest(
+                        client.player.getX(), client.player.getY(), client.player.getZ(),
+                        gameStats.getDimension());
             }
 
             // Death detection

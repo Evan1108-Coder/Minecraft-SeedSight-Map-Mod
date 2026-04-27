@@ -3,18 +3,20 @@ package com.worldwhisperer.gui;
 public class TabManager {
 
     public enum Tab {
-        MINIMAP("MiniMap", TabType.PARTIAL_TOP),
-        STATS("Statistics", TabType.PARTIAL_BOTTOM),
-        PERF_STATS("Perf Stats", TabType.PARTIAL_BOTTOM),
-        WAYPOINT("Waypoints", TabType.FULL),
-        CALCULATOR("Calculator", TabType.FULL),
-        SETTINGS("Settings", TabType.FULL);
+        MINIMAP("MiniMap", "M", TabType.PARTIAL_TOP),
+        STATS("Statistics", "S", TabType.PARTIAL_BOTTOM),
+        PERF_STATS("Perf Stats", "P", TabType.PARTIAL_BOTTOM),
+        WAYPOINT("Waypoints", "W", TabType.FULL),
+        CALCULATOR("Calculator", "#", TabType.FULL),
+        SETTINGS("Settings", "*", TabType.FULL);
 
         public final String label;
+        public final String icon;
         public final TabType type;
 
-        Tab(String label, TabType type) {
+        Tab(String label, String icon, TabType type) {
             this.label = label;
+            this.icon = icon;
             this.type = type;
         }
     }
