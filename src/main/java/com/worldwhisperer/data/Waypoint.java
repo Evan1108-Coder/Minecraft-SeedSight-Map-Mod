@@ -14,10 +14,20 @@ public record Waypoint(String name, int x, int y, int z, int color, String dimen
 
     public String distanceStr() {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null) return "?";
+        if (client.player == null || client.world == null) return "?";
+        String currentDim = client.world.getRegistryKey().getValue().getPath();
+        if (!dimension.equals(currentDim)) return "[" + dimLabel() + "]";
         double dist = distanceTo(client.player.getX(), client.player.getY(), client.player.getZ());
         if (dist < 1000) return String.format("%.0fm", dist);
         return String.format("%.1fkm", dist / 1000);
+    }
+
+    private String dimLabel() {
+        return switch (dimension) {
+            case "the_nether" -> "Nether";
+            case "the_end" -> "End";
+            default -> "OW";
+        };
     }
 
     public Waypoint withName(String newName) {
