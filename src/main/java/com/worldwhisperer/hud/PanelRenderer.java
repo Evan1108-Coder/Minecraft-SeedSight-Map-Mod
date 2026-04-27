@@ -51,6 +51,12 @@ public class PanelRenderer {
                 "Day", dayWeather, labelColor, weatherColor);
         ty += LINE_H;
 
+        if (gs.getTickTime() >= 12000) {
+            drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
+                    "Moon", gs.getMoonPhaseName(), labelColor, ColorUtil.GRAY);
+            ty += LINE_H;
+        }
+
         long tickTime = gs.getTickTime();
         String phaseStr;
         int phaseColor;
@@ -219,13 +225,23 @@ public class PanelRenderer {
         RenderUtil.drawHorizontalDivider(ctx, x + PAD, ty, w - PAD * 2);
         ty += 4;
 
-        List<Waypoint> wps = mod.getWaypointManager().getWaypoints();
+        String currentDim = mod.getGameStats().getDimension();
+        List<Waypoint> wps = new java.util.ArrayList<>(mod.getWaypointManager().getWaypoints());
         if (wps.isEmpty()) {
             ctx.drawText(font, "No waypoints. Press B to add.", x + PAD, ty, ColorUtil.GRAY, true);
             return;
         }
-
-        String currentDim = mod.getGameStats().getDimension();
+        net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
+        if (mc.player != null) {
+            double px = mc.player.getX(), py = mc.player.getY(), pz = mc.player.getZ();
+            wps.sort((a, b) -> {
+                boolean aSameDim = a.dimension().equals(currentDim);
+                boolean bSameDim = b.dimension().equals(currentDim);
+                if (aSameDim != bSameDim) return aSameDim ? -1 : 1;
+                if (!aSameDim) return a.name().compareTo(b.name());
+                return Double.compare(a.distanceTo(px, py, pz), b.distanceTo(px, py, pz));
+            });
+        }
         for (Waypoint wp : wps) {
             if (ty + LINE_H > y + h) break;
 
