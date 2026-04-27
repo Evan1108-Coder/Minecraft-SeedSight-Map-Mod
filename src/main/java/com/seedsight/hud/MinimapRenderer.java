@@ -52,8 +52,8 @@ public class MinimapRenderer {
                     double rad = Math.toRadians(playerYaw);
                     int dx = px - w / 2;
                     int dz = pz - h / 2;
-                    worldX = centerBlockX + (int) (dx * Math.cos(rad) - dz * Math.sin(rad)) * blocksPerPixel;
-                    worldZ = centerBlockZ + (int) (dx * Math.sin(rad) + dz * Math.cos(rad)) * blocksPerPixel;
+                    worldX = centerBlockX + (int) ((dx * Math.cos(rad) - dz * Math.sin(rad)) * blocksPerPixel);
+                    worldZ = centerBlockZ + (int) ((dx * Math.sin(rad) + dz * Math.cos(rad)) * blocksPerPixel);
                 }
 
                 int color = map.getColorAt(worldX, worldZ);
@@ -160,6 +160,7 @@ public class MinimapRenderer {
         int radiusBlocks = (w / 2) * bpp;
 
         for (Waypoint wp : mod.getWaypointManager().getWaypoints()) {
+            if (!wp.visible()) continue;
             int dx = wp.x() - centerX;
             int dz = wp.z() - centerZ;
 

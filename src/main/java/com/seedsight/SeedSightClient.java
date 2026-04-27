@@ -39,6 +39,7 @@ public class SeedSightClient implements ClientModInitializer {
     private KeyBinding zoomOutKey;
     private KeyBinding addWaypointKey;
     private KeyBinding cycleTabKey;
+    private boolean wasAlive = true;
 
     public static SeedSightClient getInstance() {
         return instance;
@@ -114,6 +115,16 @@ public class SeedSightClient implements ClientModInitializer {
             }
             if (cycleTabKey.wasPressed()) {
                 tabManager.cycleTab();
+            }
+
+            // Death detection
+            if (client.player != null) {
+                boolean alive = client.player.isAlive();
+                if (wasAlive && !alive) {
+                    waypointManager.addDeathMarker(
+                            client.player.getX(), client.player.getY(), client.player.getZ());
+                }
+                wasAlive = alive;
             }
 
             mapManager.tick(client);

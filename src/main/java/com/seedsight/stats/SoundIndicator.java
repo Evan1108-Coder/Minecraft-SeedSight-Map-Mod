@@ -53,29 +53,27 @@ public class SoundIndicator {
     private String formatSoundName(String soundId) {
         if (soundId == null) return null;
 
-        // Filter to interesting sounds only
-        if (soundId.contains("mob.zombie")) return "Zombie";
-        if (soundId.contains("mob.skeleton")) return "Skeleton";
-        if (soundId.contains("mob.creeper")) return "Creeper";
-        if (soundId.contains("mob.spider")) return "Spider";
-        if (soundId.contains("mob.enderman")) return "Enderman";
-        if (soundId.contains("mob.blaze")) return "Blaze";
-        if (soundId.contains("mob.ghast")) return "Ghast";
-        if (soundId.contains("mob.wither")) return "Wither";
-        if (soundId.contains("mob.warden")) return "Warden";
-        if (soundId.contains("mob.breeze")) return "Breeze";
-        if (soundId.contains("mob.creaking")) return "Creaking";
+        if (soundId.contains("entity.zombie")) return "Zombie";
+        if (soundId.contains("entity.skeleton")) return "Skeleton";
+        if (soundId.contains("entity.creeper")) return "Creeper";
+        if (soundId.contains("entity.spider")) return "Spider";
+        if (soundId.contains("entity.enderman")) return "Enderman";
+        if (soundId.contains("entity.blaze")) return "Blaze";
+        if (soundId.contains("entity.ghast")) return "Ghast";
+        if (soundId.contains("entity.wither")) return "Wither";
+        if (soundId.contains("entity.warden")) return "Warden";
+        if (soundId.contains("entity.breeze")) return "Breeze";
+        if (soundId.contains("entity.creaking")) return "Creaking";
         if (soundId.contains("entity.player.attack")) return "Player Attack";
         if (soundId.contains("block.anvil")) return "Anvil";
         if (soundId.contains("block.chest")) return "Chest";
         if (soundId.contains("block.portal")) return "Portal";
         if (soundId.contains("entity.tnt")) return "TNT";
-        if (soundId.contains("entity.lightning")) return "Lightning";
+        if (soundId.contains("entity.lightning_bolt")) return "Lightning";
         if (soundId.contains("ambient.cave")) return "Cave Ambience";
         if (soundId.contains("block.note_block")) return "Note Block";
 
-        // Generic categories
-        if (soundId.contains("entity.hostile") || soundId.contains("mob.")) return "Hostile Mob";
+        if (soundId.contains("entity.hostile")) return "Hostile Mob";
         if (soundId.contains("block.") && soundId.contains("break")) return "Block Break";
         if (soundId.contains("step")) return "Footsteps";
 
