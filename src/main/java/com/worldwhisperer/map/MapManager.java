@@ -163,10 +163,12 @@ public class MapManager {
 
     public void zoomIn() {
         config.mapZoom = Math.max(config.minZoom, config.mapZoom - 1);
+        config.save();
     }
 
     public void zoomOut() {
         config.mapZoom = Math.min(config.maxZoom, config.mapZoom + 1);
+        config.save();
     }
 
     public int getZoom() {
