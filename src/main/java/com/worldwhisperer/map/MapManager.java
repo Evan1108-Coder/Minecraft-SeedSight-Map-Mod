@@ -24,6 +24,7 @@ public class MapManager {
     private List<StructureFinder.StructureMarker> structureMarkers = List.of();
     private int lastPlayerChunkX = Integer.MIN_VALUE;
     private int lastPlayerChunkZ = Integer.MIN_VALUE;
+    private int playerY = 64;
     private String lastDimension = "";
     private int tickCounter = 0;
 
@@ -47,6 +48,7 @@ public class MapManager {
 
         int playerChunkX = client.player.getChunkPos().x;
         int playerChunkZ = client.player.getChunkPos().z;
+        playerY = client.player.getBlockPos().getY();
 
         boolean moved = playerChunkX != lastPlayerChunkX || playerChunkZ != lastPlayerChunkZ;
 
@@ -90,6 +92,7 @@ public class MapManager {
         int cz = client.player.getChunkPos().z;
         int viewDist = client.options.getViewDistance().getValue();
         int scanRadius = Math.min(viewDist, 16);
+        boolean nether = isNether(world);
 
         for (int dx = -scanRadius; dx <= scanRadius; dx++) {
             for (int dz = -scanRadius; dz <= scanRadius; dz++) {
@@ -102,13 +105,13 @@ public class MapManager {
                 WorldChunk chunk = world.getChunkManager().getWorldChunk(chunkX, chunkZ);
                 if (chunk == null) continue;
 
-                int[] colors = scanChunk(world, chunk);
+                int[] colors = scanChunk(world, chunk, nether);
                 tileCache.put(key, colors);
             }
         }
     }
 
-    private int[] scanChunk(World world, WorldChunk chunk) {
+    private int[] scanChunk(World world, WorldChunk chunk, boolean nether) {
         int[] colors = new int[TILE_SIZE * TILE_SIZE];
         int startX = chunk.getPos().getStartX();
         int startZ = chunk.getPos().getStartZ();
@@ -117,7 +120,12 @@ public class MapManager {
             for (int z = 0; z < TILE_SIZE; z++) {
                 int worldX = startX + x;
                 int worldZ = startZ + z;
-                int topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, worldX, worldZ);
+                int topY;
+                if (nether) {
+                    topY = findNetherSurface(world, worldX, worldZ);
+                } else {
+                    topY = world.getTopY(Heightmap.Type.MOTION_BLOCKING, worldX, worldZ);
+                }
                 BlockPos pos = new BlockPos(worldX, topY - 1, worldZ);
                 BlockState state = world.getBlockState(pos);
 
@@ -134,6 +142,22 @@ public class MapManager {
             }
         }
         return colors;
+    }
+
+    private int findNetherSurface(World world, int worldX, int worldZ) {
+        int startY = Math.min(playerY + 10, 120);
+        for (int y = startY; y > 30; y--) {
+            BlockState above = world.getBlockState(new BlockPos(worldX, y, worldZ));
+            BlockState below = world.getBlockState(new BlockPos(worldX, y - 1, worldZ));
+            if (above.isAir() && !below.isAir()) {
+                return y;
+            }
+        }
+        return playerY;
+    }
+
+    private static boolean isNether(World world) {
+        return "the_nether".equals(world.getRegistryKey().getValue().getPath());
     }
 
     private void updateStructures(MinecraftClient client) {
