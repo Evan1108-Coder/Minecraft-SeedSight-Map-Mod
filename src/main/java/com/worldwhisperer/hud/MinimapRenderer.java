@@ -304,7 +304,7 @@ public class MinimapRenderer {
             int pz = toScreenY(marker.pos().getX(), marker.pos().getZ());
             if (px < x || px >= x + w || pz < y || pz >= y + h) continue;
 
-            int borderColor = ColorUtil.brighten(marker.color(), 0.6f) | 0xFF000000;
+            int borderColor = ColorUtil.brighten(marker.color(), 1.4f) | 0xFF000000;
             ctx.fill(px - 3, pz - 3, px + 4, pz + 4, 0xFF000000);
             ctx.fill(px - 2, pz - 2, px + 3, pz + 3, borderColor);
             ctx.fill(px - 1, pz - 1, px + 2, pz + 2, marker.color());
