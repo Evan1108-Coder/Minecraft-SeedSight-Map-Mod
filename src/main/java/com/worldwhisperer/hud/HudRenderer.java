@@ -26,6 +26,7 @@ public class HudRenderer {
         this.mod = mod;
         this.minimapRenderer = new MinimapRenderer(mod);
         this.panelRenderer = new PanelRenderer(mod);
+        this.visible = mod.getConfig().hudVisible;
     }
 
     public void render(DrawContext ctx, RenderTickCounter tickCounter) {
@@ -143,6 +144,8 @@ public class HudRenderer {
 
     public void toggleVisible() {
         visible = !visible;
+        mod.getConfig().hudVisible = visible;
+        mod.getConfig().save();
     }
 
     public void toggleExpanded() {
