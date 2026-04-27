@@ -73,6 +73,15 @@ public class SoundIndicator {
         if (soundId.contains("entity.phantom")) return "Phantom";
         if (soundId.contains("entity.elder_guardian")) return "Elder Guardian";
         if (soundId.contains("entity.shulker")) return "Shulker";
+        if (soundId.contains("entity.witch")) return "Witch";
+        if (soundId.contains("entity.pillager")) return "Pillager";
+        if (soundId.contains("entity.ravager")) return "Ravager";
+        if (soundId.contains("entity.evoker")) return "Evoker";
+        if (soundId.contains("entity.vindicator")) return "Vindicator";
+        if (soundId.contains("entity.vex")) return "Vex";
+        if (soundId.contains("entity.hoglin")) return "Hoglin";
+        if (soundId.contains("entity.piglin_brute")) return "Piglin Brute";
+        if (soundId.contains("entity.piglin")) return "Piglin";
         if (ModVersion.hasCreaking() && soundId.contains("entity.creaking")) return "Creaking";
         if (soundId.contains("entity.player.attack")) return "Player Attack";
         if (soundId.contains("block.anvil")) return "Anvil";
