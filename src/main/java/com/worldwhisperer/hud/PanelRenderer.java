@@ -89,7 +89,12 @@ public class PanelRenderer {
 
         int light = gs.getLightLevel();
         int lightColor = light == 0 ? ColorUtil.RED : light <= 7 ? ColorUtil.YELLOW : ColorUtil.GREEN;
-        String lightStr = light == 0 ? "0 DANGER" : String.valueOf(light);
+        String lightStr;
+        if (light == 0) {
+            lightStr = "0 DANGER";
+        } else {
+            lightStr = light + " (B:" + gs.getBlockLight() + " S:" + gs.getSkyLight() + ")";
+        }
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Light", lightStr, labelColor, lightColor);
         ty += LINE_H;
@@ -177,9 +182,10 @@ public class PanelRenderer {
             ty += LINE_H;
         }
 
+        int totalNearby = gs.getHostileCount() + gs.getPassiveCount() + gs.getVillagerCount();
         String entities = gs.getVillagerCount() > 0
-                ? String.format("H:%d P:%d V:%d", gs.getHostileCount(), gs.getPassiveCount(), gs.getVillagerCount())
-                : String.format("H:%d P:%d", gs.getHostileCount(), gs.getPassiveCount());
+                ? String.format("H:%d P:%d V:%d =%d", gs.getHostileCount(), gs.getPassiveCount(), gs.getVillagerCount(), totalNearby)
+                : String.format("H:%d P:%d =%d", gs.getHostileCount(), gs.getPassiveCount(), totalNearby);
         drawStatLine(ctx, font, x + PAD, ty, w - PAD * 2,
                 "Entities", entities, labelColor, valueColor);
         ty += LINE_H;

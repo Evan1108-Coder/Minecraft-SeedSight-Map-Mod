@@ -28,6 +28,8 @@ public class GameStats {
     private long tickTime;
     private int dayCount;
     private int lightLevel;
+    private int blockLight;
+    private int skyLight;
     private String facing = "N";
     private int yawDegrees;
     private int hostileCount;
@@ -84,9 +86,9 @@ public class GameStats {
         timeOfDay = formatTime(tickTime);
 
         BlockPos pos = client.player.getBlockPos();
-        lightLevel = client.world.getLightLevel(LightType.BLOCK, pos);
-        int skyLight = client.world.getLightLevel(LightType.SKY, pos);
-        lightLevel = Math.max(lightLevel, skyLight);
+        blockLight = client.world.getLightLevel(LightType.BLOCK, pos);
+        skyLight = client.world.getLightLevel(LightType.SKY, pos);
+        lightLevel = Math.max(blockLight, skyLight);
 
         facing = formatDirection(client.player.getHorizontalFacing());
         yawDegrees = ((int) client.player.getYaw() % 360 + 360) % 360;
@@ -221,6 +223,8 @@ public class GameStats {
     public long getTickTime() { return tickTime; }
     public int getDayCount() { return dayCount; }
     public int getLightLevel() { return lightLevel; }
+    public int getBlockLight() { return blockLight; }
+    public int getSkyLight() { return skyLight; }
     public String getFacing() { return facing; }
     public int getYawDegrees() { return yawDegrees; }
     public int getHostileCount() { return hostileCount; }
