@@ -31,6 +31,10 @@ public class GameStats {
     private String lastBiome = "";
     private long biomeChangeTime;
     private int tickCounter;
+    private float health;
+    private int food;
+    private int armor;
+    private float speed;
 
     public void tick(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -58,6 +62,13 @@ public class GameStats {
         lightLevel = Math.max(lightLevel, skyLight);
 
         facing = formatDirection(client.player.getHorizontalFacing());
+
+        health = client.player.getHealth();
+        food = client.player.getHungerManager().getFoodLevel();
+        armor = client.player.getArmor();
+        double dx = client.player.getX() - client.player.prevX;
+        double dz = client.player.getZ() - client.player.prevZ;
+        speed = (float) Math.sqrt(dx * dx + dz * dz) * 20;
 
         if (client.world.isThundering()) weather = "Thunder";
         else if (client.world.isRaining()) weather = "Rain";
@@ -138,4 +149,8 @@ public class GameStats {
     public String getWeather() { return weather; }
     public int getMoonPhase() { return moonPhase; }
     public boolean isBiomeChanged() { return System.currentTimeMillis() - biomeChangeTime < 3000; }
+    public float getHealth() { return health; }
+    public int getFood() { return food; }
+    public int getArmor() { return armor; }
+    public float getSpeed() { return speed; }
 }
