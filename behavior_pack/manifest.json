@@ -5,7 +5,7 @@
     "description": "Minimap & intelligence addon with seed-based prediction, stats overlay, waypoints, calculator, and sound indicators.",
     "uuid": "b3e6c2a1-7d4f-4e8b-9a2c-5f1d3e7b8c9a",
     "version": [1, 0, 0],
-    "min_engine_version": [1, 21, 80]
+    "min_engine_version": [1, 21, 132]
   },
   "modules": [
     {

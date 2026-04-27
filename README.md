@@ -1,6 +1,6 @@
 # WorldWhisperer - Bedrock Edition
 
-Minimap & Intelligence Addon for Minecraft Bedrock 1.21.80+
+Minimap & Intelligence Addon for Minecraft Bedrock 1.21.132+
 
 ## Status: Early Development
 
