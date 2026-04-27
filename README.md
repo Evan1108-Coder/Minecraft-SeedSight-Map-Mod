@@ -80,6 +80,15 @@ A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a featu
 
 All keybindings are configurable in Minecraft's Controls settings under the "WorldWhisperer" category.
 
+## Version-Specific Features
+
+| Feature | 1.21.0–1.21.3 | 1.21.4 |
+|---------|:-:|:-:|
+| Pale Garden biome colors | — | ✓ |
+| Creaking mob sound indicator | — | ✓ |
+| Trial Chamber structure prediction | ✓ (1.21.2+) | ✓ |
+| All other features | ✓ | ✓ |
+
 ## Supported Versions
 
 ### Java Edition (Fabric)
@@ -94,9 +103,12 @@ All keybindings are configurable in Minecraft's Controls settings under the "Wor
 
 ### Bedrock Edition
 
-| Branch | Minecraft | Status |
-|--------|-----------|--------|
-| `bedrock-1.21.80` | 1.21.80 | Planned |
+Bedrock branches use the [Script API](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/) (`@minecraft/server`) and run as behavior pack addons with TypeScript.
+
+| Branch | Minecraft | Script API |
+|--------|-----------|------------|
+| `bedrock-1.21.80` | 1.21.80 | @minecraft/server 1.17.0-beta |
+| `bedrock-1.21.132` | 1.21.132 | @minecraft/server 1.18.0-beta |
 
 ## Installation
 
