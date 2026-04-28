@@ -9,7 +9,7 @@ interface Waypoint {
     color: string;
 }
 
-interface WorldWhispererConfig {
+interface SeedSightConfig {
     hudEnabled: boolean;
     showCoords: boolean;
     showDirection: boolean;
@@ -36,7 +36,7 @@ const PASSIVE_TYPES = [
 
 const WAYPOINT_COLORS = ["§c", "§a", "§b", "§e", "§d", "§6", "§5", "§3", "§9", "§7"];
 
-const config: WorldWhispererConfig = {
+const config: SeedSightConfig = {
     hudEnabled: true,
     showCoords: true,
     showDirection: true,
@@ -53,7 +53,7 @@ let colorIndex = 0;
 const deathMarkers: Map<string, Waypoint> = new Map();
 
 world.afterEvents.worldInitialize.subscribe(() => {
-    world.sendMessage("§a[WorldWhisperer]§r Bedrock Edition loaded! Use §e!ww§r for commands.");
+    world.sendMessage("§a[SeedSight]§r Bedrock Edition loaded! Use §e!ss§r for commands.");
 });
 
 system.runInterval(() => {
@@ -85,7 +85,7 @@ world.afterEvents.entityDie.subscribe((event) => {
     deathMarkers.set(name, marker);
     try {
         (entity as Player).sendMessage(
-            `§c[WW]§r Death marker set at §e${marker.x}, ${marker.y}, ${marker.z}`
+            `§c[SS]§r Death marker set at §e${marker.x}, ${marker.y}, ${marker.z}`
         );
     } catch {}
 });
@@ -148,7 +148,7 @@ function updateActionBar(player: Player): void {
 
 world.beforeEvents.chatSend.subscribe((event) => {
     const msg = event.message.trim();
-    if (!msg.toLowerCase().startsWith("!ww")) return;
+    if (!msg.toLowerCase().startsWith("!ss")) return;
 
     event.cancel = true;
     const player = event.sender;
@@ -180,9 +180,9 @@ world.beforeEvents.chatSend.subscribe((event) => {
                 const p = player.location;
                 const inNether = player.dimension.id === "minecraft:the_nether";
                 if (inNether) {
-                    player.sendMessage(`§a[WW]§r Overworld coords: §a${Math.floor(p.x * 8)}, ${Math.floor(p.z * 8)}`);
+                    player.sendMessage(`§a[SS]§r Overworld coords: §a${Math.floor(p.x * 8)}, ${Math.floor(p.z * 8)}`);
                 } else {
-                    player.sendMessage(`§a[WW]§r Nether coords: §c${Math.floor(p.x / 8)}, ${Math.floor(p.z / 8)}`);
+                    player.sendMessage(`§a[SS]§r Nether coords: §c${Math.floor(p.x / 8)}, ${Math.floor(p.z / 8)}`);
                 }
                 break;
             }
@@ -190,7 +190,7 @@ world.beforeEvents.chatSend.subscribe((event) => {
                 showDeathMarker(player);
                 break;
             default:
-                player.sendMessage(`§c[WW]§r Unknown command: ${command}. Try §e!ww help`);
+                player.sendMessage(`§c[SS]§r Unknown command: ${command}. Try §e!ss help`);
         }
     });
 });
@@ -200,42 +200,42 @@ function handleToggle(player: Player, args: string[]): void {
     switch (setting) {
         case "hud":
             config.hudEnabled = !config.hudEnabled;
-            player.sendMessage(`§a[WW]§r HUD ${config.hudEnabled ? "§aON" : "§cOFF"}`);
+            player.sendMessage(`§a[SS]§r HUD ${config.hudEnabled ? "§aON" : "§cOFF"}`);
             break;
         case "coords":
             config.showCoords = !config.showCoords;
-            player.sendMessage(`§a[WW]§r Coords ${config.showCoords ? "§aON" : "§cOFF"}`);
+            player.sendMessage(`§a[SS]§r Coords ${config.showCoords ? "§aON" : "§cOFF"}`);
             break;
         case "time":
             config.showTime = !config.showTime;
-            player.sendMessage(`§a[WW]§r Time ${config.showTime ? "§aON" : "§cOFF"}`);
+            player.sendMessage(`§a[SS]§r Time ${config.showTime ? "§aON" : "§cOFF"}`);
             break;
         case "entities":
             config.showEntities = !config.showEntities;
-            player.sendMessage(`§a[WW]§r Entities ${config.showEntities ? "§aON" : "§cOFF"}`);
+            player.sendMessage(`§a[SS]§r Entities ${config.showEntities ? "§aON" : "§cOFF"}`);
             break;
         case "direction":
         case "dir":
             config.showDirection = !config.showDirection;
-            player.sendMessage(`§a[WW]§r Direction ${config.showDirection ? "§aON" : "§cOFF"}`);
+            player.sendMessage(`§a[SS]§r Direction ${config.showDirection ? "§aON" : "§cOFF"}`);
             break;
         default:
-            player.sendMessage("§c[WW]§r Toggle options: hud, coords, time, entities, direction");
+            player.sendMessage("§c[SS]§r Toggle options: hud, coords, time, entities, direction");
     }
 }
 
 function showHelp(player: Player): void {
     player.sendMessage([
-        "§a═══ WorldWhisperer Commands ═══",
-        "§e!ww toggle [setting]§r - Toggle HUD/coords/time/entities/direction",
-        "§e!ww wp add <name>§r - Add waypoint",
-        "§e!ww wp list§r - List waypoints with distance",
-        "§e!ww wp remove <name>§r - Remove waypoint",
-        "§e!ww wp nearest§r - Show nearest waypoint",
-        "§e!ww calc§r - Show calculator",
-        "§e!ww portal§r - Auto-convert coords (detects dimension)",
-        "§e!ww death§r - Show last death location",
-        "§e!ww settings§r - Show current settings",
+        "§a═══ SeedSight Commands ═══",
+        "§e!ss toggle [setting]§r - Toggle HUD/coords/time/entities/direction",
+        "§e!ss wp add <name>§r - Add waypoint",
+        "§e!ss wp list§r - List waypoints with distance",
+        "§e!ss wp remove <name>§r - Remove waypoint",
+        "§e!ss wp nearest§r - Show nearest waypoint",
+        "§e!ss calc§r - Show calculator",
+        "§e!ss portal§r - Auto-convert coords (detects dimension)",
+        "§e!ss death§r - Show last death location",
+        "§e!ss settings§r - Show current settings",
         "§a══════════════════════════════",
     ].join("\n"));
 }
@@ -258,13 +258,13 @@ function handleWaypoint(player: Player, args: string[]): void {
                 color,
             });
             player.sendMessage(
-                `§a[WW]§r Waypoint ${color}${name}§r added at ${Math.floor(pos.x)}, ${Math.floor(pos.y)}, ${Math.floor(pos.z)}`
+                `§a[SS]§r Waypoint ${color}${name}§r added at ${Math.floor(pos.x)}, ${Math.floor(pos.y)}, ${Math.floor(pos.z)}`
             );
             break;
         }
         case "list": {
             if (waypoints.length === 0) {
-                player.sendMessage("§a[WW]§r No waypoints. Use §e!ww wp add <name>§r to create one.");
+                player.sendMessage("§a[SS]§r No waypoints. Use §e!ss wp add <name>§r to create one.");
                 return;
             }
             player.sendMessage("§a═══ Waypoints ═══");
@@ -285,15 +285,15 @@ function handleWaypoint(player: Player, args: string[]): void {
             const index = waypoints.findIndex((wp) => wp.name.toLowerCase() === targetName);
             if (index >= 0) {
                 const removed = waypoints.splice(index, 1)[0];
-                player.sendMessage(`§a[WW]§r Waypoint ${removed.color}${removed.name}§r removed.`);
+                player.sendMessage(`§a[SS]§r Waypoint ${removed.color}${removed.name}§r removed.`);
             } else {
-                player.sendMessage(`§c[WW]§r Waypoint not found: ${targetName}`);
+                player.sendMessage(`§c[SS]§r Waypoint not found: ${targetName}`);
             }
             break;
         }
         case "nearest": {
             if (waypoints.length === 0) {
-                player.sendMessage("§a[WW]§r No waypoints set.");
+                player.sendMessage("§a[SS]§r No waypoints set.");
                 return;
             }
             let nearest = waypoints[0];
@@ -310,12 +310,12 @@ function handleWaypoint(player: Player, args: string[]): void {
                 }
             }
             player.sendMessage(
-                `§a[WW]§r Nearest: ${nearest.color}${nearest.name}§r at ${nearest.x}, ${nearest.y}, ${nearest.z} §7(${Math.floor(nearestDist)}m)`
+                `§a[SS]§r Nearest: ${nearest.color}${nearest.name}§r at ${nearest.x}, ${nearest.y}, ${nearest.z} §7(${Math.floor(nearestDist)}m)`
             );
             break;
         }
         default:
-            player.sendMessage("§c[WW]§r Usage: !ww wp [add|list|remove|nearest]");
+            player.sendMessage("§c[SS]§r Usage: !ss wp [add|list|remove|nearest]");
     }
 }
 
@@ -323,7 +323,7 @@ function showDeathMarker(player: Player): void {
     const name = player.nameTag || "Player";
     const marker = deathMarkers.get(name);
     if (!marker) {
-        player.sendMessage("§a[WW]§r No death marker recorded yet.");
+        player.sendMessage("§a[SS]§r No death marker recorded yet.");
         return;
     }
     const dist = Math.floor(
@@ -334,7 +334,7 @@ function showDeathMarker(player: Player): void {
         )
     );
     player.sendMessage(
-        `§c[WW]§r Last death: §e${marker.x}, ${marker.y}, ${marker.z}§r §7(${dist}m away)`
+        `§c[SS]§r Last death: §e${marker.x}, ${marker.y}, ${marker.z}§r §7(${dist}m away)`
     );
 }
 
@@ -370,7 +370,7 @@ function showSettings(player: Player): void {
         `§7Direction: ${config.showDirection ? on : off}`,
         `§7Time: ${config.showTime ? on : off}`,
         `§7Entities: ${config.showEntities ? on : off}`,
-        "§7Use §e!ww toggle <setting>§r to change",
+        "§7Use §e!ss toggle <setting>§r to change",
         "§a═════════════════",
     ].join("\n"));
 }
