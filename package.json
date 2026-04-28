@@ -1,7 +1,7 @@
 {
-  "name": "worldwhisperer-bedrock",
+  "name": "seedsight-bedrock",
   "version": "1.0.0",
-  "description": "WorldWhisperer minimap mod for Minecraft Bedrock Edition",
+  "description": "SeedSight minimap addon for Minecraft Bedrock Edition",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch"
@@ -11,6 +11,6 @@
     "@minecraft/server-ui": "1.4.0-beta.1.21.132-stable",
     "typescript": "^5.4.0"
   },
-  "author": "Evan1108-Coder",
+  "author": "Evan Lu",
   "license": "MIT"
 }

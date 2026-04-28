@@ -1,6 +1,8 @@
-# WorldWhisperer - Bedrock Edition
+# SeedSight - Bedrock Edition
 
 Minimap & Intelligence Addon for Minecraft Bedrock Edition using the Script API.
+
+> **Looking for a specific Minecraft version?** This repo has branches for each supported version. Switch to the branch matching your version: `java-1.21.0`, `java-1.21.1`, `java-1.21.2`, `java-1.21.3`, `java-1.21.4`, `bedrock-1.21.80`, or `bedrock-1.21.132`. The `main` branch tracks the latest Java release (1.21.4). See [SETUP.md](SETUP.md) for detailed installation instructions.
 
 ## Features
 
@@ -16,29 +18,32 @@ Minimap & Intelligence Addon for Minecraft Bedrock Edition using the Script API.
 
 | Command | Description |
 |---------|-------------|
-| `!ww help` | Show all commands |
-| `!ww toggle [setting]` | Toggle HUD/coords/time/entities/direction |
-| `!ww wp add <name>` | Add waypoint at current position |
-| `!ww wp list` | List all waypoints with distance |
-| `!ww wp remove <name>` | Remove a waypoint |
-| `!ww wp nearest` | Show nearest waypoint |
-| `!ww portal` | Auto-convert coords (detects dimension) |
-| `!ww calc` | Show calculator (Nether coords, XP, enchanting) |
-| `!ww death` | Show last death location |
-| `!ww settings` | Show current settings |
+| `!ss help` | Show all commands |
+| `!ss toggle [setting]` | Toggle HUD/coords/time/entities/direction |
+| `!ss wp add <name>` | Add waypoint at current position |
+| `!ss wp list` | List all waypoints with distance |
+| `!ss wp remove <name>` | Remove a waypoint |
+| `!ss wp nearest` | Show nearest waypoint |
+| `!ss portal` | Auto-convert coords (detects dimension) |
+| `!ss calc` | Show calculator (Nether coords, XP, enchanting) |
+| `!ss death` | Show last death location |
+| `!ss settings` | Show current settings |
 
 ## Installation
 
-1. Download the `.mcaddon` file from Releases
+1. Download the `.mcpack` file for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod/releases)
 2. Double-click to import into Minecraft Bedrock
 3. Apply the behavior pack to your world
+4. Enable **Beta APIs** in your world's Experiments settings
 
-## Building
+## Building from Source
 
 ```bash
 npm install
 npm run build
 ```
+
+The compiled JavaScript will be output to `behavior_pack/scripts/main.js`.
 
 ## Supported Versions
 
@@ -49,4 +54,4 @@ npm run build
 
 ## License
 
-MIT License
+MIT License - see [LICENSE](LICENSE)
