@@ -77,6 +77,9 @@ public class HudRenderer {
         }
 
         float alpha = cfg.hudOpacity;
+        if (client.currentScreen != null) {
+            alpha *= 0.3f;
+        }
 
         // Danger-responsive border: red tint when hostile mobs nearby or light level 0
         int bgBase = 0x181818;
