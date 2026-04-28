@@ -206,7 +206,7 @@ Bedrock branches use the [Script API](https://learn.microsoft.com/en-us/minecraf
 ### Steps
 1. Install Fabric Loader for your Minecraft version
 2. Download the Fabric API mod and place it in your `mods` folder
-3. Build the SeedSight JAR from source (see Building from Source below), or download from the repository
+3. Download the SeedSight JAR for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod/releases), or build from source (see below)
 4. Place the SeedSight JAR in your `mods` folder
 5. Launch Minecraft with the Fabric profile
 
