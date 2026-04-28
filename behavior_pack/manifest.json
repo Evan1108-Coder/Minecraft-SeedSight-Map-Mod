@@ -2,10 +2,10 @@
   "format_version": 2,
   "header": {
     "name": "SeedSight",
-    "description": "Minimap & intelligence addon with seed-based prediction, stats overlay, waypoints, calculator, and sound indicators.",
+    "description": "Intelligence addon with HUD overlay, waypoints, structure finder, slime chunks, stats, and calculator.",
     "uuid": "b3e6c2a1-7d4f-4e8b-9a2c-5f1d3e7b8c9a",
-    "version": [1, 0, 0],
-    "min_engine_version": [1, 21, 80]
+    "version": [2, 0, 0],
+    "min_engine_version": [1, 21, 0]
   },
   "modules": [
     {
@@ -13,17 +13,13 @@
       "language": "javascript",
       "uuid": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
       "entry": "scripts/main.js",
-      "version": [1, 0, 0]
+      "version": [2, 0, 0]
     }
   ],
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "1.17.0-beta"
-    },
-    {
-      "module_name": "@minecraft/server-ui",
-      "version": "1.4.0-beta"
+      "version": "1.16.0"
     }
   ]
 }
