@@ -4,7 +4,7 @@
     "name": "SeedSight",
     "description": "Intelligence addon with HUD overlay, waypoints, structure finder, slime chunks, stats, and calculator.",
     "uuid": "b3e6c2a1-7d4f-4e8b-9a2c-5f1d3e7b8c9a",
-    "version": [2, 0, 0],
+    "version": [2, 1, 0],
     "min_engine_version": [1, 21, 0]
   },
   "modules": [
@@ -13,7 +13,7 @@
       "language": "javascript",
       "uuid": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
       "entry": "scripts/main.js",
-      "version": [2, 0, 0]
+      "version": [2, 1, 0]
     }
   ],
   "dependencies": [

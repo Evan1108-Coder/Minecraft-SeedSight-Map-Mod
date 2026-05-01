@@ -1,4 +1,4 @@
-import { world, system, Player, Entity, Vector3 } from "@minecraft/server";
+import { world, system, Player, Vector3 } from "@minecraft/server";
 
 // ─── Interfaces ───
 
@@ -26,15 +26,12 @@ interface SeedSightConfig {
 interface SessionStats {
     startTime: number;
     blocksWalked: number;
-    blocksMined: number;
     mobsKilled: number;
     deaths: number;
-    jumps: number;
 }
 
 interface PlayerTracker {
     lastPos: Vector3 | null;
-    lastHealth: number;
     sessionStats: SessionStats;
 }
 
@@ -60,7 +57,6 @@ const PASSIVE_TYPES = [
 
 const NEUTRAL_TYPES = [
     "trader_llama", "llama", "piglin", "zombified_piglin",
-    "dolphin", "wolf", "bee", "polar_bear", "iron_golem",
 ];
 
 const WAYPOINT_COLORS = ["§c", "§a", "§b", "§e", "§d", "§6", "§5", "§3", "§9", "§7"];
@@ -68,10 +64,6 @@ const WAYPOINT_COLORS = ["§c", "§a", "§b", "§e", "§d", "§6", "§5", "§3",
 const DIRECTION_ARROWS: Record<string, string> = {
     "N": "↑ N", "NE": "↗ NE", "E": "→ E", "SE": "↘ SE",
     "S": "↓ S", "SW": "↙ SW", "W": "← W", "NW": "↖ NW",
-};
-
-const XP_TABLE: Record<number, number> = {
-    10: 100, 15: 225, 20: 400, 25: 625, 30: 1395, 40: 2920, 50: 5345,
 };
 
 const OVERWORLD_STRUCTURES = [
@@ -119,7 +111,7 @@ let worldSeed: string = "";
 
 world.afterEvents.worldInitialize.subscribe(() => {
     world.sendMessage(
-        "§a[SeedSight]§r Bedrock Edition v2.0 loaded! §e!ss help§r for commands.\n" +
+        "§a[SeedSight]§r Bedrock Edition v2.1 loaded! §e!ss help§r for commands.\n" +
         "§7Features: HUD, waypoints, structures, slime chunks, stats, calculator"
     );
 });
@@ -127,20 +119,22 @@ world.afterEvents.worldInitialize.subscribe(() => {
 // ─── Main tick loop ───
 
 system.runInterval(() => {
-    tickCounter++;
-    if (!config.hudEnabled) return;
+    try {
+        tickCounter++;
+        if (!config.hudEnabled) return;
 
-    for (const player of world.getAllPlayers()) {
-        const tracker = getTracker(player);
+        for (const player of world.getAllPlayers()) {
+            const tracker = getTracker(player);
 
-        if (tickCounter % 2 === 0) {
-            trackMovement(player, tracker);
+            if (tickCounter % 2 === 0) {
+                trackMovement(player, tracker);
+            }
+
+            if (tickCounter % 20 === 0) {
+                updateActionBar(player, tracker);
+            }
         }
-
-        if (tickCounter % 20 === 0) {
-            updateActionBar(player, tracker);
-        }
-    }
+    } catch {}
 }, 1);
 
 function getTracker(player: Player): PlayerTracker {
@@ -148,14 +142,11 @@ function getTracker(player: Player): PlayerTracker {
     if (!playerTrackers.has(name)) {
         playerTrackers.set(name, {
             lastPos: null,
-            lastHealth: 20,
             sessionStats: {
                 startTime: Date.now(),
                 blocksWalked: 0,
-                blocksMined: 0,
                 mobsKilled: 0,
                 deaths: 0,
-                jumps: 0,
             },
         });
     }
@@ -177,7 +168,7 @@ function trackMovement(player: Player, tracker: PlayerTracker): void {
 
 // ─── Death tracking ───
 
-world.afterEvents.entityDie.subscribe((event) => {
+world.afterEvents.entityDie.subscribe((event: any) => {
     const entity = event.deadEntity;
     if (entity.typeId !== "minecraft:player") return;
 
@@ -212,7 +203,7 @@ world.afterEvents.entityDie.subscribe((event) => {
 
 // ─── Entity kill tracking ───
 
-world.afterEvents.entityDie.subscribe((event) => {
+world.afterEvents.entityDie.subscribe((event: any) => {
     if (!event.damageSource?.damagingEntity) return;
     const killer = event.damageSource.damagingEntity;
     if (killer.typeId !== "minecraft:player") return;
@@ -265,7 +256,7 @@ function updateActionBar(player: Player, tracker: PlayerTracker): void {
     }
 
     if (config.showTime) {
-        const timeOfDay = world.getTimeOfDay();
+        const timeOfDay = ((world.getTimeOfDay() % 24000) + 24000) % 24000;
         const hours = Math.floor((timeOfDay / 1000 + 6) % 24);
         const minutes = Math.floor((timeOfDay % 1000) * 60 / 1000);
         const period = hours >= 12 ? "PM" : "AM";
@@ -281,6 +272,12 @@ function updateActionBar(player: Player, tracker: PlayerTracker): void {
     if (config.showWeather) {
         const weather = getWeatherString();
         lines.push(weather);
+    }
+
+    if (config.hudMode === "full") {
+        const walked = Math.floor(tracker.sessionStats.blocksWalked);
+        if (walked > 0) lines.push(`§7${walked}m`);
+        lines.push(`§c⚔${tracker.sessionStats.mobsKilled}`);
     }
 
     if (lines.length > 0) {
@@ -314,9 +311,11 @@ function countEntities(player: Player): EntityCounts {
             counts.total++;
             counts.breakdown.set(typeId, (counts.breakdown.get(typeId) || 0) + 1);
 
-            if (HOSTILE_TYPES.some((t) => typeId.includes(t))) {
+            if (HOSTILE_TYPES.some((t) => typeId === t)) {
                 counts.hostile++;
-            } else if (PASSIVE_TYPES.some((t) => typeId.includes(t))) {
+            } else if (NEUTRAL_TYPES.some((t) => typeId === t)) {
+                counts.neutral++;
+            } else if (PASSIVE_TYPES.some((t) => typeId === t)) {
                 counts.passive++;
             } else {
                 counts.neutral++;
@@ -333,9 +332,10 @@ function getWeatherString(): string {
     try {
         const timeOfDay = world.getTimeOfDay();
         const isDay = timeOfDay >= 0 && timeOfDay < 12000;
-        if (!isDay) return "§8Night";
+        if (!isDay) return "§8☾ Night";
+        return "§e☀ Day";
     } catch {}
-    return "§eDay";
+    return "§7?";
 }
 
 // ─── Slime chunk finder ───
@@ -397,11 +397,13 @@ function findNearbyStructures(
     dimension: string
 ): { name: string, x: number, z: number, dist: number }[] {
     const results: { name: string, x: number, z: number, dist: number }[] = [];
-    const structures = dimension === "minecraft:the_nether" ? NETHER_STRUCTURES :
+    const isNether = dimension === "minecraft:the_nether";
+    const structures = isNether ? NETHER_STRUCTURES :
                        dimension === "minecraft:the_end" ? [] : OVERWORLD_STRUCTURES;
 
     const chunkX = Math.floor(playerX / 16);
     const chunkZ = Math.floor(playerZ / 16);
+    const netherRegionPicked: Map<string, string> = new Map();
 
     for (const struct of structures) {
         let nearest = { x: 0, z: 0, dist: Infinity };
@@ -411,6 +413,19 @@ function findNearbyStructures(
                 const searchChunkX = chunkX + rx * struct.spacing;
                 const searchChunkZ = chunkZ + rz * struct.spacing;
                 const pos = predictStructurePos(seed, searchChunkX, searchChunkZ, struct.spacing, struct.separation, struct.salt);
+
+                if (isNether) {
+                    const regionX = Math.floor(searchChunkX / struct.spacing);
+                    const regionZ = Math.floor(searchChunkZ / struct.spacing);
+                    const regionKey = `${regionX},${regionZ}`;
+                    if (!netherRegionPicked.has(regionKey)) {
+                        let rHash = (seed + regionX * 341873128712 + regionZ * 132897987541 + 30084232) | 0;
+                        rHash = rHash ^ (rHash >>> 16);
+                        netherRegionPicked.set(regionKey, (Math.abs(rHash) % 5 < 2) ? "Fortress" : "Bastion");
+                    }
+                    if (netherRegionPicked.get(regionKey) !== struct.name) continue;
+                }
+
                 const dist = Math.sqrt((pos.x - playerX) ** 2 + (pos.z - playerZ) ** 2);
                 if (dist < nearest.dist) {
                     nearest = { x: pos.x, z: pos.z, dist };
@@ -503,9 +518,9 @@ function predictEndCity(seed: number, playerX: number, playerZ: number): { name:
 
 // ─── Chat command handler ───
 
-world.beforeEvents.chatSend.subscribe((event) => {
+world.beforeEvents.chatSend.subscribe((event: any) => {
     const msg = event.message.trim();
-    if (!msg.toLowerCase().startsWith("!ss")) return;
+    if (!msg.toLowerCase().startsWith("!ss ") && msg.toLowerCase() !== "!ss") return;
 
     event.cancel = true;
     const player = event.sender;
@@ -616,7 +631,7 @@ function handleToggle(player: Player, args: string[]): void {
 
 function showHelp(player: Player): void {
     player.sendMessage([
-        "§a═══ SeedSight v2.0 Commands ═══",
+        "§a═══ SeedSight v2.1 Commands ═══",
         "§6--- HUD & Display ---",
         "§e!ss toggle <opt>§r - Toggle: hud/coords/time/entities/dir/health/weather",
         "§e!ss hud [compact|full]§r - Switch HUD display mode",
@@ -638,7 +653,7 @@ function showHelp(player: Player): void {
 
 function showHelp2(player: Player): void {
     player.sendMessage([
-        "§a═══ SeedSight v2.0 Commands (2/2) ═══",
+        "§a═══ SeedSight v2.1 Commands (2/2) ═══",
         "§6--- World Analysis ---",
         "§e!ss seed <number>§r - Set world seed for predictions",
         "§e!ss structures§r - Find nearby structures",
@@ -747,7 +762,7 @@ function handleWaypoint(player: Player, args: string[]): void {
 
 function findNearestWaypoint(player: Player): Waypoint | null {
     if (waypoints.length === 0) return null;
-    let nearest = waypoints[0];
+    let nearest: Waypoint | null = null;
     let nearestDist = Infinity;
     for (const wp of waypoints) {
         if (wp.dimension !== player.dimension.id) continue;
@@ -789,8 +804,8 @@ function distance3D(wp: { x: number, y: number, z: number }, pos: Vector3): numb
 function directionTo(player: Player, targetX: number, targetZ: number): string {
     const dx = targetX - player.location.x;
     const dz = targetZ - player.location.z;
-    const angle = Math.atan2(dz, dx) * 180 / Math.PI;
-    const n = ((90 - angle) % 360 + 360) % 360;
+    const angle = Math.atan2(dx, -dz) * 180 / Math.PI;
+    const n = ((angle % 360) + 360) % 360;
     if (n >= 337.5 || n < 22.5) return "N";
     if (n < 67.5) return "NE";
     if (n < 112.5) return "E";
@@ -858,7 +873,7 @@ function showEntityScan(player: Player): void {
     if (top.length > 0) {
         player.sendMessage("§7--- Top entities ---");
         for (const [type, count] of top) {
-            const isHostile = HOSTILE_TYPES.some(t => type.includes(t));
+            const isHostile = HOSTILE_TYPES.some(t => type === t);
             const color = isHostile ? "§c" : "§a";
             player.sendMessage(`  ${color}${type}§r: §f${count}`);
         }
