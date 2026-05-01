@@ -1,4 +1,4 @@
-# SeedSight - Bedrock Edition v2.0
+# SeedSight - Bedrock Edition v2.1
 
 Minimap & Intelligence Addon for Minecraft Bedrock Edition using the Script API.
 
@@ -74,7 +74,7 @@ Minimap & Intelligence Addon for Minecraft Bedrock Edition using the Script API.
 1. Download the `.mcpack` file for your Minecraft version from [Releases](https://github.com/Evan1108-Coder/Minecraft-SeedSight-Map-Mod/releases)
 2. Double-click to import into Minecraft Bedrock
 3. Apply the behavior pack to your world
-4. Enable **Beta APIs** in your world's Experiments settings
+4. No experiments or Beta APIs needed — uses stable Script API
 
 ## Building from Source
 
@@ -89,8 +89,8 @@ The compiled JavaScript will be output to `behavior_pack/scripts/main.js`.
 
 | Branch | Minecraft | Script API |
 |--------|-----------|------------|
-| `bedrock-1.21.80` | 1.21.80 | @minecraft/server 1.17.0-beta |
-| `bedrock-1.21.132` | 1.21.132 | @minecraft/server 1.18.0-beta |
+| `bedrock-1.21.80` | 1.21.80 | @minecraft/server 1.16.0 (stable) |
+| `bedrock-1.21.132` | 1.21.132 | @minecraft/server 1.16.0 (stable) |
 
 ## Bedrock vs Java
 
