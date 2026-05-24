@@ -5,3 +5,8 @@ behavior_pack/scripts/
 .gradle/
 build/
 *.jar
+
+# Environment
+.env
+.env.*
+!.env.example
