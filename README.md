@@ -20,6 +20,12 @@ SeedSight is a Fabric minimap and intelligence mod for Minecraft 1.21+ that comb
 
 A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a feature-rich minimap HUD with seed-based world generation prediction, game statistics, performance monitoring, waypoints, and more.
 
+## Features Overview
+
+![Features](docs/images/features.jpg)
+
+*SeedSight combines real-time minimap rendering, seed-based prediction, waypoints, entities, and performance monitoring in one HUD.*
+
 > **Looking for a specific Minecraft version?** This repo has branches for each supported version. Switch to the branch matching your version: `java-1.21.0`, `java-1.21.1`, `java-1.21.2`, `java-1.21.3`, `java-1.21.4`, `bedrock-1.21.80`, or `bedrock-1.21.132`. The `main` branch tracks the latest Java release (1.21.4). See [SETUP.md](SETUP.md) for detailed installation instructions.
 
 ## Features
