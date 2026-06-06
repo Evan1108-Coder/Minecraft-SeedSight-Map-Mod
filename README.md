@@ -1,5 +1,23 @@
 # SeedSight - Minecraft Minimap & Intelligence Mod
 
+> Status: beta Minecraft mod. Seed-based predictions and overlays should be tested against real worlds, dimensions, and multiplayer setups before relying on them.
+
+SeedSight is a Fabric minimap and intelligence mod for Minecraft 1.21+ that combines explored-world cache data with seed-based terrain, biome, structure, waypoint, and entity overlays.
+
+## Why Use SeedSight?
+
+- Shows more context than a basic minimap by using seed-aware prediction.
+- Keeps waypoints, structures, entities, stats, and performance information in one HUD.
+- Supports exploration, navigation, mining, Nether travel, and multiplayer coordination.
+- Uses cached real data for explored areas and generated predictions for unknown areas.
+
+## Current Limitations
+
+- Fabric Java Edition is the primary target. Bedrock is not supported by this mod.
+- Server rules may restrict minimap or seed-based prediction features. Check before using on multiplayer servers.
+- Predicted terrain and structures can differ when world generation, datapacks, or server-side changes alter the seed behavior.
+
+
 A client-side Fabric mod for Minecraft Java Edition 1.21.x that provides a feature-rich minimap HUD with seed-based world generation prediction, game statistics, performance monitoring, waypoints, and more.
 
 > **Looking for a specific Minecraft version?** This repo has branches for each supported version. Switch to the branch matching your version: `java-1.21.0`, `java-1.21.1`, `java-1.21.2`, `java-1.21.3`, `java-1.21.4`, `bedrock-1.21.80`, or `bedrock-1.21.132`. The `main` branch tracks the latest Java release (1.21.4). See [SETUP.md](SETUP.md) for detailed installation instructions.
